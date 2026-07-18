@@ -4,15 +4,23 @@ import type { ApiResponse, HttpClientOptions } from './types';
 
 export class HttpClient {
   private readonly options: HttpClientOptions;
+  private readonly headers: Headers;
   private readonly pending = new Map< string, Promise< ApiResponse > >();
 
   public constructor ( options: HttpClientOptions ) {
-    this.options = { ...options, headers: new Headers( options.headers ) };
+    this.options = options;
+    this.headers = this.createHeaders();
   }
+
+  private createHeaders () : Headers {
+    const headers = new Headers();
+
+    return headers;
+  };
 
   private async execute < T > ( url: URL, parser: ( res: Response ) => Promise< T > ) : Promise< ApiResponse< T > > {
     const start = performance.now();
-    const res = await fetch( url, { method: 'GET', headers: this.options.headers } );
+    const res = await fetch( url, { method: 'GET', headers: this.headers } );
     const latency = Math.round( performance.now() - start );
 
     let data: T | null = null, parseError;
