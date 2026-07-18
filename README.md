@@ -1,2 +1,3 @@
-# api
-Billionaires Index API
+# RTBNext SDK
+
+Official JavaScript/TypeScript SDK for the RTBNext API.
