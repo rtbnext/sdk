@@ -18,11 +18,13 @@ export class HttpClient {
 
   private async execute < T > ( url: URL ) : Promise< ApiResponse< T > > {
     const start = performance.now();
-    const response = await fetch( url, { method: 'GET', headers: this.options.headers } );
+    const res = await fetch( url, { method: 'GET', headers: new Headers( this.options.headers ) } );
     const latency = performance.now() - start;
 
-    const data = await response.json() as T;
-    return { data, url, status: response.status, headers: response.headers, latency };
+    if ( ! res.ok ) throw new Error( `Request failed with status ${ res.status } for ${ url.href }` );
+
+    const data = await res.json() as T;
+    return { data, url, status: res.status, headers: res.headers, latency };
   }
 
   public async request < T > ( path: string ) : Promise< ApiResponse< T > > {
