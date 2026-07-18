@@ -29,3 +29,10 @@ export type RTBNextOptions = {
   baseUrl?: string;
   cache?: CacheType;
 };
+
+export interface CacheStore {
+  get ( key: string ) : Promise< CacheEntry | null >;
+  set ( key: string, value: CacheEntry ) : Promise< void >;
+  delete ( key: string ) : Promise< void >;
+  clear () : Promise< void >;
+}
