@@ -14,6 +14,10 @@ export class HttpClient {
 
   private createHeaders () : Headers {
     const { client, sdkVersion } = this.options;
+
+    if ( ! client.name.trim() ) throw new Error( 'Client name is required.' );
+    if ( ! client.version.trim() ) throw new Error( 'Client version is required.' );
+
     const headers = new Headers();
     let userAgent = `${ client.name }/${ client.version }`;
 
