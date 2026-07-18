@@ -1,3 +1,6 @@
+import { Parser } from './Parser';
+
+
 export type HttpClientOptions = {
   baseUrl: string;
   headers: Headers;
@@ -54,16 +57,7 @@ export class HttpClient {
 
   public async jsonl < T > ( path: string ) : Promise< ApiResponse< T[] > > {
     return { ...await this.request( path, async ( res ) => {
-      return res.text().then( text => {
-        const data: T[] = [];
-
-        for ( const line of text.split( '\n' ) ) {
-          if ( ! line.trim().length ) continue;
-          try { data.push( JSON.parse( line ) as T ) } catch {}
-        }
-
-        return data;
-      } );
+      return res.text().then( raw => Parser.jsonl( raw ) );
     } ), format: 'jsonl' };
   }
 
@@ -73,20 +67,7 @@ export class HttpClient {
 
   public async csv < T > ( path: string, delimiter: string = ';' ) : Promise< ApiResponse< T[] > > {
     return { ...await this.request( path, async ( res ) => {
-      return res.text().then( text => {
-        const data: T[] = [];
-
-        for ( const line of text.split( '\n' ) ) {
-          if ( ! line.trim().length ) continue;
-
-          data.push( line.split( delimiter ).map( v => {
-            const n = Number( v );
-            return Number.isNaN( n ) ? v.trim() : n;
-          } ) as unknown as T );
-        }
-
-        return data;
-      } );
+      return res.text().then( raw => Parser.csv( raw, delimiter ) );
     } ), format: 'csv' };
   }
 }
