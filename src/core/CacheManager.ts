@@ -16,7 +16,7 @@ export class CacheManager {
     if ( cached ) return cached as CacheEntry< T >;
 
     const res = await this.client[ format ]( path, options?.delimiter as string );
-    this.store && await this.store.set( path, res );
+    this.store && await this.store.set( path, { response: res, created: new Date().getTime() } );
   }
 
   public static fromStore ( type: CacheType, client: HttpClient ) : CacheManager {
