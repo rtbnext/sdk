@@ -3,7 +3,13 @@ export type HttpClientOptions = {
   headers: Headers;
 };
 
-export type ApiResponse< T > = {};
+export type ApiResponse< T > = {
+  data: T;
+  url: URL;
+  status: number;
+  headers: Headers;
+  latency: number;
+};
 
 
 export class HttpClient {
