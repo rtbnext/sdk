@@ -19,12 +19,16 @@ export type ApiResponse< T = unknown > = {
 
 
 export class HttpClient {
+  private readonly options: HttpClientOptions;
   private readonly pending = new Map< string, Promise< ApiResponse > >();
-  public constructor ( private readonly options: HttpClientOptions ) {}
+
+  public constructor ( options: HttpClientOptions ) {
+    this.options = { ...options, headers: new Headers( options.headers ) };
+  }
 
   private async execute < T > ( url: URL, parser: ( res: Response ) => Promise< T > ) : Promise< ApiResponse< T > > {
     const start = performance.now();
-    const res = await fetch( url, { method: 'GET', headers: new Headers( this.options.headers ) } );
+    const res = await fetch( url, { method: 'GET', headers: this.options.headers } );
     const latency = Math.round( performance.now() - start );
 
     let data: T | null = null, parseError;
