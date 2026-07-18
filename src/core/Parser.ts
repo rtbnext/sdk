@@ -1,16 +1,20 @@
-export class Parser {
-  public static jsonl < T > ( raw: string ) : T[] {
+export class JsonlParser {
+  public static parse < T > ( raw: string ) : T[] {
     const data: T[] = [];
 
     for ( const line of raw.split( '\n' ) ) {
       if ( ! line.trim().length ) continue;
-      try { data.push( JSON.parse( line ) as T ) } catch {}
+
+      try { data.push( JSON.parse( line ) as T ) }
+      catch {}
     }
 
     return data;
   }
+}
 
-  public static csv < T > ( raw: string, delimiter: string = ';' ) : T[] {
+export class CsvParser {
+  public static parse < T > ( raw: string, delimiter: string = ';' ) : T[] {
     const data: T[] = [];
 
     for ( const line of raw.split( '\n' ) ) {

@@ -1,4 +1,4 @@
-import { Parser } from './Parser';
+import { CsvParser, JsonlParser } from './Parser';
 import type { ApiResponse, HttpClientOptions } from './types';
 
 
@@ -66,7 +66,7 @@ export class HttpClient {
 
   public async jsonl < T > ( path: string ) : Promise< ApiResponse< T[] > > {
     return { ...await this.request( path, async ( res ) => {
-      return res.text().then( raw => Parser.jsonl( raw ) );
+      return res.text().then( raw => JsonlParser.parse( raw ) );
     } ), format: 'jsonl' };
   }
 
@@ -76,7 +76,7 @@ export class HttpClient {
 
   public async csv < T > ( path: string, delimiter: string = ';' ) : Promise< ApiResponse< T[] > > {
     return { ...await this.request( path, async ( res ) => {
-      return res.text().then( raw => Parser.csv( raw, delimiter ) );
+      return res.text().then( raw => CsvParser.parse( raw, delimiter ) );
     } ), format: 'csv' };
   }
 }
