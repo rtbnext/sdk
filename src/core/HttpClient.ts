@@ -10,6 +10,8 @@ export type ApiResponse< T = unknown > = {
   ok: boolean;
   headers: Headers;
   latency: number;
+  parseError?: unknown;
+  format?: string;
 };
 
 
@@ -21,12 +23,14 @@ export class HttpClient {
     const start = performance.now();
     const res = await fetch( url, { method: 'GET', headers: new Headers( this.options.headers ) } );
     const latency = Math.round( performance.now() - start );
-    const data = res.ok ? await parser( res ) as T : null;
 
-    return { data, url, status: res.status, ok: res.ok, headers: res.headers, latency };
+    let data: T | null = null, parseError;
+    if ( res.ok ) try { data = await parser( res ) as T } catch ( e ) { parseError = e }
+
+    return { data, url, status: res.status, ok: res.ok, headers: res.headers, latency, parseError };
   }
 
-  public async request < T > ( path: string, parser: ( res: Response ) => Promise< T > ) : Promise< ApiResponse< T > > {
+  private async request < T > ( path: string, parser: ( res: Response ) => Promise< T > ) : Promise< ApiResponse< T > > {
     const url = new URL( path, this.options.baseUrl );
     const key = url.href;
 
@@ -41,47 +45,48 @@ export class HttpClient {
   }
 
   public async text ( path: string ) : Promise< ApiResponse< string > > {
-    return await this.request( path, res => res.text() );
+    return { ...await this.request( path, res => res.text() ), format: 'text' };
   }
 
   public async json < T > ( path: string ) : Promise< ApiResponse< T > > {
-    return await this.request( path, res => res.json() );
+    return { ...await this.request( path, res => res.json() ), format: 'json' };
   }
 
   public async jsonl < T > ( path: string ) : Promise< ApiResponse< T[] > > {
-    return await this.request( path, async ( res ) => {
+    return { ...await this.request( path, async ( res ) => {
       return res.text().then( text => {
         const data: T[] = [];
 
         for ( const line of text.split( '\n' ) ) {
           if ( ! line.trim().length ) continue;
-
-          data.push( JSON.parse( line ) as T );
+          try { data.push( JSON.parse( line ) as T ) } catch {}
         }
 
         return data;
       } );
-    } );
+    } ), format: 'jsonl' };
   }
 
   public async blob ( path: string ) : Promise< ApiResponse< Blob > > {
-    return await this.request( path, res => res.blob() );
+    return { ...await this.request( path, res => res.blob() ), format: 'blob' };
   }
 
   public async csv < T > ( path: string, delimiter: string = ';' ) : Promise< ApiResponse< T[] > > {
-    return await this.request( path, async ( res ) => {
+    return { ...await this.request( path, async ( res ) => {
       return res.text().then( text => {
         const data: T[] = [];
 
         for ( const line of text.split( '\n' ) ) {
           if ( ! line.trim().length ) continue;
 
-          const values = line.split( delimiter ).map( v => v.trim() );
-          data.push( values as unknown as T );
+          data.push( line.split( delimiter ).map( v => {
+            const n = Number( v );
+            return Number.isNaN( n ) ? v.trim() : n;
+          } ) as unknown as T );
         }
 
         return data;
       } );
-    } );
+    } ), format: 'csv' };
   }
 }
