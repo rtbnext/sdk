@@ -10,6 +10,15 @@ export class HttpClient {
   private readonly pending = new Map< string, Promise< ApiResponse< unknown > > >();
   public constructor( private readonly options: HttpClientOptions ) {}
 
+  private async execute < T > ( url: URL ) : Promise< ApiResponse< T > > {
+    const start = performance.now();
+    const response = await fetch( url, { method: 'GET', headers: this.options.headers } );
+    const latency = performance.now() - start;
+
+    const data = await response.json() as T;
+    return { data, url, status: response.status, headers: response.headers, latency };
+  }
+
   public async request < T > ( path: string ) : Promise< ApiResponse< T > > {
     const url = new URL( path, this.options.baseUrl );
     const key = url.href;
