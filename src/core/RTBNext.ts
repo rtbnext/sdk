@@ -1,4 +1,5 @@
 import type { RTBNextOptions } from '../types';
+import { CacheManager } from './CacheManager';
 import { HttpClient } from './HttpClient';
 
 
@@ -11,13 +12,20 @@ const DEFAULT_OPTIONS: Required< Omit< RTBNextOptions, 'client' > > = {
 export class RTBNext {
   private readonly options: Required< RTBNextOptions >;
   private readonly httpClient: HttpClient;
+  private readonly cacheManager: CacheManager;
 
   constructor ( options: RTBNextOptions ) {
     this.options = { ...DEFAULT_OPTIONS, ...options };
+
     this.httpClient = new HttpClient( {
       baseUrl: this.options.baseUrl,
       sdkVersion: VERSION,
       client: this.options.client
     } );
+
+    this.cacheManager = CacheManager.fromStore(
+      this.options.cache,
+      this.httpClient
+    );
   }
 }
