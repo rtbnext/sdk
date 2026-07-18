@@ -17,7 +17,19 @@ export class HttpClient {
   private readonly pending = new Map< string, Promise< ApiResponse > >();
   public constructor ( private readonly options: HttpClientOptions ) {}
 
-  public async request < T > ( path: string, parser: ( res: Response ) => Promise< T > ) : Promise< ApiResponse< T > > {}
+  public async request < T > ( path: string, parser: ( res: Response ) => Promise< T > ) : Promise< ApiResponse< T > > {
+    const url = new URL( path, this.options.baseUrl );
+    const key = url.href;
+
+    const existing = this.pending.get( key );
+    if ( existing ) return existing as Promise< ApiResponse< T > >;
+
+    const request = this.execute< T >( url, parser );
+    this.pending.set( key, request );
+
+    try { return await request }
+    finally { this.pending.delete( key ) }
+  }
 
   public async text ( path: string ) : Promise< ApiResponse< string > > {
     return await this.request( path, res => res.text() );
