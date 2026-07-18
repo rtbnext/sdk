@@ -22,7 +22,7 @@ export type ApiResponse< T = unknown > = {
   format?: string;
 };
 
-export type CacheType = 'memory' | 'persistent' | 'none';
+export type CacheType = 'memory' | 'none' | CacheStore;
 
 export type RTBNextOptions = {
   client: ClientIdentity;
