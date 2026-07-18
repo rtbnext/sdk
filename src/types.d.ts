@@ -30,6 +30,11 @@ export type RTBNextOptions = {
   cache?: CacheType;
 };
 
+export type CacheEntry < T = unknown > = {
+  response: ApiResponse< T >;
+  created: number;
+};
+
 export interface CacheStore {
   get ( key: string ) : Promise< CacheEntry | null >;
   set ( key: string, value: CacheEntry ) : Promise< void >;
