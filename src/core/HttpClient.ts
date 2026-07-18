@@ -14,12 +14,12 @@ export type ApiResponse< T > = {
 
 export class HttpClient {
   private readonly pending = new Map< string, Promise< ApiResponse< unknown > > >();
-  public constructor( private readonly options: HttpClientOptions ) {}
+  public constructor ( private readonly options: HttpClientOptions ) {}
 
   private async execute < T > ( url: URL ) : Promise< ApiResponse< T > > {
     const start = performance.now();
     const res = await fetch( url, { method: 'GET', headers: new Headers( this.options.headers ) } );
-    const latency = performance.now() - start;
+    const latency = Math.round( performance.now() - start );
 
     if ( ! res.ok ) throw new Error( `Request failed with status ${ res.status } for ${ url.href }` );
 
