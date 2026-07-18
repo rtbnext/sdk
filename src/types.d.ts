@@ -14,7 +14,7 @@ export type HttpClientOptions = {
 export type ApiRequest = {
   format: 'text' | 'json' | 'jsonl' | 'csv' | 'blob';
   path: string;
-  options?: Record< string, unknown >;
+  options?: any[];
 };
 
 export type ApiResponse< T = unknown > = {

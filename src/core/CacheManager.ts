@@ -15,7 +15,7 @@ export class CacheManager {
     const cached = this.store && await this.store.get( path );
     if ( cached ) return cached as CacheEntry< T >;
 
-    const res = await this.client[ format ]( path, options?.delimiter as string );
+    const res = await this.client[ format ]( path, ...( options ?? [] ) );
     const entry = { response: res, created: new Date().getTime() };
     this.store && await this.store.set( path, entry );
 
