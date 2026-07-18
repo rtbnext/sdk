@@ -1,5 +1,5 @@
+import type { ApiResponse, HttpClientOptions } from '../types';
 import { CsvParser, JsonlParser } from './Parser';
-import type { ApiResponse, HttpClientOptions } from './types';
 
 
 export class HttpClient {

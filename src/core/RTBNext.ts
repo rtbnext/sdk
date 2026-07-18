@@ -1,5 +1,5 @@
+import type { RTBNextOptions } from '../types';
 import { HttpClient } from './HttpClient';
-import type { RTBNextOptions } from './types';
 
 
 const VERSION = '1.0.0' as const;
