@@ -1,21 +1,5 @@
 import { Parser } from './Parser';
-
-
-export type HttpClientOptions = {
-  baseUrl: string;
-  headers: Headers;
-};
-
-export type ApiResponse< T = unknown > = {
-  data: T | null;
-  url: URL;
-  status: number;
-  ok: boolean;
-  headers: Headers;
-  latency: number;
-  parseError?: Error;
-  format?: string;
-};
+import type { ApiResponse, HttpClientOptions } from './types';
 
 
 export class HttpClient {
