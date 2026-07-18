@@ -13,7 +13,7 @@ export type ApiResponse< T = unknown > = {
   ok: boolean;
   headers: Headers;
   latency: number;
-  parseError?: unknown;
+  parseError?: Error;
   format?: string;
 };
 
@@ -32,7 +32,9 @@ export class HttpClient {
     const latency = Math.round( performance.now() - start );
 
     let data: T | null = null, parseError;
-    if ( res.ok ) try { data = await parser( res ) as T } catch ( e ) { parseError = e }
+    if ( res.ok ) try { data = await parser( res ) as T } catch ( e ) {
+      parseError = e instanceof Error ? e : new Error( String( e ) );
+    }
 
     return { data, url, status: res.status, ok: res.ok, headers: res.headers, latency, parseError };
   }
