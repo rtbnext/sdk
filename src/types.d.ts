@@ -36,6 +36,7 @@ export type CacheEntry < T = unknown > = {
 };
 
 export interface CacheStore {
+  readonly size: number;
   get ( key: string ) : Promise< CacheEntry | null >;
   set ( key: string, value: CacheEntry ) : Promise< void >;
   delete ( key: string ) : Promise< void >;
