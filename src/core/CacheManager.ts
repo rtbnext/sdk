@@ -5,7 +5,7 @@ import { MemoryCacheStore } from './MemoryStore';
 
 export class CacheManager {
   public constructor (
-    private readonly store: CacheStore,
+    private readonly store: CacheStore | false,
     private readonly client: HttpClient
   ) {}
 
