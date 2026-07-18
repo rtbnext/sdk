@@ -11,6 +11,12 @@ export type HttpClientOptions = {
   client: ClientIdentity;
 };
 
+export type ApiRequest = {
+  format: 'text' | 'json' | 'jsonl' | 'csv' | 'blob';
+  url: string;
+  options?: Record< string, unknown >;
+};
+
 export type ApiResponse< T = unknown > = {
   data: T | null;
   url: URL;
