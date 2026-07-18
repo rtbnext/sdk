@@ -21,3 +21,11 @@ export type ApiResponse< T = unknown > = {
   parseError?: Error;
   format?: string;
 };
+
+export type CacheType = 'memory' | 'persistent' | 'none';
+
+export type RTBNextOptions = {
+  client: ClientIdentity;
+  baseUrl?: string;
+  cache?: CacheType;
+};
