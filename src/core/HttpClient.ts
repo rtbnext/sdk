@@ -13,7 +13,18 @@ export class HttpClient {
   }
 
   private createHeaders () : Headers {
+    const { client, sdkVersion } = this.options;
     const headers = new Headers();
+    let userAgent = `${ client.name }/${ client.version }`;
+
+    const contact = [ client.contact, client.email ].filter( Boolean ).join( '; ' );
+    if ( contact.length ) userAgent += ` (${ contact })`;
+
+    headers.set( 'User-Agent', `${ userAgent } @rtbnext/sdk/${ sdkVersion }` );
+    headers.set( 'X-Client-Name', client.name );
+    headers.set( 'X-Client-Version', client.version );
+
+    if ( client.contact ) headers.set( 'X-Client-Contact', client.contact );
 
     return headers;
   };
