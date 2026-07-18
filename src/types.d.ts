@@ -13,7 +13,7 @@ export type HttpClientOptions = {
 
 export type ApiRequest = {
   format: 'text' | 'json' | 'jsonl' | 'csv' | 'blob';
-  url: string;
+  path: string;
   options?: Record< string, unknown >;
 };
 
