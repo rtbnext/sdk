@@ -24,5 +24,8 @@
   "devDependencies": {
     "@types/node": "^26.1.1",
     "typescript": "^7.0.2"
+  },
+  "dependencies": {
+    "@rtbnext/schema": "^2.3.1"
   }
 }
