@@ -45,3 +45,11 @@ export interface CacheStore {
   delete ( key: string ) : Promise< void >;
   clear () : Promise< void >;
 }
+
+export type CacheType = false | 'memory' | CacheStore;
+export type CacheMode = 'ttl' | 'revalidate' | 'once' | 'none';
+
+export type CacheOptions = {
+  type?: CacheType;
+  mode?: CacheMode;
+}
