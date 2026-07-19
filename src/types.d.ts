@@ -47,7 +47,7 @@ export interface Cache {
 }
 
 export type CacheType = false | 'memory' | Cache;
-export type CacheMode = 'ttl' | 'revalidate' | 'once' | 'none';
+export type CacheMode = 'ttl' | 'revalidate' | 'session';
 
 export type CacheOptions = {
   type?: CacheType;
