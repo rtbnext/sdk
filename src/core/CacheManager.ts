@@ -21,6 +21,18 @@ export class CacheManager {
     return entry;
   }
 
+  public async clear () : Promise< void > {
+    this.store && await this.store.clear();
+  }
+
+  public async delete ( path: string ) : Promise< void > {
+    this.store && await this.store.delete( path );
+  }
+
+  public get size () : number {
+    return this.store ? this.store.size : 0;
+  }
+
   public static getInstance ( client: HttpClient, options: CacheOptions = {} ) : CacheManager {
     const { type = 'memory', mode = 'ttl' } = options;
     return new CacheManager( type === 'memory' ? new MemoryCache() : type, client, mode );
