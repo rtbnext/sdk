@@ -3,7 +3,7 @@ import { JsonParser } from '../core/JsonParser';
 import type { ApiResponse, RequestOptions } from '../types';
 
 
-export abstract class API {
+export abstract class Endpoint {
   constructor ( protected readonly cache: CacheManager ) {}
 
   protected async json < T > ( path: string, options?: RequestOptions ) : Promise< ApiResponse< T > > {

@@ -1,4 +1,4 @@
-import { API } from './API';
+import { Endpoint } from './Endpoint';
 
 
-export class System extends API {}
+export class System extends Endpoint {}

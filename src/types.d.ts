@@ -77,7 +77,7 @@ export type ApiResponse< T > = {
   data: () => T | null;
 };
 
-export interface API {
+export interface Endpoints {
   profile: Profile;
   list: List;
   mover: Mover;
