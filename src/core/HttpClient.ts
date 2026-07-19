@@ -48,11 +48,16 @@ export class HttpClient {
     return headers;
   };
 
-  private prepareRequest ( options?: RequestOptions ) : RequestInit {}
+  private requestInit ( options?: RequestOptions ) : RequestInit {
+    return {
+      signal: AbortSignal.timeout( options?.timeout ?? this.options.timeout ),
+      headers: new Headers( { ...this.headers, ...options?.headers } )
+    };
+  }
 
   private async execute ( url: URL, options?: RequestOptions ) : Promise< HttpResponse > {
     const start = performance.now();
-    const res = await fetch( url, this.prepareRequest( options ) );
+    const res = await fetch( url, this.requestInit( options ) );
     const latency = Math.round( performance.now() - start );
   }
 
