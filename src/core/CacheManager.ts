@@ -14,16 +14,16 @@ export class CacheManager {
     return entry.expires !== undefined && entry.expires <= Date.now();
   }
 
-  private createEntry ( res: HttpResponse ) : CacheEntry {
+  private refreshEntry ( res: HttpResponse, cached?: CacheEntry ) : CacheEntry {
     const created = Date.now();
     const cacheControl = res.headers.get( 'Cache-Control' ) ?? undefined;
-
     const match = cacheControl?.match( /max-age=(\d+)/i );
-    const expires = match ? created + Number( match[ 1 ] ) * 1000 : undefined;
+    const expires = match ? created + Number( match[ 1 ] ) * 1000 : cached?.expires;
 
     return {
-      response: res, created, expires, etag: res.headers.get( 'ETag' ) ?? undefined,
-      lastModified: res.headers.get( 'Last-Modified' ) ?? undefined
+      response: cached ? { ...cached.response, headers: res.headers } : res,
+      created, expires, etag: res.headers.get( 'ETag' ) ?? cached?.etag,
+      lastModified: res.headers.get( 'Last-Modified' ) ?? cached?.lastModified
     };
   }
 
@@ -32,7 +32,7 @@ export class CacheManager {
 
     if ( ! cached ) {
       const response = await this.httpClient.request( path, options );
-      const entry = this.createEntry( response );
+      const entry = this.refreshEntry( response );
       this.store && await this.store.set( path, entry );
 
       return entry;
@@ -45,13 +45,13 @@ export class CacheManager {
     const response = await this.httpClient.request( path, { ...options, headers } );
 
     if ( response.status === 304 ) {
-      const updated: CacheEntry = { ...cached, created: Date.now() };
-      this.store && await this.store.set( path, updated );
+      const updated = this.refreshEntry( response, cached );
+      await this.store.set( path, updated );
 
       return updated;
     }
 
-    const entry = this.createEntry( response );
+    const entry = this.refreshEntry( response );
     this.store && await this.store.set( path, entry );
 
     return entry;
@@ -59,12 +59,12 @@ export class CacheManager {
 
   public async request ( path: string, options?: RequestOptions ) : Promise< CacheEntry > {
     if ( this.mode === 'revalidate' ) return this.revalidate( path, options );
-    if ( ! this.store ) return this.createEntry( await this.httpClient.request( path, options ) );
+    if ( ! this.store ) return this.refreshEntry( await this.httpClient.request( path, options ) );
 
     const cached = await this.store.get( path );
     if ( cached && ( this.mode === 'session' || ! this.isExpired( cached ) ) ) return cached;
 
-    const entry = this.createEntry( await this.httpClient.request( path, options ) );
+    const entry = this.refreshEntry( await this.httpClient.request( path, options ) );
     if ( this.mode === 'session' || entry.expires ) await this.store.set( path, entry );
 
     return entry;
