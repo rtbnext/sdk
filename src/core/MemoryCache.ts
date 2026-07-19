@@ -1,4 +1,4 @@
-import { CacheEntry, Cache } from '../types';
+import type { CacheEntry, Cache } from '../types';
 
 
 export class MemoryCache implements Cache {
