@@ -28,6 +28,34 @@ export class CacheManager {
     };
   }
 
+  public async revalidate ( path: string, options?: RequestOptions ) : Promise< CacheEntry > {
+    const cached = this.store && await this.store.get( path );
+
+    if ( ! cached ) {
+      const response = await this.httpClient.request( path, options );
+      const entry = this.createEntry( response );
+
+      this.store && await this.store.set( path, entry );
+      return entry;
+    }
+
+    const headers = new Headers( options?.headers );
+    if ( cached.etag ) headers.set( 'If-None-Match', cached.etag );
+    if ( cached.lastModified ) headers.set( 'If-Modified-Since', cached.lastModified );
+
+    const response = await this.httpClient.request( path, { ...options, headers } );
+
+    if ( response.status === 304 ) {
+      const updated: CacheEntry = { ...cached, created: Date.now() };
+      this.store && await this.store.set( path, updated );
+      return updated;
+    }
+
+    const entry = this.createEntry( response );
+    this.store && await this.store.set( path, entry );
+    return entry;
+  }
+
   public async request ( path: string, options?: RequestOptions ) : Promise< CacheEntry > {
     const cached = this.store && await this.store.get( path );
     if ( cached ) return cached;
