@@ -32,3 +32,5 @@ export type HttpResponse = {
   headers: Headers;
   latency: number;
 };
+
+export interface CacheStore {}
