@@ -13,6 +13,8 @@ type HttpClientOptions = {
 
 type RequestOptions = {};
 
+type HttpResponse = {};
+
 export class HttpClient {
   private readonly headers: Headers;
 
@@ -41,5 +43,7 @@ export class HttpClient {
     return headers;
   };
 
-  public async request ( path: string, options?: RequestOptions ) {}
+  private async execute ( path: string, options?: RequestOptions ) : Promise< HttpResponse > {}
+
+  public async request ( path: string, options?: RequestOptions ) : Promise< HttpResponse > {}
 }
