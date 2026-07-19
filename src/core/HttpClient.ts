@@ -67,6 +67,8 @@ export class HttpClient {
   }
 
   private async execute ( url: URL, options?: RequestOptions ) : Promise< HttpResponse > {
+    await this.limiter.acquire();
+
     const start = performance.now();
     const res = await fetch( url, this.requestInit( options ) );
     const latency = Math.round( performance.now() - start );
