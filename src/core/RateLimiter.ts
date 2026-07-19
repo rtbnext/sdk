@@ -2,21 +2,12 @@ import type { RateLimiterOptions } from '../types';
 
 
 export class RateLimiter {
-  private readonly maxTokens: number;
-  private readonly refillInterval: number;
   private queue: ( () => void )[] = [];
+  private spreadTimer: NodeJS.Timeout | null = null;
   private tokens: number;
 
-  constructor ( { maxRequests, perMs }: RateLimiterOptions ) {
-    this.maxTokens = maxRequests;
-    this.refillInterval = perMs / maxRequests;
-    this.tokens = maxRequests;
-
-    setInterval( () => this.do(), this.refillInterval );
-  }
-
-  private do () : void {
-    if ( this.tokens < this.maxTokens ) this.tokens++, this.processQueue();
+  constructor ( private readonly options: RateLimiterOptions ) {
+    this.tokens = this.options.maxRequests;
   }
 
   private processQueue () : void {
@@ -26,10 +17,5 @@ export class RateLimiter {
       const next = this.queue.shift();
       if ( next ) next();
     }
-  }
-
-  public async acquire () : Promise< void > {
-    if ( this.tokens > 0 ) { this.tokens--; return }
-    return new Promise( resolve => this.queue.push( resolve ) );
   }
 }
