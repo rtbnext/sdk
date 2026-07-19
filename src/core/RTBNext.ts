@@ -4,7 +4,7 @@ import { Mover } from '../api/Mover';
 import { Profile } from '../api/Profile';
 import { Stats } from '../api/Stats';
 import { System } from '../api/System';
-import type { Endpoints, RTBNextOptions } from '../types';
+import type { API, RTBNextOptions } from '../types';
 import { CacheManager } from './CacheManager';
 import { HttpClient } from './HttpClient';
 
@@ -12,7 +12,7 @@ import { HttpClient } from './HttpClient';
 export class RTBNext {
   private readonly httpClient: HttpClient;
   private readonly cacheManager: CacheManager;
-  private readonly endpoints: Endpoints;
+  private readonly api: API;
 
   constructor ( private readonly options: RTBNextOptions ) {
     const { client, baseUrl, httpTimeout, cache } = this.options;
@@ -25,10 +25,10 @@ export class RTBNext {
     } );
 
     this.cacheManager = CacheManager.getInstance( this.httpClient, cache );
-    this.endpoints = this.loadEndpoints();
+    this.api = this.loadAPIEndpoints();
   }
 
-  private loadEndpoints () : Endpoints {
+  private loadAPIEndpoints () : API {
     return {
       profile: new Profile( this.cacheManager ),
       list: new List( this.cacheManager ),
@@ -42,10 +42,10 @@ export class RTBNext {
   public get client () : HttpClient { return this.httpClient }
   public get cache () : CacheManager { return this.cacheManager }
 
-  public get profile () : Profile { return this.endpoints.profile }
-  public get list () : List { return this.endpoints.list }
-  public get mover () : Mover { return this.endpoints.mover }
-  public get filter () : Filter { return this.endpoints.filter }
-  public get stats () : Stats { return this.endpoints.stats }
-  public get system () : System { return this.endpoints.system }
+  public get profile () : Profile { return this.api.profile }
+  public get list () : List { return this.api.list }
+  public get mover () : Mover { return this.api.mover }
+  public get filter () : Filter { return this.api.filter }
+  public get stats () : Stats { return this.api.stats }
+  public get system () : System { return this.api.system }
 }

@@ -72,7 +72,7 @@ export type RTBNextOptions = {
   cache?: CacheOptions;
 };
 
-export interface Endpoints {
+export interface API {
   profile: Profile;
   list: List;
   mover: Mover;
