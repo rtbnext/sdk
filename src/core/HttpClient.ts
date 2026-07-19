@@ -41,7 +41,7 @@ export class HttpClient {
   }
 
   private async execute ( url: URL, options?: RequestOptions ) : Promise< HttpResponse > {
-    await this.limiter.acquire();
+    await this.limiter[ options?.mode ?? 'spread' ]();
 
     const start = performance.now();
     const res = await fetch( url, this.requestInit( options ) );

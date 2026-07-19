@@ -20,6 +20,7 @@ export type HttpClientOptions = {
 
 export type RequestOptions = {
   headers?: Headers;
+  mode?: 'burst' | 'spread';
   timeout?: number;
 };
 
