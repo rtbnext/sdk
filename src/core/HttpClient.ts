@@ -11,6 +11,7 @@ type HttpClientOptions = {
   baseUrl: string;
   sdkVersion: string;
   client: ClientIdentity;
+  limiter: RateLimiterOptions;
   timeout: number;
 };
 
@@ -34,7 +35,7 @@ export class HttpClient {
   private readonly headers: Headers;
 
   constructor ( private readonly options: HttpClientOptions ) {
-    this.limiter = new RateLimiter( { maxRequests: 60, perMs: 10_000 } );
+    this.limiter = new RateLimiter( this.options.limiter );
     this.headers = this.createHeaders();
   }
 
