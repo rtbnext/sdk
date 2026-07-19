@@ -9,13 +9,18 @@ type HttpClientOptions = {
   baseUrl: string;
   sdkVersion: string;
   client: ClientIdentity;
+  timeout: number;
 };
 
-type RequestOptions = {};
+type RequestOptions = {
+  headers?: Headers;
+  timeout?: number;
+};
 
 type HttpResponse = {};
 
 export class HttpClient {
+  private readonly pending = new Map< string, Promise< HttpResponse > >();
   private readonly headers: Headers;
 
   constructor ( private readonly options: HttpClientOptions ) {
