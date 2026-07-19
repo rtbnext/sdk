@@ -1,8 +1,8 @@
-import { TextParser } from './TextParser';
+export class JsonParser {
+  protected static readonly decoder = new TextDecoder( 'utf-8' );
+  private constructor () {}
 
-
-export class JsonParser extends TextParser {
-  public static override parse < T > ( raw: Uint8Array< ArrayBuffer > ) : T {
-    return JSON.parse( super.parse( raw ) ) as T;
+  public static parse < T > ( raw: Uint8Array< ArrayBuffer > ) : T {
+    return JSON.parse( this.decoder.decode( raw ) ) as T;
   }
 }
