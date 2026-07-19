@@ -38,7 +38,7 @@ export type CacheEntry = {
   created: number;
 }
 
-export interface CacheStore {
+export interface Cache {
   readonly size: number;
   get ( key: string ) : Promise< CacheEntry | null >;
   set ( key: string, value: CacheEntry ) : Promise< void >;
@@ -46,7 +46,7 @@ export interface CacheStore {
   clear () : Promise< void >;
 }
 
-export type CacheType = false | 'memory' | CacheStore;
+export type CacheType = false | 'memory' | Cache;
 export type CacheMode = 'ttl' | 'revalidate' | 'once' | 'none';
 
 export type CacheOptions = {
