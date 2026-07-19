@@ -1,4 +1,9 @@
+import { Filter } from '../api/Filter';
+import { List } from '../api/List';
+import { Mover } from '../api/Mover';
 import { Profile } from '../api/Profile';
+import { Stats } from '../api/Stats';
+import { System } from '../api/System';
 import type { Endpoints, RTBNextOptions } from '../types';
 import { CacheManager } from './CacheManager';
 import { HttpClient } from './HttpClient';
@@ -25,7 +30,12 @@ export class RTBNext {
 
   private loadEndpoints () : Endpoints {
     return {
-      profile: new Profile( this.cacheManager )
+      profile: new Profile( this.cacheManager ),
+      list: new List( this.cacheManager ),
+      mover: new Mover( this.cacheManager ),
+      filter: new Filter( this.cacheManager ),
+      stats: new Stats( this.cacheManager ),
+      system: new System( this.cacheManager )
     };
   }
 
