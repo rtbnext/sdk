@@ -76,12 +76,3 @@ export type ApiResponse< T > = {
   response: CacheEntry;
   data: () => T | null;
 };
-
-export interface Endpoints {
-  profile: Profile;
-  list: List;
-  mover: Mover;
-  filter: Filter;
-  stats: Stats;
-  system: System;
-}
