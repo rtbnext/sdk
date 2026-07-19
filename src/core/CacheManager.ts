@@ -34,8 +34,8 @@ export class CacheManager {
     if ( ! cached ) {
       const response = await this.httpClient.request( path, options );
       const entry = this.createEntry( response );
-
       this.store && await this.store.set( path, entry );
+
       return entry;
     }
 
@@ -48,11 +48,13 @@ export class CacheManager {
     if ( response.status === 304 ) {
       const updated: CacheEntry = { ...cached, created: Date.now() };
       this.store && await this.store.set( path, updated );
+
       return updated;
     }
 
     const entry = this.createEntry( response );
     this.store && await this.store.set( path, entry );
+
     return entry;
   }
 
@@ -64,7 +66,7 @@ export class CacheManager {
     if ( cached && ( this.mode === 'session' || ! this.isExpired( cached ) ) ) return cached;
 
     const entry = this.createEntry( await this.httpClient.request( path, options ) );
-    await this.store.set( path, entry );
+    if ( this.mode === 'session' || entry.expires ) await this.store.set( path, entry );
 
     return entry;
   }
