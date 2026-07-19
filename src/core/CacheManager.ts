@@ -1,4 +1,4 @@
-import type { Cache, CacheEntry, CacheMode, CacheOptions, RequestOptions } from '../types';
+import type { Cache, CacheEntry, CacheMode, CacheOptions, HttpResponse, RequestOptions } from '../types';
 import { HttpClient } from './HttpClient';
 import { MemoryCache } from './MemoryCache';
 
@@ -12,6 +12,20 @@ export class CacheManager {
 
   private isExpired ( entry: CacheEntry ) : boolean {
     return entry.expires !== undefined && entry.expires <= Date.now();
+  }
+
+  private createEntry ( res: HttpResponse ) : CacheEntry {
+    const created = Date.now();
+    const cacheControl = res.headers.get( 'Cache-Control' ) ?? undefined;
+
+    let expires: number | undefined, match: RegExpMatchArray | null;
+    if ( cacheControl && ( match = cacheControl.match( /max-age=(\d+)/i ) ) )
+      expires = created + Number( match[ 1 ] ) * 1000;
+
+    return {
+      response: res, created, expires, etag: res.headers.get( 'ETag' ) ?? undefined,
+      lastModified: res.headers.get( 'Last-Modified' ) ?? undefined
+    };
   }
 
   public async request ( path: string, options?: RequestOptions ) : Promise< CacheEntry > {
