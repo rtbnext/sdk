@@ -40,12 +40,19 @@ export class RateLimiter {
     if ( this.tokens > 0 ) {
       this.tokens--;
 
-      if ( ! this.spreadTimer ) this.spreadTimer = setInterval( () => {
-        if ( this.tokens < this.options.maxRequests ) {
-          this.tokens++;
-          this.processQueue();
-        }
-      }, this.refillInterval );
+      if ( ! this.spreadTimer ) {
+        this.spreadTimer = setInterval( () => {
+          if ( this.tokens < this.options.maxRequests ) {
+            this.tokens++;
+            this.processQueue();
+          }
+
+          if ( this.tokens === this.options.maxRequests && this.queue.length === 0 ) {
+            this.spreadTimer && clearInterval( this.spreadTimer );
+            this.spreadTimer = null;
+          }
+        }, this.refillInterval );
+      }
 
       return;
     }
