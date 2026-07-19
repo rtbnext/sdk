@@ -39,7 +39,7 @@ export type CacheEntry = {
   expires?: number;
   etag?: string;
   lastModified?: string;
-}
+};
 
 export interface Cache {
   readonly size: number;
@@ -55,4 +55,11 @@ export type CacheMode = 'ttl' | 'revalidate' | 'session';
 export type CacheOptions = {
   type?: CacheType;
   mode?: CacheMode;
-}
+};
+
+export type RTBNextOptions = {
+  client: ClientIdentity;
+  baseUrl?: string;
+  httpTimeout?: number;
+  cache?: CacheOptions;
+};
