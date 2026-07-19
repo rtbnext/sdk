@@ -33,4 +33,15 @@ export type HttpResponse = {
   latency: number;
 };
 
-export interface CacheStore {}
+export type CacheEntry = {
+  response: HttpResponse;
+  created: number;
+}
+
+export interface CacheStore {
+  readonly size: number;
+  get ( key: string ) : Promise< CacheEntry | null >;
+  set ( key: string, value: CacheEntry ) : Promise< void >;
+  delete ( key: string ) : Promise< void >;
+  clear () : Promise< void >;
+}
