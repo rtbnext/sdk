@@ -18,10 +18,7 @@ class RateLimiter {
   }
 
   private do () : void {
-    if ( this.tokens < this.maxTokens ) {
-      this.tokens++;
-      this.processQueue();
-    }
+    if ( this.tokens < this.maxTokens ) this.tokens++, this.processQueue();
   }
 
   private processQueue () : void {
@@ -31,5 +28,10 @@ class RateLimiter {
       const next = this.queue.shift();
       if ( next ) next();
     }
+  }
+
+  public async acquire () : Promise< void > {
+    if ( this.tokens > 0 ) { this.tokens--; return }
+    return new Promise( resolve => this.queue.push( resolve ) );
   }
 }
