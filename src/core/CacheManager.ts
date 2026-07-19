@@ -10,6 +10,10 @@ export class CacheManager {
     private readonly mode: CacheMode
   ) {}
 
+  private isExpired ( entry: CacheEntry ) : boolean {
+    return entry.expires !== undefined && entry.expires <= Date.now();
+  }
+
   public async request ( path: string, options?: RequestOptions ) : Promise< CacheEntry > {
     const cached = this.store && await this.store.get( path );
     if ( cached ) return cached;
