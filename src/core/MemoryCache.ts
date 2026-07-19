@@ -1,7 +1,7 @@
-import { CacheEntry, CacheStore } from '../types';
+import { CacheEntry, Cache } from '../types';
 
 
-export class MemoryCacheStore implements CacheStore {
+export class MemoryCache implements Cache {
   private readonly cache = new Map< string, CacheEntry >();
   public get size () : number { return this.cache.size }
 
