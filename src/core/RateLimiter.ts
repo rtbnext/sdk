@@ -18,4 +18,19 @@ export class RateLimiter {
       if ( next ) next();
     }
   }
+
+  public async burst () : Promise< void > {
+    if ( this.tokens > 0 ) { this.tokens--; return }
+
+    return new Promise( resolve => {
+      this.queue.push( resolve );
+
+      if ( ! this.spreadTimer ) this.spreadTimer = setTimeout( () => {
+        this.tokens = this.options.maxRequests;
+        this.spreadTimer = null;
+
+        this.processQueue();
+      }, this.options.perMs );
+    } );
+  }
 }
