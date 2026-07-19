@@ -1,7 +1,5 @@
-type RateLimiterOptions = {
-  maxRequests: number;
-  perMs: number;
-};
+import type { RateLimiterOptions } from '../types';
+
 
 export class RateLimiter {
   private readonly maxTokens: number;

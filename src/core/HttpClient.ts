@@ -1,33 +1,6 @@
+import type { HttpClientOptions, HttpResponse, RequestOptions } from '../types';
 import { RateLimiter } from './RateLimiter';
 
-type ClientIdentity = {
-  name: string;
-  version: string;
-  contact?: string;
-  email?: string;
-};
-
-type HttpClientOptions = {
-  baseUrl: string;
-  sdkVersion: string;
-  client: ClientIdentity;
-  limiter: RateLimiterOptions;
-  timeout: number;
-};
-
-type RequestOptions = {
-  headers?: Headers;
-  timeout?: number;
-};
-
-type HttpResponse = {
-  url: URL;
-  ok: boolean;
-  status: number;
-  body: Uint8Array< ArrayBuffer >;
-  headers: Headers;
-  latency: number;
-};
 
 export class HttpClient {
   private readonly limiter: RateLimiter;
