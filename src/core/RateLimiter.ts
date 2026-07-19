@@ -9,10 +9,10 @@ class RateLimiter {
   private queue: ( () => void )[] = [];
   private tokens: number;
 
-  constructor ( private readonly options: RateLimiterOptions ) {
-    this.maxTokens = options.maxRequests;
-    this.refillInterval = options.perMs / options.maxRequests;
-    this.tokens = options.maxRequests;
+  constructor ( { maxRequests, perMs }: RateLimiterOptions ) {
+    this.maxTokens = maxRequests;
+    this.refillInterval = perMs / maxRequests;
+    this.tokens = maxRequests;
 
     setInterval( () => this.do(), this.refillInterval );
   }
