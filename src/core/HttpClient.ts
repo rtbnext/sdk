@@ -17,7 +17,14 @@ type RequestOptions = {
   timeout?: number;
 };
 
-type HttpResponse = {};
+type HttpResponse = {
+  url: URL;
+  ok: boolean;
+  status: number;
+  body: Uint8Array< ArrayBuffer >;
+  headers: Headers;
+  latency: number;
+};
 
 export class HttpClient {
   private readonly pending = new Map< string, Promise< HttpResponse > >();
@@ -59,6 +66,9 @@ export class HttpClient {
     const start = performance.now();
     const res = await fetch( url, this.requestInit( options ) );
     const latency = Math.round( performance.now() - start );
+    const body = new Uint8Array( await res.arrayBuffer() );
+
+    return { url, ok: res.ok, status: res.status, body, headers: res.headers, latency };
   }
 
   public async request ( path: string, options?: RequestOptions ) : Promise< HttpResponse > {
