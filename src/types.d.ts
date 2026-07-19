@@ -1,3 +1,6 @@
+import type { Profile } from './api/Profile';
+
+
 export type ClientIdentity = {
   name: string;
   version: string;
@@ -63,3 +66,7 @@ export type RTBNextOptions = {
   httpTimeout?: number;
   cache?: CacheOptions;
 };
+
+export interface Endpoints {
+  profile: Profile;
+}
