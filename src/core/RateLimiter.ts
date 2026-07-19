@@ -14,6 +14,13 @@ class RateLimiter {
     this.refillInterval = options.perMs / options.maxRequests;
     this.tokens = options.maxRequests;
 
-    setInterval( () => this.refill(), this.refillInterval );
+    setInterval( () => this.next(), this.refillInterval );
+  }
+
+  private next () : void {
+    if ( this.tokens < this.maxTokens ) {
+      this.tokens++;
+      this.processQueue();
+    }
   }
 }
