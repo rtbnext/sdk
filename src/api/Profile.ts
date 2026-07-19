@@ -1,4 +1,14 @@
-import { Endpoint } from './Endpoint';
+import type { CacheManager } from '../core/CacheManager';
+import { API } from './API';
 
 
-export class Profile extends Endpoint {}
+export class Profile extends API {
+  constructor ( cache: CacheManager ) {
+    super( cache, {
+      index: {
+        path: 'profile/index.json',
+        format: 'json'
+      }
+    } );
+  }
+}
