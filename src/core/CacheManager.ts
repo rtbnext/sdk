@@ -18,9 +18,8 @@ export class CacheManager {
     const created = Date.now();
     const cacheControl = res.headers.get( 'Cache-Control' ) ?? undefined;
 
-    let expires: number | undefined, match: RegExpMatchArray | null;
-    if ( cacheControl && ( match = cacheControl.match( /max-age=(\d+)/i ) ) )
-      expires = created + Number( match[ 1 ] ) * 1000;
+    const match = cacheControl?.match( /max-age=(\d+)/i );
+    const expires = match ? created + Number( match[ 1 ] ) * 1000 : undefined;
 
     return {
       response: res, created, expires, etag: res.headers.get( 'ETag' ) ?? undefined,
