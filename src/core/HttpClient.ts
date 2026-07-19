@@ -43,7 +43,19 @@ export class HttpClient {
     return headers;
   };
 
-  private async execute ( path: string, options?: RequestOptions ) : Promise< HttpResponse > {}
+  private async execute ( url: URL, options?: RequestOptions ) : Promise< HttpResponse > {}
 
-  public async request ( path: string, options?: RequestOptions ) : Promise< HttpResponse > {}
+  public async request ( path: string, options?: RequestOptions ) : Promise< HttpResponse > {
+    const url = new URL( path, this.options.baseUrl );
+    const key = url.href;
+
+    const existing = this.pending.get( key );
+    if ( existing ) return existing;
+
+    const request = this.execute( url, options );
+    this.pending.set( key, request );
+
+    try { return await request }
+    finally { this.pending.delete( key ) }
+  }
 }
