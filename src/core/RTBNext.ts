@@ -43,4 +43,9 @@ export class RTBNext {
   public get cache () : CacheManager { return this.cacheManager }
 
   public get profile () : Profile { return this.endpoints.profile }
+  public get list () : List { return this.endpoints.list }
+  public get mover () : Mover { return this.endpoints.mover }
+  public get filter () : Filter { return this.endpoints.filter }
+  public get stats () : Stats { return this.endpoints.stats }
+  public get system () : System { return this.endpoints.system }
 }
