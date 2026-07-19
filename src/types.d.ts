@@ -72,7 +72,6 @@ export type RTBNextOptions = {
   cache?: CacheOptions;
 };
 
-export type ApiResponse< T > = {
-  response: CacheEntry;
+export interface ApiResponse< T > extends CacheEntry {
   data: () => T | null;
-};
+}
