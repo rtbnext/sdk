@@ -3,7 +3,7 @@ type RateLimiterOptions = {
   perMs: number;
 };
 
-class RateLimiter {
+export class RateLimiter {
   private readonly maxTokens: number;
   private readonly refillInterval: number;
   private queue: ( () => void )[] = [];

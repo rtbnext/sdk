@@ -1,3 +1,5 @@
+import { RateLimiter } from './RateLimiter';
+
 type ClientIdentity = {
   name: string;
   version: string;
@@ -27,10 +29,12 @@ type HttpResponse = {
 };
 
 export class HttpClient {
+  private readonly limiter: RateLimiter;
   private readonly pending = new Map< string, Promise< HttpResponse > >();
   private readonly headers: Headers;
 
   constructor ( private readonly options: HttpClientOptions ) {
+    this.limiter = new RateLimiter( { maxRequests: 60, perMs: 10_000 } );
     this.headers = this.createHeaders();
   }
 
