@@ -1,4 +1,5 @@
-import type { RTBNextOptions } from '../types';
+import { Profile } from '../api/Profile';
+import type { Endpoints, RTBNextOptions } from '../types';
 import { CacheManager } from './CacheManager';
 import { HttpClient } from './HttpClient';
 
@@ -6,6 +7,7 @@ import { HttpClient } from './HttpClient';
 export class RTBNext {
   private readonly httpClient: HttpClient;
   private readonly cacheManager: CacheManager;
+  private readonly endpoints: Endpoints;
 
   constructor ( private readonly options: RTBNextOptions ) {
     const { client, baseUrl, httpTimeout, cache } = this.options;
@@ -18,6 +20,13 @@ export class RTBNext {
     } );
 
     this.cacheManager = CacheManager.getInstance( this.httpClient, cache );
+    this.endpoints = this.loadEndpoints();
+  }
+
+  private loadEndpoints () : Endpoints {
+    return {
+      profile: new Profile( this.cacheManager )
+    };
   }
 
   public get client () : HttpClient { return this.httpClient }
