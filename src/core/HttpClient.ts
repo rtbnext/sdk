@@ -48,7 +48,13 @@ export class HttpClient {
     return headers;
   };
 
-  private async execute ( url: URL, options?: RequestOptions ) : Promise< HttpResponse > {}
+  private prepareRequest ( options?: RequestOptions ) : RequestInit {}
+
+  private async execute ( url: URL, options?: RequestOptions ) : Promise< HttpResponse > {
+    const start = performance.now();
+    const res = await fetch( url, this.prepareRequest( options ) );
+    const latency = Math.round( performance.now() - start );
+  }
 
   public async request ( path: string, options?: RequestOptions ) : Promise< HttpResponse > {
     const url = new URL( path, this.options.baseUrl );
