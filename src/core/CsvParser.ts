@@ -35,7 +35,8 @@ export class CsvParser {
     return values;
   }
 
-  public static parse < T > ( raw: Uint8Array< ArrayBuffer > ) : T[] {
-    const text = this.decoder.decode( raw );
+  public static parse < T > ( raw: Uint8Array< ArrayBuffer >, delimiter: string = ';' ) : T[] {
+    return this.decoder.decode( raw ).split( /\r?\n/ ).filter( l => l.trim().length > 0 )
+      .map( l => this.parseLine( l, delimiter ) ) as T[];
   }
 }
