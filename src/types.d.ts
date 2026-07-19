@@ -36,6 +36,9 @@ export type HttpResponse = {
 export type CacheEntry = {
   response: HttpResponse;
   created: number;
+  expires?: number;
+  etag?: string;
+  lastModified?: string;
 }
 
 export interface Cache {
