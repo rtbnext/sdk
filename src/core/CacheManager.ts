@@ -57,22 +57,11 @@ export class CacheManager {
   }
 
   public async request ( path: string, options?: RequestOptions ) : Promise< CacheEntry > {
+    if ( this.mode === 'revalidate' ) return this.revalidate( path, options );
     if ( ! this.store ) return this.createEntry( await this.httpClient.request( path, options ) );
 
     const cached = await this.store.get( path );
-
-    switch ( this.mode ) {
-      case 'session':
-        if ( cached ) return cached;
-        break;
-
-      case 'ttl':
-        if ( cached && ! this.isExpired( cached ) ) return cached;
-        break;
-
-      case 'revalidate':
-        return this.revalidate( path, options );
-    }
+    if ( cached && ( this.mode === 'session' || ! this.isExpired( cached ) ) ) return cached;
 
     const entry = this.createEntry( await this.httpClient.request( path, options ) );
     await this.store.set( path, entry );
