@@ -31,4 +31,6 @@ export class RTBNext {
 
   public get client () : HttpClient { return this.httpClient }
   public get cache () : CacheManager { return this.cacheManager }
+
+  public get profile () : Profile { return this.endpoints.profile }
 }
