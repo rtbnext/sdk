@@ -72,6 +72,11 @@ export type RTBNextOptions = {
   cache?: CacheOptions;
 };
 
+export type ApiResponse< T > = {
+  response: CacheEntry;
+  data: () => T | null;
+};
+
 export interface API {
   profile: Profile;
   list: List;
