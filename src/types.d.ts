@@ -33,37 +33,8 @@ export type HttpResponse = {
   latency: number;
 };
 
-export type CacheEntry = {
-  response: HttpResponse;
-  created: number;
-  expires?: number;
-  etag?: string;
-  lastModified?: string;
-};
-
-export interface Cache {
-  readonly size: number;
-  get ( key: string ) : Promise< CacheEntry | null >;
-  set ( key: string, value: CacheEntry ) : Promise< void >;
-  delete ( key: string ) : Promise< void >;
-  clear () : Promise< void >;
-}
-
-export type CacheType = false | 'memory' | Cache;
-export type CacheMode = 'ttl' | 'revalidate' | 'session';
-
-export type CacheOptions = {
-  type?: CacheType;
-  mode?: CacheMode;
-};
-
 export type RTBNextOptions = {
   client: ClientIdentity;
   baseUrl?: string;
   httpTimeout?: number;
-  cache?: CacheOptions;
 };
-
-export interface ApiResponse< T > extends CacheEntry {
-  data: () => T | null;
-}

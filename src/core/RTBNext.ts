@@ -6,7 +6,7 @@ export class RTBNext {
   public readonly httpClient: HttpClient;
 
   constructor ( private readonly options: RTBNextOptions ) {
-    const { client, baseUrl, httpTimeout, cache } = this.options;
+    const { client, baseUrl, httpTimeout } = this.options;
 
     this.httpClient = new HttpClient( {
       baseUrl: baseUrl ?? 'https://api.rtbnext.de/v2',
