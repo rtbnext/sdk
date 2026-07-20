@@ -8,8 +8,8 @@ export class CsvParser extends TextParser {
     return Number.isNaN( n ) ? value.trim() : n;
   }
 
-  private static parseLine ( line: string, delimiter: string ) : unknown[] {
-    const values: unknown[] = [];
+  private static parseLine ( line: string, delimiter: string ) : ( string | number )[] {
+    const values: ( string | number )[] = [];
     let value = '', quoted = false;
 
     for ( let i = 0; i < line.length; i++ ) {
