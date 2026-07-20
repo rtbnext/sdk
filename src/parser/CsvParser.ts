@@ -1,10 +1,8 @@
 import { HttpResponse } from '../types';
+import { TextParser } from './TextParser';
 
 
-export class CsvParser {
-  protected static readonly decoder = new TextDecoder( 'utf-8' );
-  private constructor () {}
-
+export class CsvParser extends TextParser {
   private static parseValue ( value: string ) : string | number {
     const n = Number( value );
     return Number.isNaN( n ) ? value.trim() : n;
@@ -38,12 +36,11 @@ export class CsvParser {
     return values;
   }
 
-  public static parse < T > ( res: HttpResponse, delimiter: string = ';' ) : T {
+  public static override parse < T > ( res: HttpResponse, delimiter: string = ';' ) : T {
     if ( ! res.ok ) throw new Error( `Request failed with status ${ res.status }.` );
     if ( ! res.body.byteLength ) throw new Error( 'Response contains no data.' );
 
-    return this.decoder.decode( res.body )
-      .split( /\r?\n/ ).filter( l => l.trim().length > 0 )
+    return super.parse( res ).split( /\r?\n/ ).filter( l => l.trim().length > 0 )
       .map( l => this.parseLine( l, delimiter ) ) as T;
   }
 }
