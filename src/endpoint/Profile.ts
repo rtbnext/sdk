@@ -1,6 +1,7 @@
 import type { TProfileData, TProfileHistory, TProfileIndex, TProfileMetaData } from '@rtbnext/schema/src/model/profile';
 import type { TSearchIndex } from '@rtbnext/schema/src/model/search';
 import type { Resource } from '../core/Resource';
+import { Utils } from '../core/Utils';
 import { Endpoint } from './Endpoint';
 
 
@@ -30,8 +31,8 @@ export class Profile extends Endpoint {
     data: Resource< TProfileData >,
     history: Resource< TProfileHistory >
   } | null > {
-    const index = await this.index().data();
-    const uri = index.items.find( i => i.uri === uriLike || i.aliases.includes( uriLike ) )?.uri;
+    const index = await this.index().data(), test = Utils.sanitize( uriLike );
+    const uri = index.items.find( i => i.uri === test || i.aliases.includes( test ) )?.uri;
 
     return ! uri ? null : {
       meta: this.profileMeta( uri ),
