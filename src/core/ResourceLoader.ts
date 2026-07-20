@@ -33,6 +33,10 @@ export class ResourceLoader {
     return this.createState( res, prev );
   }
 
+  private isExpired ( state: ResourceState ) : boolean {
+    return !! state.expires && state.expires <= Date.now();
+  }
+
   public get size () : number {
     return this.cache.size;
   }
