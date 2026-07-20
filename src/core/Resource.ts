@@ -38,31 +38,27 @@ export class Resource< T > {
   public async load ( options?: RequestOptions ) : Promise< void > {
     if ( this.loaded ) return;
 
-    this.loading ??= this.loader.load( this.path, options ).then( state => {
-      this.state = state;
-      this.loaded = true;
-
-      this.emit( 'load', 'update' );
-    } );
+    this.loading ??= this.loader.load( this.path, options )
+      .then( state => {
+        this.state = state, this.loaded = true, this.parsed = false, this.value = undefined;
+        this.emit( 'load', 'update' );
+      } )
+      .finally( () => this.loading = undefined );
 
     return this.loading;
   }
 
   public async refresh ( options?: RequestOptions ) : Promise< void > {
     this.state = await this.loader.refresh( this.path, options );
-    this.parsed = false;
-    this.value = undefined;
-
+    this.loaded = true, this.parsed = false, this.value = undefined;
     this.emit( 'refresh', 'update' );
   }
 
-  public async data ( options?: RequestOptions, ...args: any[] ) : Promise< T > {
-    await this.load( options );
+  public async data ( ...args: any[] ) : Promise< T > {
+    await this.load();
 
     if ( ! this.parsed ) {
-      this.value = this.parser( this.state!.response, ...args );
-      this.parsed = true;
-
+      this.value = this.parser( this.state!.response, ...args ), this.parsed = true;
       this.emit( 'parse' );
     }
 
