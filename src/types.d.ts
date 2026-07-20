@@ -33,6 +33,16 @@ export type HttpResponse = {
   latency: number;
 };
 
+export type ResourceState = {};
+
+export interface Cache {
+  readonly size: number;
+  get ( key: string ) : Promise< ResourceState | null >;
+  set ( key: string, value: ResourceState ) : Promise< void >;
+  delete ( key: string ) : Promise< void >;
+  clear () : Promise< void >;
+}
+
 export type RTBNextOptions = {
   client: ClientIdentity;
   baseUrl?: string;
