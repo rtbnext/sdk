@@ -1,4 +1,4 @@
-import { HttpResponse } from '../types';
+import type { HttpResponse } from '../types';
 import { TextParser } from './TextParser';
 
 
