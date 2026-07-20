@@ -2,8 +2,7 @@ import type { HttpResponse } from '../types';
 
 
 export class TextParser {
-  protected static readonly decoder = new TextDecoder( 'utf-8' );
-  protected constructor () {}
+  private static readonly decoder = new TextDecoder( 'utf-8' );
 
   public static parse ( res: HttpResponse ) : string {
     if ( ! res.ok ) throw new Error( `Request failed with status ${ res.status }.` );
