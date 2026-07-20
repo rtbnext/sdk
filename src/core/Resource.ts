@@ -3,7 +3,7 @@ import type { ResourceLoader } from './ResourceLoader';
 
 
 export class Resource< T > {
-  private readonly hooks = new Map< string, Set< ( ...args: unknown[] ) => void > >();
+  private readonly hooks = new Map< string, Set< ( self: this ) => void > >();
 
   private state!: ResourceState;
   private parsed: boolean = false;
@@ -14,6 +14,20 @@ export class Resource< T > {
     private readonly loader: ResourceLoader,
     private readonly parser: ( res: HttpResponse ) => T
   ) {}
+
+  private emit ( ...events: string[] ) : void {
+    for ( const event of events ) this.hooks.get( event )?.forEach( handler => handler( this ) );
+  }
+
+  public on ( event: string, handler: ( self: this ) => void ) : this {
+    ( this.hooks.get( event ) || this.hooks.set( event, new Set() ).get( event ) )!.add( handler );
+    return this;
+  }
+
+  public off ( event: string, handler: ( self: this ) => void ) : this {
+    this.hooks.get( event )?.delete( handler );
+    return this;
+  }
 
   public async request ( options?: RequestOptions ) : Promise< void > {
     this.state = await this.loader.request( this.path, options );
