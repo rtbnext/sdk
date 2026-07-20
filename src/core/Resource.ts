@@ -1,4 +1,4 @@
-import { CacheManager } from './CacheManager';
+import { ResourceLoader } from './ResourceLoader';
 
 
 export class Resource< T > {
@@ -6,7 +6,7 @@ export class Resource< T > {
 
   constructor (
     private readonly path: string,
-    private readonly cache: CacheManager,
+    private readonly loader: ResourceLoader,
     private readonly parser: any
   ) {}
 }

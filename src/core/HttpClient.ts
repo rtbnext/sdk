@@ -27,7 +27,6 @@ export class HttpClient {
     headers.set( 'User-Agent', `${ userAgent } @rtbnext/sdk/${ sdkVersion }` );
     headers.set( 'X-Client-Name', client.name );
     headers.set( 'X-Client-Version', client.version );
-
     if ( client.contact ) headers.set( 'X-Client-Contact', client.contact );
 
     return headers;
