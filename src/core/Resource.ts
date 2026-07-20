@@ -5,7 +5,7 @@ import type { ResourceLoader } from './ResourceLoader';
 export class Resource< T > {
   private readonly hooks = new Map< string, Set< ( self: this ) => void > >();
 
-  private state!: ResourceState;
+  private state?: ResourceState;
   private parsed: boolean = false;
   private value?: T;
 
@@ -46,6 +46,8 @@ export class Resource< T > {
   }
 
   public data () : T {
+    if ( ! this.state ) throw new Error( 'Resource has not been loaded.' );
+
     if ( ! this.parsed ) {
       this.value = this.parser( this.state.response );
       this.parsed = true;
