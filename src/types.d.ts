@@ -43,8 +43,17 @@ export interface Cache {
   clear () : Promise< void >;
 }
 
+export type CacheMode = 'ttl' | 'revalidate' | 'session';
+export type CacheType = false | 'memory' | Cache;
+
+export type CacheOptions = {
+  type?: CacheType;
+  mode?: CacheMode;
+};
+
 export type RTBNextOptions = {
   client: ClientIdentity;
   baseUrl?: string;
   httpTimeout?: number;
+  cache?: CacheOptions;
 };
