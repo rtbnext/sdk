@@ -1,21 +1,27 @@
-import type { TProfileIndex } from '@rtbnext/schema/src/model/profile';
+import type { TProfileData, TProfileHistory, TProfileIndex, TProfileMetaData } from '@rtbnext/schema/src/model/profile';
+import type { TSearchIndex } from '@rtbnext/schema/src/model/search';
 import type { Resource } from '../core/Resource';
 import { Endpoint } from './Endpoint';
 
 
 export class Profile extends Endpoint {
-  private readonly uris = new Map< string, string >();
-
   public index () : Resource< TProfileIndex > {
-    return this.json< TProfileIndex >( 'profile/index.json' ).on( 'update', ( { data } ) => {
-      this.uris.clear();
+    return this.json< TProfileIndex >( 'profile/index.json' );
+  }
 
-      data().then( ( { items } ) => {
-        for ( const { uri, aliases } of items ) {
-          for ( const alias of aliases ) this.uris.set( alias, uri );
-          this.uris.set( uri, uri );
-        }
-      } );
-    } );
+  public searchIndex () : Resource< TSearchIndex > {
+    return this.json< TSearchIndex >( 'profile/search.json' );
+  }
+
+  public profileMeta ( uri: string ) : Resource< TProfileMetaData > {
+    return this.json< TProfileMetaData >( `profile/${ uri }/meta.json` );
+  }
+
+  public profileData ( uri: string ) : Resource< TProfileData > {
+    return this.json< TProfileData >( `profile/${ uri }/profile.json` );
+  }
+
+  public profileHistory ( uri: string ) : Resource< TProfileHistory > {
+    return this.csv< TProfileHistory >( `profile/${ uri }/history.json` );
   }
 }
