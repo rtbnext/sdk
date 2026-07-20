@@ -34,7 +34,7 @@ export class Resource< T > {
     this.parsed = false;
     this.value = undefined;
 
-    this.emit( 'request' );
+    this.emit( 'request', 'update' );
   }
 
   public async revalidate ( options?: RequestOptions ) : Promise< void > {
@@ -42,7 +42,7 @@ export class Resource< T > {
     this.parsed = false;
     this.value = undefined;
 
-    this.emit( 'revalidate' );
+    this.emit( 'revalidate', 'update' );
   }
 
   public data () : T {
