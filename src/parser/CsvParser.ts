@@ -37,9 +37,6 @@ export class CsvParser extends TextParser {
   }
 
   public static override parse < T > ( res: HttpResponse, delimiter: string = ';' ) : T {
-    if ( ! res.ok ) throw new Error( `Request failed with status ${ res.status }.` );
-    if ( ! res.body.byteLength ) throw new Error( 'Response contains no data.' );
-
     return super.parse( res ).split( /\r?\n/ ).filter( l => l.trim().length > 0 )
       .map( l => this.parseLine( l, delimiter ) ) as T;
   }
