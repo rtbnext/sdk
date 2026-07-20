@@ -49,16 +49,7 @@ export class ResourceLoader {
     if ( this.mode === 'revalidate' ) return await this.revalidate( path, options );
 
     const cached = await this.cache.get( path );
-
-    switch ( this.mode ) {
-      case 'session':
-        if ( cached ) return cached;
-        break;
-
-      case 'ttl':
-        if ( cached && ! this.isExpired( cached ) ) return cached;
-        break;
-    }
+    if ( cached && ( this.mode === 'session' || ! this.isExpired( cached ) ) ) return cached;
 
     const state = await this.fetch( path, undefined, options );
     if ( this.mode === 'session' || state.expires ) await this.cache.set( path, state );
