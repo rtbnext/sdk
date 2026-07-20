@@ -1,3 +1,4 @@
+import { System } from '../endpoint/System';
 import type { RTBNextOptions } from '../types';
 import { HttpClient } from './HttpClient';
 import { ResourceLoader } from './ResourceLoader';
@@ -16,6 +17,8 @@ export class RTBNext {
   public readonly httpClient: HttpClient;
   public readonly resourceLoader: ResourceLoader;
 
+  public readonly system: System;
+
   constructor ( options: RTBNextOptions ) {
     this.httpClient = new HttpClient( {
       baseUrl: options.baseUrl ?? DEFAULT_OPTIONS.baseUrl,
@@ -28,5 +31,7 @@ export class RTBNext {
     this.resourceLoader = ResourceLoader.getInstance( this.httpClient, {
       ...DEFAULT_OPTIONS.cache, ...options.cache
     } );
+
+    this.system = new System( this.resourceLoader );
   }
 }
