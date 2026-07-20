@@ -1,4 +1,4 @@
-import { Cache, CacheMode, CacheOptions } from '../types';
+import { Cache, CacheMode, CacheOptions, HttpResponse, ResourceState } from '../types';
 import { EmptyCache } from './EmptyCache';
 import { HttpClient } from './HttpClient';
 import { MemoryCache } from './MemoryCache';
@@ -10,6 +10,19 @@ export class ResourceLoader {
     private readonly httpClient: HttpClient,
     private readonly mode: CacheMode
   ) {}
+
+  private createState ( res: HttpResponse, prev?: ResourceState ) : ResourceState {
+    const created = Date.now();
+    const response = res.status === 304 && prev ? { ...prev.response, headers: res.headers } : res;
+
+    const maxAge = res.headers.get( 'Cache-Control' )?.match( /max-age=(\d+)/i )?.[ 1 ];
+    const expires = maxAge ? created + Number( maxAge ) * 1000 : prev?.expires;
+
+    const etag = res.headers.get( 'ETag' ) ?? prev?.etag;
+    const lastModified = res.headers.get( 'Last-Modified' ) ?? prev?.lastModified;
+
+    return { response, created, expires, etag, lastModified };
+  }
 
   public get size () : number {
     return this.cache.size;
