@@ -48,11 +48,11 @@ export class Resource< T > {
     this.emit( 'revalidate', 'update' );
   }
 
-  public data () : T {
+  public data ( ...args: any[] ) : T {
     if ( ! this.state ) throw new Error( 'Resource has not been loaded.' );
 
     if ( ! this.parsed ) {
-      this.value = this.parser( this.state.response );
+      this.value = this.parser( this.state.response, ...args );
       this.parsed = true;
 
       this.emit( 'parse' );
