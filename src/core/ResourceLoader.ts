@@ -11,6 +11,18 @@ export class ResourceLoader {
     private readonly mode: CacheMode
   ) {}
 
+  public get size () : number {
+    return this.cache.size;
+  }
+
+  public async delete ( path: string ) : Promise< void > {
+    this.cache.delete( path );
+  }
+
+  public async clear () : Promise< void > {
+    this.cache.clear();
+  }
+
   public static getInstance ( client: HttpClient, options: CacheOptions = {} ) : ResourceLoader {
     const { type = 'memory', mode = 'ttl' } = options;
     const cache = type === 'memory' ? new MemoryCache() : type === false ? new EmptyCache() : type;
