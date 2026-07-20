@@ -33,7 +33,13 @@ export type HttpResponse = {
   latency: number;
 };
 
-export type ResourceState = {};
+export type ResourceState = {
+  response: HttpResponse;
+  created: number;
+  expires?: number;
+  etag?: string;
+  lastModified?: string;
+};
 
 export interface Cache {
   readonly size: number;
