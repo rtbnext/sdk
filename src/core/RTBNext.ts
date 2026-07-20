@@ -1,5 +1,6 @@
 import type { RTBNextOptions } from '../types';
 import { HttpClient } from './HttpClient';
+import { ResourceLoader } from './ResourceLoader';
 
 
 const DEFAULT_OPTIONS = {
@@ -13,6 +14,7 @@ const DEFAULT_OPTIONS = {
 
 export class RTBNext {
   public readonly httpClient: HttpClient;
+  public readonly resourceLoader: ResourceLoader;
 
   constructor ( options: RTBNextOptions ) {
     this.httpClient = new HttpClient( {
@@ -21,6 +23,10 @@ export class RTBNext {
       client: options.client,
       limiter: DEFAULT_OPTIONS.limiter,
       timeout: options.httpTimeout ?? DEFAULT_OPTIONS.httpTimeout
+    } );
+
+    this.resourceLoader = ResourceLoader.getInstance( this.httpClient, {
+      ...DEFAULT_OPTIONS.cache, ...options.cache
     } );
   }
 }
