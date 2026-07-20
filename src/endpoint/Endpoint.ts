@@ -8,7 +8,7 @@ export abstract class Endpoint {
 
   protected async json < T > ( path: string, options?: RequestOptions ) : Promise< ApiResponse< T > > {
     const res = await this.cache.request( path, options );
-    const data = () => res.response.ok ? JsonParser.parse< T >( res.response.body ) : null
+    const data = () => res.response.ok ? JsonParser.parse< T >( res.response.body ) : null;
 
     return { ...res, data };
   }
