@@ -41,7 +41,7 @@ export type ResourceState = {
   lastModified?: string;
 };
 
-export type ParserFn = ( res: HttpResponse, ...args: any[] ) => T;
+export type ParserFn< T > = ( res: HttpResponse, ...args: any[] ) => T;
 
 export interface Cache {
   readonly size: number;

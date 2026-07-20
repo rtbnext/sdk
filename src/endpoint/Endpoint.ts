@@ -9,7 +9,7 @@ import type { ParserFn, RequestOptions } from '../types';
 export abstract class Endpoint {
   constructor ( protected readonly loader: ResourceLoader ) {}
 
-  private async resource < T > ( path: string, parser: ParserFn, options?: RequestOptions ) : Promise< Resource< T > > {
+  private async resource < T > ( path: string, parser: ParserFn< T >, options?: RequestOptions ) : Promise< Resource< T > > {
     const res = new Resource< T >( path, this.loader, parser );
     await res.request( options );
 

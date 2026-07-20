@@ -12,7 +12,7 @@ export class Resource< T > {
   constructor (
     private readonly path: string,
     private readonly loader: ResourceLoader,
-    private readonly parser: ParserFn
+    private readonly parser: ParserFn< T >
   ) {}
 
   private emit ( ...events: string[] ) : void {
