@@ -5,7 +5,7 @@ import { Profile } from '../api/Profile';
 import { Stats } from '../api/Stats';
 import { System } from '../api/System';
 import type { RTBNextOptions } from '../types';
-import { CacheManager } from './CacheManager';
+import { CacheManager } from '../../_old/CacheManager';
 import { HttpClient } from './HttpClient';
 
 
