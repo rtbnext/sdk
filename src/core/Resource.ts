@@ -20,12 +20,15 @@ export class Resource< T > {
   }
 
   public on ( event: string, handler: ( self: this ) => void ) : this {
-    ( this.hooks.get( event ) || this.hooks.set( event, new Set() ).get( event ) )!.add( handler );
+    if ( ! this.hooks.has( event ) ) this.hooks.set( event, new Set() );
+    this.hooks.get( event )!.add( handler );
+
     return this;
   }
 
   public off ( event: string, handler: ( self: this ) => void ) : this {
     this.hooks.get( event )?.delete( handler );
+
     return this;
   }
 
