@@ -5,7 +5,10 @@ import type { ResourceLoader } from './ResourceLoader';
 export class Resource< T > {
   private readonly hooks = new Map< string, Set< ( self: this ) => void > >();
 
+  private loaded: boolean = false;
+  private loading?: Promise< void >;
   private state?: ResourceState;
+
   private parsed: boolean = false;
   private value?: T;
 
@@ -33,11 +36,16 @@ export class Resource< T > {
   }
 
   public async load ( options?: RequestOptions ) : Promise< void > {
-    this.state = await this.loader.load( this.path, options );
-    this.parsed = false;
-    this.value = undefined;
+    if ( this.loaded ) return;
 
-    this.emit( 'request', 'update' );
+    this.loading ??= this.loader.load( this.path, options ).then( state => {
+      this.state = state;
+      this.loaded = true;
+
+      this.emit( 'load', 'update' );
+    } );
+
+    return this.loading;
   }
 
   public async refresh ( options?: RequestOptions ) : Promise< void > {
@@ -45,11 +53,11 @@ export class Resource< T > {
     this.parsed = false;
     this.value = undefined;
 
-    this.emit( 'revalidate', 'update' );
+    this.emit( 'refresh', 'update' );
   }
 
   public async data ( options?: RequestOptions, ...args: any[] ) : Promise< T > {
-    if ( ! this.state ) await this.load( options );
+    await this.load( options );
 
     if ( ! this.parsed ) {
       this.value = this.parser( this.state!.response, ...args );
