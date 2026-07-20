@@ -12,7 +12,7 @@ export class Resource< T > {
   constructor (
     private readonly path: string,
     private readonly loader: ResourceLoader,
-    private readonly parser: ( res: HttpResponse ) => T
+    private readonly parser: ( res: HttpResponse, ...args: unknown[] ) => T
   ) {}
 
   private emit ( ...events: string[] ) : void {
