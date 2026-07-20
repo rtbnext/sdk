@@ -1,4 +1,4 @@
-import { Cache, CacheMode, CacheOptions, HttpResponse, ResourceState } from '../types';
+import { Cache, CacheMode, CacheOptions, HttpResponse, RequestOptions, ResourceState } from '../types';
 import { EmptyCache } from './EmptyCache';
 import { HttpClient } from './HttpClient';
 import { MemoryCache } from './MemoryCache';
@@ -22,6 +22,15 @@ export class ResourceLoader {
     const lastModified = res.headers.get( 'Last-Modified' ) ?? prev?.lastModified;
 
     return { response, created, expires, etag, lastModified };
+  }
+
+  private async fetch ( path: string, prev?: ResourceState, options?: RequestOptions ) : Promise< ResourceState > {
+    const headers = new Headers( options?.headers );
+    if ( prev?.etag ) headers.set( 'If-None-Match', prev.etag );
+    if ( prev?.lastModified ) headers.set( 'If-Modified-Since', prev.lastModified );
+
+    const res = await this.httpClient.request( path, { ...options, headers } );
+    return this.createState( res, prev );
   }
 
   public get size () : number {
