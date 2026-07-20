@@ -3,28 +3,20 @@ import type { ResourceLoader } from '../core/ResourceLoader';
 import { CsvParser } from '../parser/CsvParser';
 import { JsonParser } from '../parser/JsonParser';
 import { TextParser } from '../parser/TextParser';
-import type { ParserFn, RequestOptions } from '../types';
 
 
 export abstract class Endpoint {
   constructor ( protected readonly loader: ResourceLoader ) {}
 
-  private async resource < T > ( path: string, parser: ParserFn< T >, options?: RequestOptions ) : Promise< Resource< T > > {
-    const res = new Resource< T >( path, this.loader, parser );
-    await res.load( options );
-
-    return res;
+  protected text ( path: string ) : Resource< string > {
+    return new Resource< string >( path, this.loader, TextParser.parse );
   }
 
-  protected async text ( path: string, options?: RequestOptions ) : Promise< Resource< string > > {
-    return await this.resource< string >( path, TextParser.parse, options );
+  protected json < T > ( path: string ) : Resource< T > {
+    return new Resource< T >( path, this.loader, JsonParser.parse< T > );
   }
 
-  protected async json < T > ( path: string, options?: RequestOptions ) : Promise< Resource< T > > {
-    return await this.resource< T >( path, JsonParser.parse, options );
-  }
-
-  protected async csv < T > ( path: string, options?: RequestOptions ) : Promise< Resource< T > > {
-    return await this.resource< T >( path,CsvParser.parse, options );
+  protected csv < T > ( path: string ) : Resource< T > {
+    return new Resource< T >( path, this.loader, CsvParser.parse< T > );
   }
 }
