@@ -1,11 +1,3 @@
-import type { Filter } from './api/Filter';
-import type { List } from './api/List';
-import type { Mover } from './api/Mover';
-import type { Profile } from './api/Profile';
-import type { Stats } from './api/Stats';
-import type { System } from './api/System';
-
-
 export type ClientIdentity = {
   name: string;
   version: string;
