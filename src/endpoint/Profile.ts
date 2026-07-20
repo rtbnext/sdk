@@ -24,4 +24,19 @@ export class Profile extends Endpoint {
   public profileHistory ( uri: string ) : Resource< TProfileHistory > {
     return this.csv< TProfileHistory >( `profile/${ uri }/history.json` );
   }
+
+  public async get ( uriLike: string ) : Promise< {
+    meta: Resource< TProfileMetaData >,
+    data: Resource< TProfileData >,
+    history: Resource< TProfileHistory >
+  } | null > {
+    const index = await this.index().data();
+    const uri = index.items.find( i => i.uri === uriLike || i.aliases.includes( uriLike ) )?.uri;
+
+    return ! uri ? null : {
+      meta: this.profileMeta( uri ),
+      data: this.profileData( uri ),
+      history: this.profileHistory( uri )
+    };
+  }
 }
