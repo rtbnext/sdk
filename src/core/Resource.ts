@@ -1,4 +1,4 @@
-import type { HttpResponse, RequestOptions, ResourceState } from '../types';
+import type { ParserFn, RequestOptions, ResourceState } from '../types';
 import type { ResourceLoader } from './ResourceLoader';
 
 
@@ -12,7 +12,7 @@ export class Resource< T > {
   constructor (
     private readonly path: string,
     private readonly loader: ResourceLoader,
-    private readonly parser: ( res: HttpResponse, ...args: unknown[] ) => T
+    private readonly parser: ParserFn
   ) {}
 
   private emit ( ...events: string[] ) : void {
