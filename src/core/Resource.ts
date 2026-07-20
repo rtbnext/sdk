@@ -1,4 +1,4 @@
-import { ResourceLoader } from './ResourceLoader';
+import type { ResourceLoader } from './ResourceLoader';
 
 
 export class Resource< T > {

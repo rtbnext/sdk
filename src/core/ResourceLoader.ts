@@ -1,6 +1,6 @@
-import { Cache, CacheMode, CacheOptions, HttpResponse, RequestOptions, ResourceState } from '../types';
+import type { Cache, CacheMode, CacheOptions, HttpResponse, RequestOptions, ResourceState } from '../types';
 import { EmptyCache } from './EmptyCache';
-import { HttpClient } from './HttpClient';
+import type { HttpClient } from './HttpClient';
 import { MemoryCache } from './MemoryCache';
 
 
