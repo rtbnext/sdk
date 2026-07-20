@@ -32,16 +32,16 @@ export class Resource< T > {
     return this;
   }
 
-  public async request ( options?: RequestOptions ) : Promise< void > {
-    this.state = await this.loader.request( this.path, options );
+  public async load ( options?: RequestOptions ) : Promise< void > {
+    this.state = await this.loader.load( this.path, options );
     this.parsed = false;
     this.value = undefined;
 
     this.emit( 'request', 'update' );
   }
 
-  public async revalidate ( options?: RequestOptions ) : Promise< void > {
-    this.state = await this.loader.revalidate( this.path, options );
+  public async refresh ( options?: RequestOptions ) : Promise< void > {
+    this.state = await this.loader.refresh( this.path, options );
     this.parsed = false;
     this.value = undefined;
 

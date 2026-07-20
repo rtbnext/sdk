@@ -11,7 +11,7 @@ export abstract class Endpoint {
 
   private async resource < T > ( path: string, parser: ParserFn< T >, options?: RequestOptions ) : Promise< Resource< T > > {
     const res = new Resource< T >( path, this.loader, parser );
-    await res.request( options );
+    await res.load( options );
 
     return res;
   }

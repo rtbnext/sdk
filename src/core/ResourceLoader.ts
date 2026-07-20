@@ -36,7 +36,7 @@ export class ResourceLoader {
     return !! state.expires && state.expires <= Date.now();
   }
 
-  public async revalidate ( path: string, options?: RequestOptions ) : Promise< ResourceState > {
+  public async refresh ( path: string, options?: RequestOptions ) : Promise< ResourceState > {
     const cached = await this.cache.get( path );
     const state = await this.fetch( path, cached ?? undefined, options );
     await this.cache.set( path, state );
@@ -44,8 +44,8 @@ export class ResourceLoader {
     return state;
   }
 
-  public async request ( path: string, options?: RequestOptions ) : Promise< ResourceState > {
-    if ( this.mode === 'revalidate' ) return this.revalidate( path, options );
+  public async load ( path: string, options?: RequestOptions ) : Promise< ResourceState > {
+    if ( this.mode === 'revalidate' ) return this.refresh( path, options );
 
     const cached = await this.cache.get( path );
     if ( cached && ( this.mode === 'session' || ! this.isExpired( cached ) ) ) return cached;
