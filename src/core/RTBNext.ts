@@ -1,3 +1,4 @@
+import { Profile } from '../endpoint/Profile';
 import { System } from '../endpoint/System';
 import type { RTBNextOptions } from '../types';
 import { HttpClient } from './HttpClient';
@@ -17,6 +18,7 @@ export class RTBNext {
   public readonly httpClient: HttpClient;
   public readonly resourceLoader: ResourceLoader;
 
+  public readonly profile: Profile;
   public readonly system: System;
 
   constructor ( options: RTBNextOptions ) {
@@ -32,6 +34,7 @@ export class RTBNext {
       ...DEFAULT_OPTIONS.cache, ...options.cache
     } );
 
+    this.profile = new Profile( this.resourceLoader );
     this.system = new System( this.resourceLoader );
   }
 }
