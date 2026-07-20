@@ -13,14 +13,13 @@ export class ResourceLoader {
 
   private createState ( res: HttpResponse, prev?: ResourceState ) : ResourceState {
     const created = Date.now();
-    const response = res.status === 304 && prev ? { ...prev.response, headers: res.headers } : res;
-
     const maxAge = res.headers.get( 'Cache-Control' )?.match( /max-age=(\d+)/i )?.[ 1 ];
     const expires = maxAge ? created + Number( maxAge ) * 1000 : prev?.expires;
 
     const etag = res.headers.get( 'ETag' ) ?? prev?.etag;
     const lastModified = res.headers.get( 'Last-Modified' ) ?? prev?.lastModified;
 
+    const response = res.status === 304 && prev ? { ...prev.response, headers: res.headers } : res;
     return { response, created, expires, etag, lastModified };
   }
 
@@ -46,7 +45,7 @@ export class ResourceLoader {
   }
 
   public async request ( path: string, options?: RequestOptions ) : Promise< ResourceState > {
-    if ( this.mode === 'revalidate' ) return await this.revalidate( path, options );
+    if ( this.mode === 'revalidate' ) return this.revalidate( path, options );
 
     const cached = await this.cache.get( path );
     if ( cached && ( this.mode === 'session' || ! this.isExpired( cached ) ) ) return cached;
@@ -62,11 +61,11 @@ export class ResourceLoader {
   }
 
   public async delete ( path: string ) : Promise< void > {
-    this.cache.delete( path );
+    await this.cache.delete( path );
   }
 
   public async clear () : Promise< void > {
-    this.cache.clear();
+    await this.cache.clear();
   }
 
   public static getInstance ( client: HttpClient, options: CacheOptions = {} ) : ResourceLoader {
