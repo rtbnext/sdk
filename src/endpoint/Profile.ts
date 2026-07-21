@@ -1,4 +1,4 @@
-import type { TProfileData, TProfileHistory, TProfileIndex, TProfileMetaData } from '@rtbnext/schema/src/model/profile';
+import type { TProfileData, TProfileHistory, TProfileIndex, TProfileIndexItem, TProfileMetaData } from '@rtbnext/schema/src/model/profile';
 import type { TSearchIndex } from '@rtbnext/schema/src/model/search';
 import type { Resource } from '../core/Resource';
 import { Utils } from '../core/Utils';
@@ -26,13 +26,17 @@ export class Profile extends Endpoint {
     return this.csv< TProfileHistory >( `profile/${ uri }/history.json` );
   }
 
+  public async find ( uriLike: string ) : Promise< TProfileIndexItem | null > {
+    const index = await this.index().data(), test = Utils.sanitize( uriLike );
+    return index.items.find( i => i.uri === test || i.aliases.includes( test ) ) ?? null;
+  }
+
   public async get ( uriLike: string ) : Promise< {
     meta: Resource< TProfileMetaData >,
     data: Resource< TProfileData >,
     history: Resource< TProfileHistory >
   } | null > {
-    const index = await this.index().data(), test = Utils.sanitize( uriLike );
-    const uri = index.items.find( i => i.uri === test || i.aliases.includes( test ) )?.uri;
+    const uri = ( await this.find( uriLike ) )?.uri;
 
     return ! uri ? null : {
       meta: this.profileMeta( uri ),
