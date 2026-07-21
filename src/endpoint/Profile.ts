@@ -89,8 +89,8 @@ export class Profile extends Endpoint {
   }
 
   public async find ( uriLike: string ) : Promise< ProfileItem< TProfileIndexItem > | null > {
-    const index = await this.index().data(), test = Utils.sanitize( uriLike );
-    const item = index.items.find( i => i.uri === test || i.aliases.includes( test ) );
+    const index = await this.index().data(), uri = Utils.sanitize( uriLike );
+    const item = index.items.find( i => i.uri === uri || i.aliases.includes( uri ) );
 
     return item ? profileItem( this, item ) : null;
   }
