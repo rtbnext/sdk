@@ -33,10 +33,10 @@ export class HttpClient {
   };
 
   private requestInit ( options?: RequestOptions ) : RequestInit {
-    return {
-      signal: AbortSignal.timeout( options?.timeout ?? this.options.timeout ),
-      headers: new Headers( { ...this.headers, ...options?.headers } )
-    };
+    const headers = new Headers( this.headers );
+    options?.headers?.forEach( ( v, k ) => headers.set( k, v ) );
+
+    return { signal: AbortSignal.timeout( options?.timeout ?? this.options.timeout ), headers };
   }
 
   private async execute ( url: URL, options?: RequestOptions ) : Promise< HttpResponse > {
