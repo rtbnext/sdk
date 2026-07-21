@@ -1,5 +1,3 @@
-export type Expand< T > = T extends object ? { [ K in keyof T ]: T[ K ] } & {} : T;
-
 export type ClientIdentity = {
   name: string;
   version: string;
