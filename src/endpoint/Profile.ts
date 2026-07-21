@@ -83,6 +83,11 @@ export class Profile extends Endpoint {
     return this.csv< TProfileHistory >( `profile/${ uri }/history.json` );
   }
 
+  public async all () : Promise< ProfileList< TProfileIndexItem > > {
+    const index = await this.index().data();
+    return profileList( this, index.items, index.count );
+  }
+
   public async find ( uriLike: string ) : Promise< ProfileItem< TProfileIndexItem > | null > {
     const index = await this.index().data(), test = Utils.sanitize( uriLike );
     const item = index.items.find( i => i.uri === test || i.aliases.includes( test ) );
