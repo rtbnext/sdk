@@ -1,5 +1,5 @@
 import type { TProfileData, TProfileHistory, TProfileIndex, TProfileIndexItem, TProfileMetaData } from '@rtbnext/schema/src/model/profile';
-import type { TSearchIndex } from '@rtbnext/schema/src/model/search';
+import type { TSearchIndex, TSearchIndexItem } from '@rtbnext/schema/src/model/search';
 import type { Resource } from '../core/Resource';
 import { Utils } from '../core/Utils';
 import { Endpoint } from './Endpoint';
@@ -93,5 +93,12 @@ export class Profile extends Endpoint {
     const item = index.items.find( i => i.uri === uri || i.aliases.includes( uri ) );
 
     return item ? profileItem( this, item ) : null;
+  }
+
+  public async search ( query: string ) : Promise< ProfileList< TSearchIndexItem > > {
+    const index = await this.searchIndex().data(), normalized = Utils.normalize( query );
+    const items = index.items.filter( i => i.searchName.includes( normalized ) );
+
+    return profileList( this, items, items.length );
   }
 }
