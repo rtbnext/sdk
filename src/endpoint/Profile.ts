@@ -20,6 +20,8 @@ type ProfileList< T > = Readonly< {
   current: ProfileItem< T > | null;
   next: ProfileItem< T > | null;
   prev: ProfileItem< T > | null;
+  hasNext: boolean;
+  hasPrev: boolean;
 
   at ( index: number ) : ProfileItem< T > | null;
   page ( page: number, perPage?: number ) : ProfileList< T >;
@@ -38,7 +40,7 @@ function profileItem < T > ( profile: Profile, item: T & { uri: string } ) : Pro
   } );
 }
 
-function profileList < T > ( profile: Profile, raw: ( T & { uri: string } )[], count: number ) : ProfileList< T > {
+function profileList < T > ( profile: Profile, raw: readonly ( T & { uri: string } )[], count = raw.length ) : ProfileList< T > {
   const items = raw.map( i => profileItem( profile, i ) );
   let idx = 0;
 
@@ -48,6 +50,8 @@ function profileList < T > ( profile: Profile, raw: ( T & { uri: string } )[], c
     get current () { return items[ idx ] ?? null },
     get next () { return items[ ++idx ] ?? null },
     get prev () { return items[ --idx ] ?? null },
+    get hasNext () { return idx + 1 < items.length },
+    get hasPrev () { return idx > 0 },
 
     at ( index: number ) { return items[ index ] ?? null },
     page ( page: number, perPage: number = 10 ) {
