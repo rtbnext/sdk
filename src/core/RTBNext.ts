@@ -1,3 +1,6 @@
+import { Filter } from '../endpoint/Filter';
+import { List } from '../endpoint/List';
+import { Mover } from '../endpoint/Mover';
 import { Profile } from '../endpoint/Profile';
 import { Stats } from '../endpoint/Stats';
 import { System } from '../endpoint/System';
@@ -20,6 +23,9 @@ export class RTBNext {
   public readonly resourceLoader: ResourceLoader;
 
   public readonly profile: Profile;
+  public readonly list: List;
+  public readonly mover: Mover;
+  public readonly filter: Filter;
   public readonly stats: Stats;
   public readonly system: System;
 
@@ -37,6 +43,9 @@ export class RTBNext {
     } );
 
     this.profile = new Profile( this.resourceLoader );
+    this.list = new List( this.resourceLoader );
+    this.mover = new Mover( this.resourceLoader );
+    this.filter = new Filter( this.resourceLoader );
     this.stats = new Stats( this.resourceLoader );
     this.system = new System( this.resourceLoader );
   }
