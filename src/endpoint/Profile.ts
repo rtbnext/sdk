@@ -89,8 +89,7 @@ export class Profile extends Endpoint {
   }
 
   public async all () : Promise< ProfileList< TProfileIndexItem > > {
-    const index = await this.index().data();
-    return profileList( this, index.items, index.count );
+    return profileList( this, ( await this.index().data() ).items );
   }
 
   public async find ( uriLike: string ) : Promise< ProfileItem< TProfileIndexItem > | null > {
@@ -102,13 +101,10 @@ export class Profile extends Endpoint {
 
   public async search ( query: string ) : Promise< ProfileList< TSearchIndexItem > > {
     const index = await this.searchIndex().data(), normalized = Utils.normalize( query );
-    const items = index.items.filter( i => i.searchName.includes( normalized ) );
-
-    return profileList( this, items, items.length );
+    return profileList( this, index.items.filter( i => i.searchName.includes( normalized ) ) );
   }
 
   public async filter ( predicate: ( item: TSearchIndexItem ) => boolean ) : Promise< ProfileList< TSearchIndexItem > > {
-    const index = await this.searchIndex().data();
-    return profileList( this, index.items.filter( predicate ), index.count );
+    return profileList( this, ( await this.searchIndex().data() ).items.filter( predicate ) );
   }
 }
