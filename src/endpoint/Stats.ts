@@ -1,7 +1,27 @@
 import type { TIndustry } from '@rtbnext/schema/src/base/const';
-import type { TDBStats, TGlobalStats, THistory, TProfileStats, TScatter, TStatsGroup, TWealthStats } from '@rtbnext/schema/src/model/stats';
+import type { TDBStats, TGlobalStats, THistory, TProfileStats, TScatter, TStatsGroup, TStatsGroupItem, TWealthStats } from '@rtbnext/schema/src/model/stats';
 import type { Resource } from '../core/Resource';
 import { Endpoint } from './Endpoint';
+
+
+type Group< T extends string > = Record< T, TStatsGroupItem & {
+  history: Resource< THistory >;
+} >;
+
+
+function statsGroup ( stats: Stats, type: 'industry' | 'citizenship', index: TStatsGroup< string >[ 'index' ] ) : Group< string > {
+  const res = {} as Group< string >;
+
+  for ( const [ key, item ] of Object.entries( index.items ) ) {
+    let history: Resource< THistory >;
+
+    res[ key ] = Object.freeze( { ...item,
+      get history () { return history ??= stats[ type ]( key as any ) }
+    } );
+  }
+
+  return res;
+}
 
 
 export class Stats extends Endpoint {
@@ -43,5 +63,13 @@ export class Stats extends Endpoint {
 
   public citizenship ( isoCode: string ) : Resource< THistory > {
     return this.csv< THistory >( `v2/stats/citizenship/${ isoCode.toUpperCase() }.csv` );
+  }
+
+  public async group ( type: 'industry' ) : Promise< Group< TIndustry > >;
+  public async group ( type: 'citizenship' ) : Promise< Group< string > >;
+
+  public async group ( type: 'industry' | 'citizenship' ) : Promise< Group< string > > {
+    const index = await ( type === 'industry' ? this.industryIndex() : this.citizenshipIndex() ).data();
+    return statsGroup( this, type, index );
   }
 }
