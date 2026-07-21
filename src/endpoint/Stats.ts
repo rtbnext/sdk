@@ -1,6 +1,5 @@
-import type {
-  TDBStats, TGlobalStats, THistory, TProfileStats, TScatter, TWealthStats
-} from '@rtbnext/schema/src/model/stats';
+import type { TIndustry } from '@rtbnext/schema/src/base/const';
+import type { TDBStats, TGlobalStats, THistory, TProfileStats, TScatter, TStatsGroup, TWealthStats } from '@rtbnext/schema/src/model/stats';
 import type { Resource } from '../core/Resource';
 import { Endpoint } from './Endpoint';
 
@@ -28,5 +27,13 @@ export class Stats extends Endpoint {
 
   public history () : Resource< THistory > {
     return this.csv< THistory >( 'v2/stats/history.csv' );
+  }
+
+  public citizenship () : Resource< TStatsGroup< string > > {
+    return this.json< TStatsGroup< string > >( 'v2/stats/citizenship/index.json' );
+  }
+
+  public industry () : Resource< TStatsGroup< TIndustry > > {
+    return this.json< TStatsGroup< string > >( 'v2/stats/industry/index.json' );
   }
 }
