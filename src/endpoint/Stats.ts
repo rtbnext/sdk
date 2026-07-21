@@ -4,12 +4,6 @@ import type { Resource } from '../core/Resource';
 import { Endpoint } from './Endpoint';
 
 
-type Group< T extends string > = {
-  index: TStatsGroup< T >;
-  history: Record< T, Resource< THistory > >;
-};
-
-
 export class Stats extends Endpoint {
   public db () : Resource< TDBStats > {
     return this.json< TDBStats >( 'v2/stats/db.json' );
@@ -49,16 +43,5 @@ export class Stats extends Endpoint {
 
   public citizenship ( isoCode: string ) : Resource< THistory > {
     return this.csv< THistory >( `v2/stats/citizenship/${ isoCode.toUpperCase() }.csv` );
-  }
-
-  public async group ( type: 'industry' ) : Promise< Group< TIndustry > >;
-  public async group ( type: 'citizenship' ) : Promise< Group< string > >;
-
-  public async group ( type: 'industry' | 'citizenship' ) : Promise< Group< string > > {
-    const index = await ( type === 'industry' ? this.industryIndex() : this.citizenshipIndex() ).data();
-    const res = { index, history: {} };
-
-    for ( const key in index.items ) ( res.history as any )[ key ] = this[ type ]( key as any );
-    return res as any;
   }
 }
