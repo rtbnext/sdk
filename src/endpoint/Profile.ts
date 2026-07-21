@@ -13,15 +13,18 @@ type ProfileItem< T > = Readonly< T & {
 
 type ProfileList< T > = Readonly< {
   items: readonly ProfileItem< T >[];
+  total: number;
   count: number;
 
   first: ProfileItem< T > | null;
   last: ProfileItem< T > | null;
+  position: number;
   current: ProfileItem< T > | null;
-  next: ProfileItem< T > | null;
-  prev: ProfileItem< T > | null;
+
   hasNext: boolean;
+  next: ProfileItem< T > | null;
   hasPrev: boolean;
+  prev: ProfileItem< T > | null;
 
   at ( index: number ) : ProfileItem< T > | null;
   page ( page: number, perPage?: number ) : ProfileList< T >;
@@ -40,23 +43,25 @@ function profileItem < T > ( profile: Profile, item: T & { uri: string } ) : Pro
   } );
 }
 
-function profileList < T > ( profile: Profile, raw: readonly ( T & { uri: string } )[], count = raw.length ) : ProfileList< T > {
+function profileList < T > ( profile: Profile, raw: readonly ( T & { uri: string } )[], total = raw.length ) : ProfileList< T > {
   const items = raw.map( i => profileItem( profile, i ) );
   let idx = 0;
 
-  return Object.freeze( { items, count,
+  return Object.freeze( { items, total, count: items.length,
     get first () { return items[ 0 ] ?? null },
     get last () { return items.at( -1 ) ?? null },
+    get position () { return idx },
     get current () { return items[ idx ] ?? null },
-    get next () { return items[ ++idx ] ?? null },
-    get prev () { return items[ --idx ] ?? null },
+
     get hasNext () { return idx + 1 < items.length },
+    get next () { return items[ ++idx ] ?? null },
     get hasPrev () { return idx > 0 },
+    get prev () { return items[ --idx ] ?? null },
 
     at ( index: number ) { return items[ index ] ?? null },
     page ( page: number, perPage: number = 10 ) {
       const start = ( page - 1 ) * perPage, end = start + perPage;
-      return profileList( profile, raw.slice( start, end ), count );
+      return profileList( profile, raw.slice( start, end ), total );
     }
   } );
 }
