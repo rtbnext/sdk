@@ -80,7 +80,7 @@ export class Profile extends Endpoint {
   }
 
   public profileHistory ( uri: string ) : Resource< TProfileHistory > {
-    return this.csv< TProfileHistory >( `profile/${ uri }/history.json` );
+    return this.csv< TProfileHistory >( `profile/${ uri }/history.csv` );
   }
 
   public async all () : Promise< ProfileList< TProfileIndexItem > > {
