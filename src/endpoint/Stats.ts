@@ -44,4 +44,12 @@ export class Stats extends Endpoint {
   public citizenship ( isoCode: string ) : Resource< THistory > {
     return this.csv< THistory >( `v2/stats/citizenship/${ isoCode.toUpperCase() }.csv` );
   }
+
+  public async get ( type: 'industry' ) : Promise< Record< TIndustry, Resource< THistory > > >;
+  public async get ( type: 'citizenship' ) : Promise< Record< string, Resource< THistory > > >;
+
+  public async get ( type: 'industry' | 'citizenship' ) : Promise< Record< string, Resource< THistory > > > {
+    const index = await ( type === 'industry' ? this.industryIndex() : this.citizenshipIndex() ).data();
+    return Object.fromEntries( Object.keys( index ).map( key => [ key, this[ type ]( key as any ) ] ) );
+  }
 }
