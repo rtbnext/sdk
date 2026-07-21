@@ -101,4 +101,9 @@ export class Profile extends Endpoint {
 
     return profileList( this, items, items.length );
   }
+
+  public async filter ( predicate: ( item: TSearchIndexItem ) => boolean ) : Promise< ProfileList< TSearchIndexItem > > {
+    const index = await this.searchIndex().data();
+    return profileList( this, index.items.filter( predicate ), index.count );
+  }
 }
