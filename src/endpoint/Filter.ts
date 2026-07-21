@@ -1,7 +1,39 @@
-import type { TAgeGroup, TGender, TIndustry, TMaritalStatus } from '@rtbnext/schema/src/base/const';
+import type { TAgeGroup, TFilterSpecial, TGender, TIndustry, TMaritalStatus } from '@rtbnext/schema/src/base/const';
 import type { TFilter, TFilterIndex } from '@rtbnext/schema/src/model/filter';
 import type { Resource } from '../core/Resource';
 import { Endpoint } from './Endpoint';
+
+
+type Filters = {
+  industry: { [ K in TIndustry ]?: Resource< TFilter > };
+  citizenship: Record< string, Resource< TFilter > >;
+  country: Record< string, Resource< TFilter > >;
+  state: Record< string, Resource< TFilter > >;
+  gender: { [ K in TGender ]?: Resource< TFilter > };
+  age: { [ K in TAgeGroup ]?: Resource< TFilter > };
+  maritalStatus: { [ K in TMaritalStatus ]?: Resource< TFilter > };
+  special: Record< TFilterSpecial, Resource< TFilter > >;
+};
+
+
+function filters ( filter: Filter, index: TFilterIndex ) : Filters {
+  const res = {} as Filters;
+
+  for ( const [ group, items ] of Object.entries( index ) ) {
+    if ( group === '$metadata' || ! Array.isArray( items ) ) continue;
+    const target = ( res as any )[ group ] ??= {};
+
+    for ( const key of items ) {
+      let resource: Resource< TFilter >;
+
+      Object.defineProperty( target, key, { enumerable: true, configurable: false, get () {
+        return resource ??= group === 'special' ? ( filter as any )[ key ]() : ( filter as any )[ group ]( key );
+      } } );
+    }
+  }
+
+  return Object.freeze( res );
+}
 
 
 export class Filter extends Endpoint {
@@ -51,5 +83,9 @@ export class Filter extends Endpoint {
 
   public selfMade () : Resource< TFilter > {
     return this.json< TFilter >( `v2/filter/special/selfMade.json` );
+  }
+
+  public async all () : Promise< Filters > {
+    return filters( this, await this.index().data() );
   }
 }
