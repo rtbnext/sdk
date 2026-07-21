@@ -45,10 +45,10 @@ export class Stats extends Endpoint {
     return this.csv< THistory >( `v2/stats/citizenship/${ isoCode.toUpperCase() }.csv` );
   }
 
-  public async get ( type: 'industry' ) : Promise< Record< TIndustry, Resource< THistory > > >;
-  public async get ( type: 'citizenship' ) : Promise< Record< string, Resource< THistory > > >;
+  public async group ( type: 'industry' ) : Promise< Record< TIndustry, Resource< THistory > > >;
+  public async group ( type: 'citizenship' ) : Promise< Record< string, Resource< THistory > > >;
 
-  public async get ( type: 'industry' | 'citizenship' ) : Promise< Record< string, Resource< THistory > > > {
+  public async group ( type: 'industry' | 'citizenship' ) : Promise< Record< string, Resource< THistory > > > {
     const index = await ( type === 'industry' ? this.industryIndex() : this.citizenshipIndex() ).data();
     return Object.fromEntries( Object.keys( index ).map( key => [ key, this[ type ]( key as any ) ] ) );
   }
