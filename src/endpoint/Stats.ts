@@ -4,9 +4,9 @@ import type { Resource } from '../core/Resource';
 import { Endpoint } from './Endpoint';
 
 
-type Group< T extends string > = Record< T, TStatsGroupItem & {
+type Group< T extends string > = Record< T, Readonly< TStatsGroupItem & {
   history: Resource< THistory >;
-} >;
+} > >;
 
 
 function statsGroup ( stats: Stats, type: 'industry' | 'citizenship', index: TStatsGroup< string >[ 'index' ] ) : Group< string > {
