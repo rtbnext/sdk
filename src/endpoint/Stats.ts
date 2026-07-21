@@ -29,11 +29,19 @@ export class Stats extends Endpoint {
     return this.csv< THistory >( 'v2/stats/history.csv' );
   }
 
-  public citizenship () : Resource< TStatsGroup< string > > {
-    return this.json< TStatsGroup< string > >( 'v2/stats/citizenship/index.json' );
+  public industryIndex () : Resource< TStatsGroup< TIndustry >[ 'index' ] > {
+    return this.json< TStatsGroup< TIndustry >[ 'index' ] >( 'v2/stats/industry/index.json' );
   }
 
-  public industry () : Resource< TStatsGroup< TIndustry > > {
-    return this.json< TStatsGroup< string > >( 'v2/stats/industry/index.json' );
+  public industry ( industry: TIndustry ) : Resource< THistory > {
+    return this.csv< THistory >( `v2/stats/industry/${ industry.toLowerCase() }.csv` );
+  }
+
+  public citizenshipIndex () : Resource< TStatsGroup< string >[ 'index' ] > {
+    return this.json< TStatsGroup< string >[ 'index' ] >( 'v2/stats/citizenship/index.json' );
+  }
+
+  public citizenship ( isoCode: string ) : Resource< THistory > {
+    return this.csv< THistory >( `v2/stats/citizenship/${ isoCode.toUpperCase() }.csv` );
   }
 }
