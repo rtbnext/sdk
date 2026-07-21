@@ -22,7 +22,16 @@
     "LICENSE"
   ],
   "scripts": {
-    "build": "tsc"
+    "clean": "rimraf dist",
+    "build:cjs": "tsc -p tsconfig.cjs.json",
+    "build:esm": "tsc -p tsconfig.esm.json",
+    "build:dts": "tsc -p tsconfig.dts.json",
+    "build:all": "tsc -p tsconfig.cjs.json && tsc -p tsconfig.esm.json && tsc -p tsconfig.dts.json",
+    "format": "prettier --ignore-path \"\" --write \"./dist/**/*.@(js|d.ts)\" --log-level warn",
+    "bundle": "esbuild dist/esm/index.js --bundle --minify --legal-comments=none --format=iife --global-name=rtbnext --outfile=dist/rtbnext.js",
+    "build": "npm run clean && npm run build:all && npm run format && npm run bundle",
+    "postbuild": "tsc-alias",
+    "prepublishOnly": "npm run build"
   },
   "devDependencies": {
     "@types/node": "^26.1.1",
