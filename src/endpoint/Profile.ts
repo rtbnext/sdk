@@ -45,7 +45,7 @@ function profileItem < T > ( profile: Profile, item: T & { uri: string } ) : Pro
 
 function profileList < T > ( profile: Profile, raw: readonly ( T & { uri: string } )[], total = raw.length ) : ProfileList< T > {
   const items = raw.map( i => profileItem( profile, i ) );
-  let idx = 0;
+  let idx = -1;
 
   return Object.freeze( { items, total, count: items.length,
     get first () { return items[ 0 ] ?? null },
