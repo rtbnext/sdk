@@ -3,6 +3,23 @@ import type { TSearchIndex, TSearchIndexItem } from '@rtbnext/schema/src/model/s
 import type { Resource } from '../core/Resource';
 import { Utils } from '../core/Utils';
 import { Endpoint } from './Endpoint';
+import { Expand } from '../types';
+
+
+type ProfileItem< T > = Expand< T & { uri: string } & {
+  meta: Resource< TProfileMetaData >,
+  data: Resource< TProfileData >,
+  history: Resource< TProfileHistory >
+} >;
+
+
+function profileItem < T > ( item: T & { uri: string }, profile: Profile ) : ProfileItem< T > {
+  const meta = profile.profileMeta( item.uri );
+  const data = profile.profileData( item.uri );
+  const history = profile.profileHistory( item.uri );
+
+  return { ...item, meta, data, history } as ProfileItem< T >;
+}
 
 
 export class Profile extends Endpoint {
@@ -26,31 +43,10 @@ export class Profile extends Endpoint {
     return this.csv< TProfileHistory >( `profile/${ uri }/history.json` );
   }
 
-  public async find ( uriLike: string ) : Promise< TProfileIndexItem | null > {
+  public async find ( uriLike: string ) : Promise< ProfileItem< TProfileIndexItem > | null > {
     const index = await this.index().data(), test = Utils.sanitize( uriLike );
-    return index.items.find( i => i.uri === test || i.aliases.includes( test ) ) ?? null;
-  }
+    const item = index.items.find( i => i.uri === test || i.aliases.includes( test ) );
 
-  public async search ( query: string ) : Promise< TSearchIndexItem[] > {
-    const test = Utils.normalize( query );
-    return ( await this.searchIndex().data() ).items.filter( i => i.searchName.includes( test ) );
-  }
-
-  public async filter ( predicate: ( item: TSearchIndexItem ) => boolean ) : Promise< TSearchIndexItem[] > {
-    return ( await this.searchIndex().data() ).items.filter( predicate );
-  }
-
-  public async get ( uriLike: string ) : Promise< {
-    meta: Resource< TProfileMetaData >,
-    data: Resource< TProfileData >,
-    history: Resource< TProfileHistory >
-  } | null > {
-    const uri = ( await this.find( uriLike ) )?.uri;
-
-    return ! uri ? null : {
-      meta: this.profileMeta( uri ),
-      data: this.profileData( uri ),
-      history: this.profileHistory( uri )
-    };
+    return item ? profileItem( item, this ) : null;
   }
 }
