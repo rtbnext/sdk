@@ -11,6 +11,20 @@ type ProfileItem< T > = Readonly< T & {
   history: Resource< TProfileHistory >
 } >;
 
+type ProfileList< T > = Readonly< {
+  items: readonly ProfileItem< T >[];
+  count: number;
+
+  first: ProfileItem< T > | null;
+  last: ProfileItem< T > | null;
+  current: ProfileItem< T > | null;
+  next: ProfileItem< T > | null;
+  prev: ProfileItem< T > | null;
+
+  at ( index: number ) : ProfileItem< T > | null;
+  page ( page: number, perPage?: number ) : ProfileList< T >;
+} >;
+
 
 function profileItem < T > ( profile: Profile, item: T & { uri: string } ) : ProfileItem< T > {
   let meta: Resource< TProfileMetaData >;
