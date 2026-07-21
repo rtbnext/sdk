@@ -38,6 +38,25 @@ function profileItem < T > ( profile: Profile, item: T & { uri: string } ) : Pro
   } );
 }
 
+function profileList < T > ( profile: Profile, raw: ( T & { uri: string } )[], count: number ) : ProfileList< T > {
+  const items = raw.map( i => profileItem( profile, i ) );
+  let idx = 0;
+
+  return Object.freeze( { items, count,
+    get first () { return items[ 0 ] ?? null },
+    get last () { return items.at( -1 ) ?? null },
+    get current () { return items[ idx ] ?? null },
+    get next () { return items[ ++idx ] ?? null },
+    get prev () { return items[ --idx ] ?? null },
+
+    at ( index: number ) { return items[ index ] ?? null },
+    page ( page: number, perPage: number = 10 ) {
+      const start = ( page - 1 ) * perPage, end = start + perPage;
+      return profileList( profile, raw.slice( start, end ), count );
+    }
+  } );
+}
+
 
 export class Profile extends Endpoint {
   public index () : Resource< TProfileIndex > {
