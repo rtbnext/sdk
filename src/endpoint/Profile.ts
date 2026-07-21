@@ -1,24 +1,27 @@
 import type { TProfileData, TProfileHistory, TProfileIndex, TProfileIndexItem, TProfileMetaData } from '@rtbnext/schema/src/model/profile';
-import type { TSearchIndex, TSearchIndexItem } from '@rtbnext/schema/src/model/search';
+import type { TSearchIndex } from '@rtbnext/schema/src/model/search';
 import type { Resource } from '../core/Resource';
 import { Utils } from '../core/Utils';
 import { Endpoint } from './Endpoint';
-import { Expand } from '../types';
 
 
-type ProfileItem< T > = Expand< T & { uri: string } & {
+type ProfileItem< T > = Readonly< T & {
   meta: Resource< TProfileMetaData >,
   data: Resource< TProfileData >,
   history: Resource< TProfileHistory >
 } >;
 
 
-function profileItem < T > ( item: T & { uri: string }, profile: Profile ) : ProfileItem< T > {
-  const meta = profile.profileMeta( item.uri );
-  const data = profile.profileData( item.uri );
-  const history = profile.profileHistory( item.uri );
+function profileItem < T > ( profile: Profile, item: T & { uri: string } ) : ProfileItem< T > {
+  let meta: Resource< TProfileMetaData >;
+  let data: Resource< TProfileData >;
+  let history: Resource< TProfileHistory >;
 
-  return { ...item, meta, data, history } as ProfileItem< T >;
+  return Object.freeze( { ...item,
+    get meta () { return meta ??= profile.profileMeta( item.uri ) },
+    get data () { return data ??= profile.profileData( item.uri ) },
+    get history () { return history ??= profile.profileHistory( item.uri ) }
+  } );
 }
 
 
@@ -47,6 +50,6 @@ export class Profile extends Endpoint {
     const index = await this.index().data(), test = Utils.sanitize( uriLike );
     const item = index.items.find( i => i.uri === test || i.aliases.includes( test ) );
 
-    return item ? profileItem( item, this ) : null;
+    return item ? profileItem( this, item ) : null;
   }
 }
