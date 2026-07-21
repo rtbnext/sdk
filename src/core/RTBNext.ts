@@ -1,4 +1,5 @@
 import { Profile } from '../endpoint/Profile';
+import { Stats } from '../endpoint/Stats';
 import { System } from '../endpoint/System';
 import type { RTBNextOptions } from '../types';
 import { HttpClient } from './HttpClient';
@@ -19,6 +20,7 @@ export class RTBNext {
   public readonly resourceLoader: ResourceLoader;
 
   public readonly profile: Profile;
+  public readonly stats: Stats;
   public readonly system: System;
 
   constructor ( options: RTBNextOptions ) {
@@ -35,6 +37,7 @@ export class RTBNext {
     } );
 
     this.profile = new Profile( this.resourceLoader );
+    this.stats = new Stats( this.resourceLoader );
     this.system = new System( this.resourceLoader );
   }
 }
