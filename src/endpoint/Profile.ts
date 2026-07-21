@@ -1,5 +1,5 @@
 import type { TProfileData, TProfileHistory, TProfileIndex, TProfileIndexItem, TProfileMetaData } from '@rtbnext/schema/src/model/profile';
-import type { TSearchIndex } from '@rtbnext/schema/src/model/search';
+import type { TSearchIndex, TSearchIndexItem } from '@rtbnext/schema/src/model/search';
 import type { Resource } from '../core/Resource';
 import { Utils } from '../core/Utils';
 import { Endpoint } from './Endpoint';
@@ -29,6 +29,15 @@ export class Profile extends Endpoint {
   public async find ( uriLike: string ) : Promise< TProfileIndexItem | null > {
     const index = await this.index().data(), test = Utils.sanitize( uriLike );
     return index.items.find( i => i.uri === test || i.aliases.includes( test ) ) ?? null;
+  }
+
+  public async search ( query: string ) : Promise< TSearchIndexItem[] > {
+    const test = Utils.normalize( query );
+    return ( await this.searchIndex().data() ).items.filter( i => i.searchName.includes( test ) );
+  }
+
+  public async filter ( predicate: ( item: TSearchIndexItem ) => boolean ) : Promise< TSearchIndexItem[] > {
+    return ( await this.searchIndex().data() ).items.filter( predicate );
   }
 
   public async get ( uriLike: string ) : Promise< {
