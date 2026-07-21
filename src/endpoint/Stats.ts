@@ -18,7 +18,7 @@ export class Stats extends Endpoint {
   }
 
   public scatter () : Resource< TScatter > {
-    return this.json< TScatter >( 'v2/stats/statter.json' );
+    return this.json< TScatter >( 'v2/stats/scatter.json' );
   }
 
   public wealth () : Resource< TWealthStats > {
