@@ -106,9 +106,11 @@ export class Profile extends Endpoint {
     return item ? profileItem( this, item ) : null;
   }
 
-  public async search ( query: string ) : Promise< ProfileList< TSearchIndexItem > > {
-    const index = await this.searchIndex().data(), normalized = Utils.normalize( query );
-    return profileList( this, index.items.filter( i => i.searchName.includes( normalized ) ) );
+  public async search ( query: string ) : Promise< ProfileList< TProfileIndexItem > > {
+    const index = await this.index().data(), terms = Utils.sanitize( query, ' ' ).split( ' ' );
+    const items = index.items.filter( i => terms.every( t => i.name.includes( t ) || i.text.includes( t ) ) );
+
+    return profileList( this, items );
   }
 
   public async filter ( predicate: ( item: TSearchIndexItem ) => boolean ) : Promise< ProfileList< TSearchIndexItem > > {
