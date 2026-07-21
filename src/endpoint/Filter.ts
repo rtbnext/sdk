@@ -36,4 +36,20 @@ export class Filter extends Endpoint {
   public state ( uspsCode: string ) : Resource< TFilter > {
     return this.json< TFilter >( `v2/filter/state/${ uspsCode.toUpperCase() }.json` );
   }
+
+  public deceased () : Resource< TFilter > {
+    return this.json< TFilter >( `v2/filter/special/deceased.json` );
+  }
+
+  public dropOff () : Resource< TFilter > {
+    return this.json< TFilter >( `v2/filter/special/dropOff.json` );
+  }
+
+  public family () : Resource< TFilter > {
+    return this.json< TFilter >( `v2/filter/special/family.json` );
+  }
+
+  public selfMade () : Resource< TFilter > {
+    return this.json< TFilter >( `v2/filter/special/selfMade.json` );
+  }
 }
