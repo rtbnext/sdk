@@ -69,23 +69,23 @@ function profileList < T > ( profile: Profile, raw: readonly ( T & { uri: string
 
 export class Profile extends Endpoint {
   public index () : Resource< TProfileIndex > {
-    return this.json< TProfileIndex >( 'profile/index.json' );
+    return this.json< TProfileIndex >( 'v2/profile/index.json' );
   }
 
   public searchIndex () : Resource< TSearchIndex > {
-    return this.json< TSearchIndex >( 'profile/search.json' );
+    return this.json< TSearchIndex >( 'v2/profile/search.json' );
   }
 
   public profileMeta ( uri: string ) : Resource< TProfileMetaData > {
-    return this.json< TProfileMetaData >( `profile/${ uri }/meta.json` );
+    return this.json< TProfileMetaData >( `v2/profile/${ uri }/meta.json` );
   }
 
   public profileData ( uri: string ) : Resource< TProfileData > {
-    return this.json< TProfileData >( `profile/${ uri }/profile.json` );
+    return this.json< TProfileData >( `v2/profile/${ uri }/profile.json` );
   }
 
   public profileHistory ( uri: string ) : Resource< TProfileHistory > {
-    return this.csv< TProfileHistory >( `profile/${ uri }/history.csv` );
+    return this.csv< TProfileHistory >( `v2/profile/${ uri }/history.csv` );
   }
 
   public async all () : Promise< ProfileList< TProfileIndexItem > > {
