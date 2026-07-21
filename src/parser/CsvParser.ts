@@ -23,7 +23,7 @@ export class CsvParser extends TextParser {
       }
 
       if ( char === delimiter && ! quoted ) {
-        values.push( this.parseValue( value ) );
+        values.push( CsvParser.parseValue( value ) );
         value = '';
 
         continue;
@@ -32,12 +32,12 @@ export class CsvParser extends TextParser {
       value += char;
     }
 
-    values.push( this.parseValue( value ) );
+    values.push( CsvParser.parseValue( value ) );
     return values;
   }
 
-  public static override parse < T > ( res: HttpResponse, delimiter: string = ';' ) : T {
-    return super.parse( res ).split( /\r?\n/ ).filter( l => l.trim().length > 0 )
-      .map( l => this.parseLine( l, delimiter ) ) as T;
+  public static override parse < T > ( res: HttpResponse, delimiter: string = ',' ) : T {
+    return TextParser.parse( res ).split( /\r?\n/ ).filter( l => l.trim().length > 0 )
+      .map( l => CsvParser.parseLine( l, delimiter ) ) as T;
   }
 }

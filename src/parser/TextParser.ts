@@ -8,6 +8,6 @@ export class TextParser {
     if ( ! res.ok ) throw new Error( `Request failed with status ${ res.status }.` );
     if ( ! res.body.byteLength ) throw new Error( 'Response contains no data.' );
 
-    return this.decoder.decode( res.body );
+    return TextParser.decoder.decode( res.body );
   }
 }
