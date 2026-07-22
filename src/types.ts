@@ -95,7 +95,7 @@ export interface ProfileResources {
   readonly history: Resource< TProfileHistory >;
 }
 
-export type ProfileEntity< T > = Readonly< T & { uri: string } & ProfileResources >;
+export type ProfileEntity< T > = Entity< T, ProfileResources >;
 
 export type CollectionSearchFn< T > = ( item: Entity< T >, query: string, terms: string[] ) => boolean;
 
