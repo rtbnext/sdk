@@ -65,3 +65,5 @@ export class Resource< T > {
     return this.value!;
   }
 }
+
+export class CollectableResource< T > extends Resource< T > {}
