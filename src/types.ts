@@ -1,3 +1,11 @@
+import type { Filter } from './endpoint/Filter';
+import type { List } from './endpoint/List';
+import type { Mover } from './endpoint/Mover';
+import type { Profile } from './endpoint/Profile';
+import type { Stats } from './endpoint/Stats';
+import type { System } from './endpoint/System';
+
+
 export type ClientIdentity = {
   name: string;
   version: string;
@@ -58,6 +66,15 @@ export type CacheOptions = {
   type?: CacheType;
   mode?: CacheMode;
 };
+
+export interface Endpoints {
+  readonly profile: Profile;
+  readonly list: List;
+  readonly mover: Mover;
+  readonly filter: Filter;
+  readonly stats: Stats;
+  readonly system: System;
+}
 
 export type RTBNextOptions = {
   client: ClientIdentity;
