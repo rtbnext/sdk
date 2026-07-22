@@ -23,10 +23,9 @@ export function profileItem < T > ( profile: Profile, item: T & { uri: string } 
 
 export function listCollection < T > (
   endpoints: Endpoints,
-  raw: readonly ( T & { uri: string } )[],
-  total = raw.length
+  items: ProfileItem< T >[],
+  total = items.length
 ) : ListCollection< T > {
-  const items = raw.map( i => profileItem( endpoints.profile, i ) );
   let idx = -1;
 
   return Object.freeze( {
@@ -58,7 +57,7 @@ export function listCollection < T > (
 
     page ( page: number, perPage: number = 10 ) {
       const start = ( page - 1 ) * perPage, end = start + perPage;
-      return listCollection( endpoints, raw.slice( start, end ), total );
+      return listCollection( endpoints, items.slice( start, end ), total );
     },
 
     [ Symbol.iterator ]() { return items[ Symbol.iterator ]() }
