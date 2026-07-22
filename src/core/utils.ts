@@ -1,6 +1,6 @@
 import type { TProfileData, TProfileHistory, TProfileMetaData } from '@rtbnext/schema/src/model/profile';
 import type { Profile } from '../endpoint/Profile';
-import type { Endpoints, ListCollection, ProfileItem } from '../types';
+import type { ListCollection, ProfileItem } from '../types';
 import type { Resource } from './Resource';
 
 
@@ -22,8 +22,8 @@ export function profileItem < T > ( profile: Profile, item: T & { uri: string } 
 }
 
 export function listCollection < T > (
-  endpoints: Endpoints,
   items: ProfileItem< T >[],
+  search: ( item: ProfileItem< T >, query: string, terms: string[] ) => boolean,
   total = items.length
 ) : ListCollection< T > {
   let idx = -1;
@@ -45,7 +45,6 @@ export function listCollection < T > (
     get prev () { return items[ --idx ] ?? null },
 
     at ( index: number ) { return items[ index ] ?? null },
-    filter ( predicate: ( item: T ) => boolean ) { return items.filter( predicate ) },
     get ( uri: string ) { return items.find( i => i.uri === uri ) ?? null },
 
     find ( uriLike: string ) {
@@ -55,9 +54,18 @@ export function listCollection < T > (
       ) ) ?? null;
     },
 
+    filter ( predicate: ( item: ProfileItem< T > ) => boolean ) {
+      return listCollection( items.filter( predicate ), search, total );
+    },
+
+    search ( query: string ) {
+      const terms = sanitize( query, ' ' ).split( ' ' );
+      return listCollection( items.filter( i => search( i, query, terms ) ), search, total );
+    },
+
     page ( page: number, perPage: number = 10 ) {
       const start = ( page - 1 ) * perPage, end = start + perPage;
-      return listCollection( endpoints, items.slice( start, end ), total );
+      return listCollection( items.slice( start, end ), search, total );
     },
 
     [ Symbol.iterator ]() { return items[ Symbol.iterator ]() }
