@@ -1,24 +1,9 @@
-import type { TProfileData, TProfileHistory, TProfileMetaData } from '@rtbnext/schema/src/model/profile';
-import type { Profile } from '../endpoint/Profile';
 import type { Collection, CollectionSearchFn, ProfileEntity } from '../types';
-import type { Resource } from './Resource';
 
 
 export function sanitize ( value: unknown, delimiter: string = '-' ) : string {
   return String( value ).trim().toLowerCase().replace( /[^a-z0-9]+/g, delimiter )
     .replace( new RegExp( `[${ delimiter }]{2,}`, 'g' ), delimiter );
-}
-
-export function profileEntity < T > ( profile: Profile, item: T & { uri: string } ) : ProfileEntity< T > {
-  let meta: Resource< TProfileMetaData >;
-  let data: Resource< TProfileData >;
-  let history: Resource< TProfileHistory >;
-
-  return Object.freeze( { ...item,
-    get meta () { return meta ??= profile.meta( item.uri ) },
-    get data () { return data ??= profile.data( item.uri ) },
-    get history () { return history ??= profile.history( item.uri ) }
-  } );
 }
 
 export function collection < T > ( items: ProfileEntity< T >[], search: CollectionSearchFn< T >, total = items.length ) : Collection< T > {
