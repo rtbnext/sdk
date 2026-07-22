@@ -68,12 +68,12 @@ export type CacheOptions = {
 };
 
 export interface Endpoints {
-  readonly profile: Profile;
-  readonly list: List;
-  readonly mover: Mover;
-  readonly filter: Filter;
-  readonly stats: Stats;
-  readonly system: System;
+  profile: Profile;
+  list: List;
+  mover: Mover;
+  filter: Filter;
+  stats: Stats;
+  system: System;
 }
 
 export type RTBNextOptions = {
