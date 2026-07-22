@@ -15,9 +15,9 @@ export function profileEntity < T > ( profile: Profile, item: T & { uri: string 
   let history: Resource< TProfileHistory >;
 
   return Object.freeze( { ...item,
-    get meta () { return meta ??= profile.profileMeta( item.uri ) },
-    get data () { return data ??= profile.profileData( item.uri ) },
-    get history () { return history ??= profile.profileHistory( item.uri ) }
+    get meta () { return meta ??= profile.meta( item.uri ) },
+    get data () { return data ??= profile.data( item.uri ) },
+    get history () { return history ??= profile.history( item.uri ) }
   } );
 }
 
