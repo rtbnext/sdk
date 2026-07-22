@@ -2,7 +2,7 @@ import type { TProfileData, TProfileHistory, TProfileIndex, TProfileIndexItem, T
 import type { TSearchIndex, TSearchIndexItem } from '@rtbnext/schema/src/model/search';
 import type { CollectableResource, Resource } from '../core/Resource';
 import { collection, sanitize } from '../core/utils';
-import type { Collection, ProfileEntity } from '../types';
+import type { Collection, CollectionSearchFn, ProfileEntity } from '../types';
 import { Endpoint } from './Endpoint';
 
 
@@ -21,6 +21,10 @@ export class Profile extends Endpoint {
     } );
   }
 
+  protected collect < T extends { uri: string } > ( items: T[], search: CollectionSearchFn< T > ) : Collection< T > {
+    return collection( items.map( i => this.entity( i ) ), search );
+  }
+
   public meta ( uri: string ) : Resource< TProfileMetaData > {
     return this.json< TProfileMetaData >( `v2/profile/${ uri }/meta.json` );
   }
@@ -34,22 +38,24 @@ export class Profile extends Endpoint {
   }
 
   public index () : CollectableResource< TProfileIndex, Collection< TProfileIndexItem > > {
-    return this.json( 'v2/profile/index.json', data => collection(
-      data.items.map( i => this.entity( i ) ), ( item, query, terms ) => {
+    return this.json( 'v2/profile/index.json', data =>
+      this.collect( data.items, ( item, query, terms ) => {
         const name = sanitize( item.name );
 
         return (
           name.includes( query ) || item.text.includes( query ) ||
           terms.every( t => name.includes( t ) || item.text.includes( t ) )
         );
-      }
-    ) );
+      } )
+    );
   }
 
   public search () : CollectableResource< TSearchIndex, Collection< TSearchIndexItem > > {
-    return this.json( 'v2/profile/search.json', data => collection(
-      data.items.map( i => this.entity( i ) ), ( item, query, terms ) =>
-        item.searchName.includes( query ) || terms.every( t => item.searchName.includes( t ) )
-    ) );
+    return this.json( 'v2/profile/search.json', data =>
+      this.collect( data.items, ( item, query, terms ) =>
+        item.searchName.includes( query ) ||
+        terms.every( t => item.searchName.includes( t ) )
+      )
+    );
   }
 }
