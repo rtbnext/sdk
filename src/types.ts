@@ -91,36 +91,36 @@ export interface ProfileResources {
   readonly history: Resource< TProfileHistory >;
 }
 
-export type ProfileItem< T > = Readonly< T & { uri: string } & ProfileResources >;
+export type ProfileEntity< T > = Readonly< T & { uri: string } & ProfileResources >;
 
 export interface Collection< T > extends Iterable< T > {
-  readonly items: ProfileItem< T >[];
+  readonly items: ProfileEntity< T >[];
   readonly total: number;
   readonly count: number;
   position: number;
 
-  readonly current: ProfileItem< T > | null;
-  readonly first: ProfileItem< T > | null;
-  readonly last: ProfileItem< T > | null;
+  readonly current: ProfileEntity< T > | null;
+  readonly first: ProfileEntity< T > | null;
+  readonly last: ProfileEntity< T > | null;
 
   readonly hasNext: boolean;
   readonly hasPrev: boolean;
 
-  readonly next: ProfileItem< T > | null;
-  readonly prev: ProfileItem< T > | null;
+  readonly next: ProfileEntity< T > | null;
+  readonly prev: ProfileEntity< T > | null;
 
-  at ( index: number ) : ProfileItem< T > | null;
-  get ( uri: string ) : ProfileItem< T > | null;
-  find ( uriLike: string ) : ProfileItem< T > | null;
-  filter ( predicate: ( item: ProfileItem< T > ) => boolean ) : Collection< T >;
+  at ( index: number ) : ProfileEntity< T > | null;
+  get ( uri: string ) : ProfileEntity< T > | null;
+  find ( uriLike: string ) : ProfileEntity< T > | null;
+  filter ( predicate: ( item: ProfileEntity< T > ) => boolean ) : Collection< T >;
   search ( query: string ) : Collection< T >;
 
-  groupBy < K > ( callback: ( item: ProfileItem< T > ) => K ) : Map< K, Collection< T > >;
+  groupBy < K > ( callback: ( item: ProfileEntity< T > ) => K ) : Map< K, Collection< T > >;
   orderBy ( key: keyof T, dir?: 'asc' | 'desc' ) : Collection< T >;
-  sort ( compare: ( a: ProfileItem< T >, b: ProfileItem< T > ) => number ) : Collection< T >;
+  sort ( compare: ( a: ProfileEntity< T >, b: ProfileEntity< T > ) => number ) : Collection< T >;
 
-  toArray () : ProfileItem< T >[];
-  map < R > ( callback: ( item: ProfileItem< T >, index: number ) => R ) : R[];
+  toArray () : ProfileEntity< T >[];
+  map < R > ( callback: ( item: ProfileEntity< T >, index: number ) => R ) : R[];
 
   take ( count: number ) : Collection< T >;
   skip ( count: number ) : Collection< T >;

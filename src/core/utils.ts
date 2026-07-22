@@ -1,6 +1,6 @@
 import type { TProfileData, TProfileHistory, TProfileMetaData } from '@rtbnext/schema/src/model/profile';
 import type { Profile } from '../endpoint/Profile';
-import type { Collection, ProfileItem } from '../types';
+import type { Collection, ProfileEntity } from '../types';
 import type { Resource } from './Resource';
 
 
@@ -9,7 +9,7 @@ export function sanitize ( value: unknown, delimiter: string = '-' ) : string {
     .replace( new RegExp( `[${ delimiter }]{2,}`, 'g' ), delimiter );
 }
 
-export function profileItem < T > ( profile: Profile, item: T & { uri: string } ) : ProfileItem< T > {
+export function profileEntity < T > ( profile: Profile, item: T & { uri: string } ) : ProfileEntity< T > {
   let meta: Resource< TProfileMetaData >;
   let data: Resource< TProfileData >;
   let history: Resource< TProfileHistory >;
@@ -22,8 +22,8 @@ export function profileItem < T > ( profile: Profile, item: T & { uri: string } 
 }
 
 export function collection < T > (
-  items: ProfileItem< T >[],
-  search: ( item: ProfileItem< T >, query: string, terms: string[] ) => boolean,
+  items: ProfileEntity< T >[],
+  search: ( item: ProfileEntity< T >, query: string, terms: string[] ) => boolean,
   total = items.length
 ) : Collection< T > {
   let idx = -1;
@@ -54,7 +54,7 @@ export function collection < T > (
       ) ) ?? null;
     },
 
-    filter ( predicate: ( item: ProfileItem< T > ) => boolean ) {
+    filter ( predicate: ( item: ProfileEntity< T > ) => boolean ) {
       return collection( items.filter( predicate ), search, total );
     },
 
@@ -63,9 +63,9 @@ export function collection < T > (
       return collection( items.filter( i => search( i, query, terms ) ), search, total );
     },
 
-    groupBy < K > ( callback: ( item: ProfileItem< T > ) => K ) {
+    groupBy < K > ( callback: ( item: ProfileEntity< T > ) => K ) {
       const groups = new Map< K, Collection< T > >();
-      const map = new Map< K, ProfileItem< T >[] >();
+      const map = new Map< K, ProfileEntity< T >[] >();
 
       for ( const item of items ) {
         const key = callback( item ), group = map.get( key );
@@ -86,12 +86,12 @@ export function collection < T > (
       } ), search, total );
     },
 
-    sort ( compare: ( a: ProfileItem< T >, b: ProfileItem< T > ) => number ) {
+    sort ( compare: ( a: ProfileEntity< T >, b: ProfileEntity< T > ) => number ) {
       return collection( [ ...items ].sort( compare ), search, total );
     },
 
     toArray () { return [ ...items ] },
-    map < R > ( callback: ( item: ProfileItem< T >, index: number ) => R ) {
+    map < R > ( callback: ( item: ProfileEntity< T >, index: number ) => R ) {
       return items.map( callback );
     },
 
