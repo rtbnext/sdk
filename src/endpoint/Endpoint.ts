@@ -25,8 +25,8 @@ export abstract class Endpoint {
     return new Resource< T >( path, this.loader, CsvParser.parse< T > );
   }
 
-  protected async collect < T > (
-    resource: Resource< { items: ( T & { uri: string } )[] } >, search: CollectionSearchFn< T >
+  protected async collect < T, R extends { items: ( T & { uri: string } )[] } > (
+    resource: Resource< R >, search: CollectionSearchFn< T >
   ) : Promise< Collection< T > > {
     return collection( ( await resource.data() ).items.map(
       i => profileEntity( this.endpoints.profile, i )
