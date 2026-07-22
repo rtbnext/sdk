@@ -5,7 +5,7 @@ import { Endpoint } from './Endpoint';
 
 
 export class Filter extends Endpoint {
-  public filterIndex () : Resource< TFilterIndex > {
+  public index () : Resource< TFilterIndex > {
     return this.json< TFilterIndex >( 'v2/filter/index.json' );
   }
 
@@ -23,5 +23,17 @@ export class Filter extends Endpoint {
 
   public maritalStatus ( maritalStatus: TMaritalStatus ) : Resource< TFilter > {
     return this.json< TFilter >( `v2/filter/maritalStatus/${ maritalStatus.toLowerCase() }.json` );
+  }
+
+  public citizenship ( isoCode: string ) : Resource< TFilter > {
+    return this.json< TFilter >( `v2/filter/citizenship/${ isoCode.toUpperCase() }.json` );
+  }
+
+  public country ( isoCode: string ) : Resource< TFilter > {
+    return this.json< TFilter >( `v2/filter/country/${ isoCode.toUpperCase() }.json` );
+  }
+
+  public state ( uspsCode: string ) : Resource< TFilter > {
+    return this.json< TFilter >( `v2/filter/state/${ uspsCode.toUpperCase() }.json` );
   }
 }
