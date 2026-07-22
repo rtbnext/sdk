@@ -66,4 +66,8 @@ export class Resource< T > {
   }
 }
 
-export class CollectableResource< T > extends Resource< T > {}
+export class CollectableResource< T > extends Resource< T > {
+  constructor ( path: string, loader: ResourceLoader, parser: ParserFn< T > ) {
+    super( path, loader, parser );
+  }
+}
