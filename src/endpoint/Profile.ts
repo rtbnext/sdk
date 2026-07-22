@@ -1,7 +1,7 @@
 import type { TProfileData, TProfileHistory, TProfileIndex, TProfileIndexItem, TProfileMetaData } from '@rtbnext/schema/src/model/profile';
 import type { TSearchIndex, TSearchIndexItem } from '@rtbnext/schema/src/model/search';
 import type { Resource } from '../core/Resource';
-import { list } from '../core/Utils';
+import { list } from '../core/utils';
 import { Endpoint } from './Endpoint';
 
 
