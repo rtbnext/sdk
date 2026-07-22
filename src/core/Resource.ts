@@ -3,22 +3,22 @@ import type { ResourceLoader } from './ResourceLoader';
 
 
 export class Resource< T > {
-  private readonly hooks = new Map< string, Set< ( self: this ) => void > >();
+  protected readonly hooks = new Map< string, Set< ( self: this ) => void > >();
 
-  private loaded: boolean = false;
-  private loading?: Promise< void >;
-  private state?: ResourceState;
+  protected loaded: boolean = false;
+  protected loading?: Promise< void >;
+  protected state?: ResourceState;
 
-  private parsed: boolean = false;
-  private value?: T;
+  protected parsed: boolean = false;
+  protected value?: T;
 
   constructor (
-    private readonly path: string,
-    private readonly loader: ResourceLoader,
-    private readonly parser: ParserFn< T >
+    protected readonly path: string,
+    protected readonly loader: ResourceLoader,
+    protected readonly parser: ParserFn< T >
   ) {}
 
-  private emit ( ...events: string[] ) : void {
+  protected emit ( ...events: string[] ) : void {
     for ( const event of events ) this.hooks.get( event )?.forEach( handler => handler( this ) );
   }
 
@@ -63,11 +63,5 @@ export class Resource< T > {
     }
 
     return this.value!;
-  }
-}
-
-export class CollectableResource< T > extends Resource< T > {
-  constructor ( path: string, loader: ResourceLoader, parser: ParserFn< T > ) {
-    super( path, loader, parser );
   }
 }
