@@ -1,6 +1,6 @@
 import type { TProfileData, TProfileHistory, TProfileMetaData } from '@rtbnext/schema/src/model/profile';
 import type { Profile } from '../endpoint/Profile';
-import type { Collection, ProfileEntity } from '../types';
+import type { Collection, CollectionSearchFn, ProfileEntity } from '../types';
 import type { Resource } from './Resource';
 
 
@@ -21,11 +21,7 @@ export function profileEntity < T > ( profile: Profile, item: T & { uri: string 
   } );
 }
 
-export function collection < T > (
-  items: ProfileEntity< T >[],
-  search: ( item: ProfileEntity< T >, query: string, terms: string[] ) => boolean,
-  total = items.length
-) : Collection< T > {
+export function collection < T > ( items: ProfileEntity< T >[], search: CollectionSearchFn< T >, total = items.length ) : Collection< T > {
   let idx = -1;
 
   return Object.freeze( {
