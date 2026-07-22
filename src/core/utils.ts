@@ -1,4 +1,4 @@
-import type { Collection, CollectionSearchFn, ProfileEntity } from '../types';
+import type { Collection, CollectionSearchFn, Entity } from '../types';
 
 
 export function sanitize ( value: unknown, delimiter: string = '-' ) : string {
@@ -6,7 +6,9 @@ export function sanitize ( value: unknown, delimiter: string = '-' ) : string {
     .replace( new RegExp( `[${ delimiter }]{2,}`, 'g' ), delimiter );
 }
 
-export function collection < T > ( items: ProfileEntity< T >[], search: CollectionSearchFn< T >, total = items.length ) : Collection< T > {
+export function collection < T, E extends Entity< T > > (
+  items: E[], search: CollectionSearchFn< T >, total = items.length
+) : Collection< T > {
   let idx = -1;
 
   return Object.freeze( {
@@ -35,7 +37,7 @@ export function collection < T > ( items: ProfileEntity< T >[], search: Collecti
       ) ) ?? null;
     },
 
-    filter ( predicate: ( item: ProfileEntity< T > ) => boolean ) {
+    filter ( predicate: ( item: E ) => boolean ) {
       return collection( items.filter( predicate ), search, total );
     },
 
@@ -44,9 +46,9 @@ export function collection < T > ( items: ProfileEntity< T >[], search: Collecti
       return collection( items.filter( i => search( i, query, terms ) ), search, total );
     },
 
-    groupBy < K > ( callback: ( item: ProfileEntity< T > ) => K ) {
+    groupBy < K > ( callback: ( item: E ) => K ) {
       const groups = new Map< K, Collection< T > >();
-      const map = new Map< K, ProfileEntity< T >[] >();
+      const map = new Map< K, E[] >();
 
       for ( const item of items ) {
         const key = callback( item ), group = map.get( key );
@@ -67,12 +69,12 @@ export function collection < T > ( items: ProfileEntity< T >[], search: Collecti
       } ), search, total );
     },
 
-    sort ( compare: ( a: ProfileEntity< T >, b: ProfileEntity< T > ) => number ) {
+    sort ( compare: ( a: E, b: E ) => number ) {
       return collection( [ ...items ].sort( compare ), search, total );
     },
 
     toArray () { return [ ...items ] },
-    map < R > ( callback: ( item: ProfileEntity< T >, index: number ) => R ) {
+    map < R > ( callback: ( item: E, index: number ) => R ) {
       return items.map( callback );
     },
 

@@ -87,6 +87,8 @@ export interface Endpoints {
   system: System;
 }
 
+export type Entity< T, R = unknown > = Readonly< T & { uri: string } & R >;
+
 export interface ProfileResources {
   readonly meta: Resource< TProfileMetaData >;
   readonly data: Resource< TProfileData >;
@@ -95,36 +97,36 @@ export interface ProfileResources {
 
 export type ProfileEntity< T > = Readonly< T & { uri: string } & ProfileResources >;
 
-export type CollectionSearchFn< T > = ( item: ProfileEntity< T >, query: string, terms: string[] ) => boolean;
+export type CollectionSearchFn< T > = ( item: Entity< T >, query: string, terms: string[] ) => boolean;
 
 export interface Collection< T > extends Iterable< T > {
-  readonly items: ProfileEntity< T >[];
+  readonly items: Entity< T >[];
   readonly total: number;
   readonly count: number;
   position: number;
 
-  readonly current: ProfileEntity< T > | null;
-  readonly first: ProfileEntity< T > | null;
-  readonly last: ProfileEntity< T > | null;
+  readonly current: Entity< T > | null;
+  readonly first: Entity< T > | null;
+  readonly last: Entity< T > | null;
 
   readonly hasNext: boolean;
   readonly hasPrev: boolean;
 
-  readonly next: ProfileEntity< T > | null;
-  readonly prev: ProfileEntity< T > | null;
+  readonly next: Entity< T > | null;
+  readonly prev: Entity< T > | null;
 
-  at ( index: number ) : ProfileEntity< T > | null;
-  get ( uri: string ) : ProfileEntity< T > | null;
-  find ( uriLike: string ) : ProfileEntity< T > | null;
-  filter ( predicate: ( item: ProfileEntity< T > ) => boolean ) : Collection< T >;
+  at ( index: number ) : Entity< T > | null;
+  get ( uri: string ) : Entity< T > | null;
+  find ( uriLike: string ) : Entity< T > | null;
+  filter ( predicate: ( item: Entity< T > ) => boolean ) : Collection< T >;
   search ( query: string ) : Collection< T >;
 
-  groupBy < K > ( callback: ( item: ProfileEntity< T > ) => K ) : Map< K, Collection< T > >;
+  groupBy < K > ( callback: ( item: Entity< T > ) => K ) : Map< K, Collection< T > >;
   orderBy ( key: keyof T, dir?: 'asc' | 'desc' ) : Collection< T >;
-  sort ( compare: ( a: ProfileEntity< T >, b: ProfileEntity< T > ) => number ) : Collection< T >;
+  sort ( compare: ( a: Entity< T >, b: Entity< T > ) => number ) : Collection< T >;
 
-  toArray () : ProfileEntity< T >[];
-  map < R > ( callback: ( item: ProfileEntity< T >, index: number ) => R ) : R[];
+  toArray () : Entity< T >[];
+  map < R > ( callback: ( item: Entity< T >, index: number ) => R ) : R[];
 
   take ( count: number ) : Collection< T >;
   skip ( count: number ) : Collection< T >;
