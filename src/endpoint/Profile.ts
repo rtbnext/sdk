@@ -1,7 +1,7 @@
 import type { TProfileData, TProfileHistory, TProfileIndex, TProfileIndexItem, TProfileMetaData } from '@rtbnext/schema/src/model/profile';
 import type { TSearchIndex, TSearchIndexItem } from '@rtbnext/schema/src/model/search';
 import type { Resource } from '../core/Resource';
-import { listCollection, profileItem } from '../core/utils';
+import { listCollection, profileItem, sanitize } from '../core/utils';
 import { ListCollection } from '../types';
 import { Endpoint } from './Endpoint';
 
@@ -29,11 +29,18 @@ export class Profile extends Endpoint {
 
   public async index () : Promise< ListCollection< TProfileIndexItem > > {
     const items = ( await this.profileIndex().data() ).items.map( i => profileItem( this, i ) );
-    return listCollection< TProfileIndexItem >( this.endpoints, items );
+
+    return listCollection< TProfileIndexItem >( items, ( item, query, terms ) =>
+      sanitize( item.name ).includes( query ) || item.text.includes( query ) ||
+      terms.every( t => item.name.includes( t ) || item.text.includes( t ) )
+    );
   }
 
   public async search () : Promise< ListCollection< TSearchIndexItem > > {
     const items = ( await this.searchIndex().data() ).items.map( i => profileItem( this, i ) );
-    return listCollection< TSearchIndexItem >( this.endpoints, items );
+
+    return listCollection< TSearchIndexItem >( items, ( item, query, terms ) =>
+      item.searchName.includes( query ) || terms.every( t => item.searchName.includes( t ) )
+    );
   }
 }
