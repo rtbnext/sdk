@@ -18,6 +18,10 @@ export class Resource< T > {
     protected readonly parser: ParserFn< T >
   ) {}
 
+  protected transform < R > ( fn: ( data: T ) => Promise< R > | R ) : Promise< R > {
+    return this.data().then( fn );
+  }
+
   protected emit ( ...events: string[] ) : void {
     for ( const event of events ) this.hooks.get( event )?.forEach( handler => handler( this ) );
   }
@@ -63,5 +67,18 @@ export class Resource< T > {
     }
 
     return this.value!;
+  }
+}
+
+export class CollectableResource< T, R > extends Resource< T > {
+  constructor (
+    path: string, loader: ResourceLoader, parser: ParserFn< T >,
+    protected readonly collectFn: ( data: T ) => Promise< R > | R
+  ) {
+    super( path, loader, parser );
+  }
+
+  public collect () : Promise< R > {
+    return this.transform( this.collectFn );
   }
 }
