@@ -1,4 +1,7 @@
-import type { Endpoints } from '../types';
+import type { TProfileData, TProfileHistory, TProfileMetaData } from '@rtbnext/schema/src/model/profile';
+import type { Profile } from '../endpoint/Profile';
+import type { Endpoints, ProfileItem } from '../types';
+import type { Resource } from './Resource';
 
 
 export function sanitize ( value: unknown, delimiter: string = '-' ) : string {
@@ -6,9 +9,24 @@ export function sanitize ( value: unknown, delimiter: string = '-' ) : string {
     .replace( new RegExp( `[${ delimiter }]{2,}`, 'g' ), delimiter );
 }
 
+export function profile < T > ( profile: Profile, item: T & { uri: string } ) : ProfileItem< T > {
+  let meta: Resource< TProfileMetaData >;
+  let data: Resource< TProfileData >;
+  let history: Resource< TProfileHistory >;
+
+  return Object.freeze( { ...item, get: {
+    get meta () { return meta ??= profile.profileMeta( item.uri ) },
+    get data () { return data ??= profile.profileData( item.uri ) },
+    get history () { return history ??= profile.profileHistory( item.uri ) }
+  } } );
+}
+
 export function list < T > (
-  endpoints: Endpoints, items: readonly ( T & { uri: string } )[], total = items.length
+  endpoints: Endpoints,
+  raw: readonly ( T & { uri: string } )[],
+  total = raw.length
 ) {
+  const items = raw.map( i => profile( endpoints.profile, i ) );
   let idx = -1;
 
   return Object.freeze( {
@@ -32,7 +50,7 @@ export function list < T > (
 
     page ( page: number, perPage: number = 10 ) {
       const start = ( page - 1 ) * perPage, end = start + perPage;
-      return list( endpoints, items.slice( start, end ), total );
+      return list( endpoints, raw.slice( start, end ), total );
     }
   } );
 };
