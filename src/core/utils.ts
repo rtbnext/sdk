@@ -81,6 +81,11 @@ export function listCollection < T > (
       return groups;
     },
 
+    toArray () { return [ ...items ] },
+    map < R > ( callback: ( item: ProfileItem< T >, index: number ) => R ) {
+      return items.map( callback );
+    },
+
     page ( page: number, perPage: number = 10 ) {
       const start = ( page - 1 ) * perPage, end = start + perPage;
       return listCollection( items.slice( start, end ), search, total );
