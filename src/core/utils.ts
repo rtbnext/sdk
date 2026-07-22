@@ -14,11 +14,11 @@ export function profileItem < T > ( profile: Profile, item: T & { uri: string } 
   let data: Resource< TProfileData >;
   let history: Resource< TProfileHistory >;
 
-  return Object.freeze( { ...item, get: {
+  return Object.freeze( { ...item,
     get meta () { return meta ??= profile.profileMeta( item.uri ) },
     get data () { return data ??= profile.profileData( item.uri ) },
     get history () { return history ??= profile.profileHistory( item.uri ) }
-  } } );
+  } );
 }
 
 export function listCollection < T > (
@@ -47,10 +47,20 @@ export function listCollection < T > (
 
     at ( index: number ) { return items[ index ] ?? null },
     filter ( predicate: ( item: T ) => boolean ) { return items.filter( predicate ) },
+    get ( uri: string ) { return items.find( i => i.uri === uri ) ?? null },
+
+    find ( uriLike: string ) {
+      const uri = sanitize( uriLike );
+      return items.find( i => i.uri === uri || (
+        'aliases' in i && Array.isArray( i.aliases ) && i.aliases.includes( uri )
+      ) ) ?? null;
+    },
 
     page ( page: number, perPage: number = 10 ) {
       const start = ( page - 1 ) * perPage, end = start + perPage;
       return listCollection( endpoints, raw.slice( start, end ), total );
-    }
+    },
+
+    [ Symbol.iterator ]() { return items[ Symbol.iterator ]() }
   } );
-};
+}

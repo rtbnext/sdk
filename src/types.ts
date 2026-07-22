@@ -91,11 +91,9 @@ export interface ProfileResources {
   readonly history: Resource< TProfileHistory >;
 }
 
-export type ProfileItem< T > = Readonly< T & {
-  get: ProfileResources;
-} >;
+export type ProfileItem< T > = Readonly< T & { uri: string } & ProfileResources >;
 
-export interface ListCollection< T > {
+export interface ListCollection< T > extends Iterable< T > {
   readonly items: ProfileItem< T >[];
   readonly total: number;
   readonly count: number;
@@ -113,6 +111,8 @@ export interface ListCollection< T > {
 
   at ( index: number ) : ProfileItem< T > | null;
   filter ( predicate: ( item: T ) => boolean ) : ProfileItem< T >[];
+  get ( uri: string ) : ProfileItem< T > | null;
+  find ( uriLike: string ) : ProfileItem< T > | null;
 
   page ( page: number, perPage?: number ) : ListCollection< T >;
 }
