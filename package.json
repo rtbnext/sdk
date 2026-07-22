@@ -56,7 +56,7 @@
     "format": "prettier --ignore-path \"\" --write \"./dist/**/*.@(js|d.ts)\" --log-level warn",
     "bundle": "esbuild dist/esm/index.js --bundle --minify --legal-comments=none --format=iife --global-name=rtbnext --outfile=dist/bundle.js",
     "build": "npm run clean && npm run build:all && npm run format && npm run bundle",
-    "postbuild": "tsc-alias",
+    "postbuild": "tsc-alias && node scripts/postbuild.mjs",
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
