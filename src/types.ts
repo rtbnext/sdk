@@ -93,6 +93,8 @@ export interface ProfileResources {
 
 export type ProfileEntity< T > = Readonly< T & { uri: string } & ProfileResources >;
 
+export type CollectionSearchFn< T > = ( item: ProfileEntity< T >, query: string, terms: string[] ) => boolean;
+
 export interface Collection< T > extends Iterable< T > {
   readonly items: ProfileEntity< T >[];
   readonly total: number;
