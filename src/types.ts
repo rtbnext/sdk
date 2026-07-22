@@ -112,7 +112,7 @@ export interface Collection< T > extends Iterable< T > {
   at ( index: number ) : ProfileItem< T > | null;
   get ( uri: string ) : ProfileItem< T > | null;
   find ( uriLike: string ) : ProfileItem< T > | null;
-  filter ( predicate: ( item: T ) => boolean ) : Collection< T >;
+  filter ( predicate: ( item: ProfileItem< T > ) => boolean ) : Collection< T >;
   search ( query: string ) : Collection< T >;
 
   sort ( compare: ( a: ProfileItem< T >, b: ProfileItem< T > ) => number ) : Collection< T >;
