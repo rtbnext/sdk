@@ -4,7 +4,7 @@ import { Mover } from '../endpoint/Mover';
 import { Profile } from '../endpoint/Profile';
 import { Stats } from '../endpoint/Stats';
 import { System } from '../endpoint/System';
-import type { RTBNextOptions } from '../types';
+import type { Endpoints, RTBNextOptions } from '../types';
 import { HttpClient } from './HttpClient';
 import { ResourceLoader } from './ResourceLoader';
 
@@ -21,6 +21,7 @@ const DEFAULT_OPTIONS = {
 export class RTBNext {
   public readonly httpClient: HttpClient;
   public readonly resourceLoader: ResourceLoader;
+  public readonly endpoints: Endpoints;
 
   public readonly profile: Profile;
   public readonly list: List;
@@ -42,11 +43,22 @@ export class RTBNext {
       ...DEFAULT_OPTIONS.cache, ...options.cache
     } );
 
-    this.profile = new Profile( this.resourceLoader );
-    this.list = new List( this.resourceLoader );
-    this.mover = new Mover( this.resourceLoader );
-    this.filter = new Filter( this.resourceLoader );
-    this.stats = new Stats( this.resourceLoader );
-    this.system = new System( this.resourceLoader );
+    const endpoints = {} as Endpoints;
+
+    this.profile = new Profile( this.resourceLoader, endpoints );
+    this.list = new List( this.resourceLoader, endpoints );
+    this.mover = new Mover( this.resourceLoader, endpoints );
+    this.filter = new Filter( this.resourceLoader, endpoints );
+    this.stats = new Stats( this.resourceLoader, endpoints );
+    this.system = new System( this.resourceLoader, endpoints );
+
+    endpoints.profile = this.profile;
+    endpoints.list = this.list;
+    endpoints.mover = this.mover;
+    endpoints.filter = this.filter;
+    endpoints.stats = this.stats;
+    endpoints.system = this.system;
+
+    this.endpoints = Object.freeze( endpoints );
   }
 }
