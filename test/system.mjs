@@ -1,6 +1,6 @@
-import RTBNext from '../dist/esm/index.js';
+import rtbnext from '../dist/esm/index.js';
 
-const client = new RTBNext( {
+const client = rtbnext( {
   client: {
     name: 'rtbnext-sdk-test',
     version: '1.0.0',
