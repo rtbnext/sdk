@@ -115,9 +115,12 @@ export interface Collection< T > extends Iterable< T > {
   filter ( predicate: ( item: ProfileItem< T > ) => boolean ) : Collection< T >;
   search ( query: string ) : Collection< T >;
 
-  sort ( compare: ( a: ProfileItem< T >, b: ProfileItem< T > ) => number ) : Collection< T >;
   groupBy < K > ( callback: ( item: ProfileItem< T > ) => K ) : Map< K, Collection< T > >;
+  orderBy ( key: keyof T, dir?: 'asc' | 'desc' ) : Collection< T >;
+  sort ( compare: ( a: ProfileItem< T >, b: ProfileItem< T > ) => number ) : Collection< T >;
+
   toArray () : ProfileItem< T >[];
+  map < R > ( callback: ( item: ProfileItem< T >, index: number ) => R ) : R[];
 
   take ( count: number ) : Collection< T >;
   skip ( count: number ) : Collection< T >;

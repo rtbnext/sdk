@@ -63,10 +63,6 @@ export function collection < T > (
       return collection( items.filter( i => search( i, query, terms ) ), search, total );
     },
 
-    sort ( compare: ( a: ProfileItem< T >, b: ProfileItem< T > ) => number ) {
-      return collection( [ ...items ].sort( compare ), search, total );
-    },
-
     groupBy < K > ( callback: ( item: ProfileItem< T > ) => K ) {
       const groups = new Map< K, Collection< T > >();
       const map = new Map< K, ProfileItem< T >[] >();
@@ -79,6 +75,19 @@ export function collection < T > (
 
       for ( const [ key, group ] of map ) groups.set( key, collection( group, search, group.length ) );
       return groups;
+    },
+
+    orderBy ( key: keyof T, dir: 'asc' | 'desc' = 'asc' ) {
+      const factor = dir === 'desc' ? -1 : 1;
+
+      return collection( [ ...items ].sort( ( a, b ) => {
+        const av = a[ key ], bv = b[ key ];
+        return av === bv ? 0 : av == null ? 1 : bv == null ? -1 : ( av < bv ? -1 : 1 ) * factor;
+      } ), search, total );
+    },
+
+    sort ( compare: ( a: ProfileItem< T >, b: ProfileItem< T > ) => number ) {
+      return collection( [ ...items ].sort( compare ), search, total );
     },
 
     toArray () { return [ ...items ] },
