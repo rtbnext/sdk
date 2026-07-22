@@ -1,5 +1,5 @@
 import type { TProfileData, TProfileHistory, TProfileMetaData } from '@rtbnext/schema/src/model/profile';
-import type { Resource } from './core/Resource';
+import type { CollectableResource, Resource } from './core/Resource';
 import type { Filter } from './endpoint/Filter';
 import type { List } from './endpoint/List';
 import type { Mover } from './endpoint/Mover';
@@ -50,6 +50,8 @@ export type ResourceState = {
   etag?: string;
   lastModified?: string;
 };
+
+export type AnyResource< T, R > = Resource< T > | CollectableResource< T, R >;
 
 export type ParserFn< T > = ( res: HttpResponse, ...args: any[] ) => T;
 
