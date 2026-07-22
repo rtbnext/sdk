@@ -28,23 +28,26 @@ export class Profile extends Endpoint {
   }
 
   public async index () : Promise< Collection< TProfileIndexItem > > {
-    const items = ( await this.profileIndex().data() ).items.map( i => profileItem( this, i ) );
+    return collection< TProfileIndexItem >(
+      ( await this.profileIndex().data() ).items.map( i => profileItem( this, i ) ),
+      ( item, query, terms ) => {
+        const name = sanitize( item.name );
 
-    return collection< TProfileIndexItem >( items, ( item, query, terms ) => {
-      const name = sanitize( item.name );
-
-      return (
-        name.includes( query ) || item.text.includes( query ) ||
-        terms.every( t => name.includes( t ) || item.text.includes( t ) )
-      );
-    } );
+        return (
+          name.includes( query ) || item.text.includes( query ) ||
+          terms.every( t => name.includes( t ) || item.text.includes( t ) )
+        );
+      }
+    );
   }
 
   public async search () : Promise< Collection< TSearchIndexItem > > {
-    const items = ( await this.searchIndex().data() ).items.map( i => profileItem( this, i ) );
-
-    return collection< TSearchIndexItem >( items, ( item, query, terms ) =>
-      item.searchName.includes( query ) || terms.every( t => item.searchName.includes( t ) )
+    return collection< TSearchIndexItem >(
+      ( await this.searchIndex().data() ).items.map( i => profileItem( this, i ) ),
+      ( item, query, terms ) => {
+        return item.searchName.includes( query ) ||
+          terms.every( t => item.searchName.includes( t ) );
+      }
     );
   }
 }
