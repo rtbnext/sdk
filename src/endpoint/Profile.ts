@@ -1,6 +1,7 @@
-import type { TProfileData, TProfileHistory, TProfileIndex, TProfileMetaData } from '@rtbnext/schema/src/model/profile';
-import type { TSearchIndex } from '@rtbnext/schema/src/model/search';
+import type { TProfileData, TProfileHistory, TProfileIndex, TProfileIndexItem, TProfileMetaData } from '@rtbnext/schema/src/model/profile';
+import type { TSearchIndex, TSearchIndexItem } from '@rtbnext/schema/src/model/search';
 import type { Resource } from '../core/Resource';
+import { list } from '../core/Utils';
 import { Endpoint } from './Endpoint';
 
 
@@ -23,5 +24,13 @@ export class Profile extends Endpoint {
 
   public profileHistory ( uri: string ) : Resource< TProfileHistory > {
     return this.csv< TProfileHistory >( `v2/profile/${ uri }/history.csv` );
+  }
+
+  public async index () : Promise< any > {
+    return list< TProfileIndexItem >( this.endpoints, ( await this.profileIndex().data() ).items );
+  }
+
+  public async search () : Promise< any > {
+    return list< TSearchIndexItem >( this.endpoints, ( await this.searchIndex().data() ).items );
   }
 }
