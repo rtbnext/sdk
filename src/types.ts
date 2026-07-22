@@ -94,3 +94,26 @@ export interface ProfileResources {
 export type ProfileItem< T > = Readonly< T & {
   get: ProfileResources;
 } >;
+
+export type ListCollection< T > = Readonly< {
+  items: ProfileItem< T >[];
+  total: number;
+  count: number;
+
+  position ( index?: number ) : number;
+
+  current: ProfileItem< T > | null;
+  first: ProfileItem< T > | null;
+  last: ProfileItem< T > | null;
+
+  hasNext: boolean;
+  hasPrev: boolean;
+
+  next: ProfileItem< T > | null;
+  prev: ProfileItem< T > | null;
+
+  at ( index: number ) : ProfileItem< T > | null;
+  filter ( predicate: ( item: T ) => boolean ) : ProfileItem< T > | null;
+
+  page ( page: number, perPage?: number ) : ListCollection< T >;
+} >
