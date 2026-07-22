@@ -1,9 +1,10 @@
 import { Resource } from '../core/Resource';
 import type { ResourceLoader } from '../core/ResourceLoader';
+import { profileEntity } from '../core/utils';
 import { CsvParser } from '../parser/CsvParser';
 import { JsonParser } from '../parser/JsonParser';
 import { TextParser } from '../parser/TextParser';
-import type { Endpoints } from '../types';
+import type { Endpoints, ProfileEntity } from '../types';
 
 
 export abstract class Endpoint {
@@ -22,5 +23,9 @@ export abstract class Endpoint {
 
   protected csv < T > ( path: string ) : Resource< T > {
     return new Resource< T >( path, this.loader, CsvParser.parse< T > );
+  }
+
+  protected prepare < T > ( items: ( T & { uri: string } )[] ) : ProfileEntity< T >[] {
+    return items.map( i => profileEntity( this.endpoints.profile, i ) );
   }
 }
