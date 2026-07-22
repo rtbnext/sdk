@@ -1,4 +1,4 @@
-import type { TDBStats, TGlobalStats } from '@rtbnext/schema/src/model/stats';
+import type { TDBStats, TGlobalStats, TProfileStats, TScatter } from '@rtbnext/schema/src/model/stats';
 import type { Resource } from '../core/Resource';
 import { Endpoint } from './Endpoint';
 
@@ -10,5 +10,13 @@ export class Stats extends Endpoint {
 
   public global () : Resource< TGlobalStats > {
     return this.json< TGlobalStats >( 'v2/stats/global.json' );
+  }
+
+  public profile () : Resource< TProfileStats > {
+    return this.json< TProfileStats >( 'v2/stats/profile.json' );
+  }
+
+  public scatter () : Resource< TScatter > {
+    return this.json< TScatter >( 'v2/stats/scatter.json' );
   }
 }
