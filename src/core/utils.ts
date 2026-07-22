@@ -1,6 +1,6 @@
 import type { TProfileData, TProfileHistory, TProfileMetaData } from '@rtbnext/schema/src/model/profile';
 import type { Profile } from '../endpoint/Profile';
-import type { Endpoints, ProfileItem } from '../types';
+import type { Endpoints, ListCollection, ProfileItem } from '../types';
 import type { Resource } from './Resource';
 
 
@@ -9,7 +9,7 @@ export function sanitize ( value: unknown, delimiter: string = '-' ) : string {
     .replace( new RegExp( `[${ delimiter }]{2,}`, 'g' ), delimiter );
 }
 
-export function profile < T > ( profile: Profile, item: T & { uri: string } ) : ProfileItem< T > {
+export function profileItem < T > ( profile: Profile, item: T & { uri: string } ) : ProfileItem< T > {
   let meta: Resource< TProfileMetaData >;
   let data: Resource< TProfileData >;
   let history: Resource< TProfileHistory >;
@@ -21,12 +21,12 @@ export function profile < T > ( profile: Profile, item: T & { uri: string } ) : 
   } } );
 }
 
-export function list < T > (
+export function listCollection < T > (
   endpoints: Endpoints,
   raw: readonly ( T & { uri: string } )[],
   total = raw.length
-) {
-  const items = raw.map( i => profile( endpoints.profile, i ) );
+) : ListCollection< T > {
+  const items = raw.map( i => profileItem( endpoints.profile, i ) );
   let idx = -1;
 
   return Object.freeze( {
@@ -50,7 +50,7 @@ export function list < T > (
 
     page ( page: number, perPage: number = 10 ) {
       const start = ( page - 1 ) * perPage, end = start + perPage;
-      return list( endpoints, raw.slice( start, end ), total );
+      return listCollection( endpoints, raw.slice( start, end ), total );
     }
   } );
 };
