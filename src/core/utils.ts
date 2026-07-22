@@ -63,6 +63,24 @@ export function listCollection < T > (
       return listCollection( items.filter( i => search( i, query, terms ) ), search, total );
     },
 
+    sort ( compare: ( a: ProfileItem< T >, b: ProfileItem< T > ) => number ) {
+      return listCollection( [ ...items ].sort( compare ), search, total );
+    },
+
+    groupBy < K > ( callback: ( item: ProfileItem< T > ) => K ) {
+      const groups = new Map< K, ListCollection< T > >();
+      const map = new Map< K, ProfileItem< T >[] >();
+
+      for ( const item of items ) {
+        const key = callback( item ), group = map.get( key );
+        if ( group ) group.push( item );
+        else map.set( key, [ item ] );
+      }
+
+      for ( const [ key, group ] of map ) groups.set( key, listCollection( group, search, group.length ) );
+      return groups;
+    },
+
     page ( page: number, perPage: number = 10 ) {
       const start = ( page - 1 ) * perPage, end = start + perPage;
       return listCollection( items.slice( start, end ), search, total );
