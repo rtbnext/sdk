@@ -1,3 +1,5 @@
+import type { TProfileData, TProfileHistory, TProfileMetaData } from '@rtbnext/schema/src/model/profile';
+import type { Resource } from './core/Resource';
 import type { Filter } from './endpoint/Filter';
 import type { List } from './endpoint/List';
 import type { Mover } from './endpoint/Mover';
@@ -67,6 +69,13 @@ export type CacheOptions = {
   mode?: CacheMode;
 };
 
+export type RTBNextOptions = {
+  client: ClientIdentity;
+  baseUrl?: string;
+  httpTimeout?: number;
+  cache?: CacheOptions;
+};
+
 export interface Endpoints {
   profile: Profile;
   list: List;
@@ -76,9 +85,12 @@ export interface Endpoints {
   system: System;
 }
 
-export type RTBNextOptions = {
-  client: ClientIdentity;
-  baseUrl?: string;
-  httpTimeout?: number;
-  cache?: CacheOptions;
-};
+export interface ProfileResources {
+  readonly meta: Resource< TProfileMetaData >;
+  readonly data: Resource< TProfileData >;
+  readonly history: Resource< TProfileHistory >;
+}
+
+export type ProfileItem< T > = Readonly< T & {
+  get: ProfileResources;
+} >;
