@@ -30,10 +30,14 @@ export class Profile extends Endpoint {
   public async index () : Promise< Collection< TProfileIndexItem > > {
     const items = ( await this.profileIndex().data() ).items.map( i => profileItem( this, i ) );
 
-    return collection< TProfileIndexItem >( items, ( item, query, terms ) =>
-      sanitize( item.name ).includes( query ) || item.text.includes( query ) ||
-      terms.every( t => item.name.includes( t ) || item.text.includes( t ) )
-    );
+    return collection< TProfileIndexItem >( items, ( item, query, terms ) => {
+      const name = sanitize( item.name );
+
+      return (
+        name.includes( query ) || item.text.includes( query ) ||
+        terms.every( t => name.includes( t ) || item.text.includes( t ) )
+      );
+    } );
   }
 
   public async search () : Promise< Collection< TSearchIndexItem > > {
