@@ -99,8 +99,7 @@ export type ListCollection< T > = Readonly< {
   items: ProfileItem< T >[];
   total: number;
   count: number;
-
-  position ( index?: number ) : number;
+  position: number;
 
   current: ProfileItem< T > | null;
   first: ProfileItem< T > | null;
@@ -113,7 +112,7 @@ export type ListCollection< T > = Readonly< {
   prev: ProfileItem< T > | null;
 
   at ( index: number ) : ProfileItem< T > | null;
-  filter ( predicate: ( item: T ) => boolean ) : ProfileItem< T > | null;
+  filter ( predicate: ( item: T ) => boolean ) : ProfileItem< T >[];
 
   page ( page: number, perPage?: number ) : ListCollection< T >;
 } >
