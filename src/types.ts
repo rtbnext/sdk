@@ -110,9 +110,10 @@ export interface ListCollection< T > extends Iterable< T > {
   readonly prev: ProfileItem< T > | null;
 
   at ( index: number ) : ProfileItem< T > | null;
-  filter ( predicate: ( item: T ) => boolean ) : ProfileItem< T >[];
   get ( uri: string ) : ProfileItem< T > | null;
   find ( uriLike: string ) : ProfileItem< T > | null;
+  filter ( predicate: ( item: T ) => boolean ) : ListCollection< T >;
+  search ( query: string ) : ListCollection< T >;
 
   page ( page: number, perPage?: number ) : ListCollection< T >;
 }
