@@ -115,5 +115,13 @@ export interface ListCollection< T > extends Iterable< T > {
   filter ( predicate: ( item: T ) => boolean ) : ListCollection< T >;
   search ( query: string ) : ListCollection< T >;
 
+  sort ( compare: ( a: ProfileItem< T >, b: ProfileItem< T > ) => number ) : ListCollection< T >;
+  groupBy < K > ( callback: ( item: ProfileItem< T > ) => K ) : Map< K, ListCollection< T > >;
+  toArray () : ProfileItem< T >[];
+
+  take ( count: number ) : ListCollection< T >;
+  skip ( count: number ) : ListCollection< T >;
+  slice ( start?: number, end?: number ) : ListCollection< T >;
+
   page ( page: number, perPage?: number ) : ListCollection< T >;
 }
