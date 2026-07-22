@@ -86,6 +86,10 @@ export function listCollection < T > (
       return items.map( callback );
     },
 
+    take ( count: number ) { return listCollection( items.slice( 0, count ), search, total ) },
+    skip ( count: number ) { return listCollection( items.slice( count ), search, total ) },
+    slice ( start?: number, end?: number ) { return listCollection( items.slice( start, end ), search, total ) },
+
     page ( page: number, perPage: number = 10 ) {
       const start = ( page - 1 ) * perPage, end = start + perPage;
       return listCollection( items.slice( start, end ), search, total );
