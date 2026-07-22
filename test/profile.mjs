@@ -8,6 +8,8 @@ const client = rtbnext( {
   }
 } );
 
-const index = await client.profile.index();
-console.log( index.count, index.first.name, await index.last.get.data.data() );
-console.log( index.find( 'bill-gates' ).desc );
+const index = await client.profile.search();
+
+for ( const item of index.filter( i => i.gender === 'f' ).sort( ( a, b ) => b.networth - a.networth ).page( 2 ) ) {
+  console.log( `${ item.fullName } (${ item.age }) :: $${ ( item.networth / 1000 ).toFixed( 1 ) }B` );
+}
