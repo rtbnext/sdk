@@ -1,9 +1,18 @@
-import type { TProfileData, TProfileHistory, TProfileMetaData } from '@rtbnext/schema/src/model/profile';
+import type { TProfileData, TProfileHistory, TProfileIndex, TProfileMetaData } from '@rtbnext/schema/src/model/profile';
+import type { TSearchIndex } from '@rtbnext/schema/src/model/search';
 import type { Resource } from '../core/Resource';
 import { Endpoint } from './Endpoint';
 
 
 export class Profile extends Endpoint {
+  public profileIndex () : Resource< TProfileIndex > {
+    return this.json< TProfileIndex >( 'v2/profile/index.json' );
+  }
+
+  public searchIndex () : Resource< TSearchIndex > {
+    return this.json< TSearchIndex >( 'v2/profile/search.json' );
+  }
+
   public profileMeta ( uri: string ) : Resource< TProfileMetaData > {
     return this.json< TProfileMetaData >( `v2/profile/${ uri }/meta.json` );
   }
