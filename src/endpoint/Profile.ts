@@ -1,46 +1,41 @@
 import type { TProfileData, TProfileHistory, TProfileIndex, TProfileIndexItem, TProfileMetaData } from '@rtbnext/schema/src/model/profile';
 import type { TSearchIndex, TSearchIndexItem } from '@rtbnext/schema/src/model/search';
-import type { Resource } from '../core/Resource';
-import { sanitize } from '../core/utils';
+import type { CollectableResource, Resource } from '../core/Resource';
+import { collection, profileEntity, sanitize } from '../core/utils';
 import type { Collection } from '../types';
 import { Endpoint } from './Endpoint';
 
 
 export class Profile extends Endpoint {
-  public profileIndex () : Resource< TProfileIndex > {
-    return this.json< TProfileIndex >( 'v2/profile/index.json' );
-  }
-
-  public searchIndex () : Resource< TSearchIndex > {
-    return this.json< TSearchIndex >( 'v2/profile/search.json' );
-  }
-
-  public profileMeta ( uri: string ) : Resource< TProfileMetaData > {
+  public meta ( uri: string ) : Resource< TProfileMetaData > {
     return this.json< TProfileMetaData >( `v2/profile/${ uri }/meta.json` );
   }
 
-  public profileData ( uri: string ) : Resource< TProfileData > {
+  public data ( uri: string ) : Resource< TProfileData > {
     return this.json< TProfileData >( `v2/profile/${ uri }/profile.json` );
   }
 
-  public profileHistory ( uri: string ) : Resource< TProfileHistory > {
+  public history ( uri: string ) : Resource< TProfileHistory > {
     return this.csv< TProfileHistory >( `v2/profile/${ uri }/history.csv` );
   }
 
-  public index () : Promise< Collection< TProfileIndexItem > > {
-    return this.collect( this.profileIndex(), ( item, query, terms ) => {
-      const name = sanitize( item.name );
+  public index () : CollectableResource< TProfileIndex, Collection< TProfileIndexItem > > {
+    return this.json( 'v2/profile/index.json', data => collection(
+      data.items.map( i => profileEntity( this, i ) ), ( item, query, terms ) => {
+        const name = sanitize( item.name );
 
-      return (
-        name.includes( query ) || item.text.includes( query ) ||
-        terms.every( t => name.includes( t ) || item.text.includes( t ) )
-      );
-    } );
+        return (
+          name.includes( query ) || item.text.includes( query ) ||
+          terms.every( t => name.includes( t ) || item.text.includes( t ) )
+        );
+      }
+    ) );
   }
 
-  public search () : Promise< Collection< TSearchIndexItem > > {
-    return this.collect( this.searchIndex(), ( item, query, terms ) =>
-      item.searchName.includes( query ) || terms.every( t => item.searchName.includes( t ) )
-    );
+  public search () : CollectableResource< TSearchIndex, Collection< TSearchIndexItem > > {
+    return this.json( 'v2/profile/search.json', data => collection(
+      data.items.map( i => profileEntity( this, i ) ), ( item, query, terms ) =>
+        item.searchName.includes( query ) || terms.every( t => item.searchName.includes( t ) )
+    ) );
   }
 }
