@@ -93,7 +93,7 @@ export interface ProfileResources {
 
 export type ProfileItem< T > = Readonly< T & { uri: string } & ProfileResources >;
 
-export interface ListCollection< T > extends Iterable< T > {
+export interface Collection< T > extends Iterable< T > {
   readonly items: ProfileItem< T >[];
   readonly total: number;
   readonly count: number;
@@ -112,16 +112,16 @@ export interface ListCollection< T > extends Iterable< T > {
   at ( index: number ) : ProfileItem< T > | null;
   get ( uri: string ) : ProfileItem< T > | null;
   find ( uriLike: string ) : ProfileItem< T > | null;
-  filter ( predicate: ( item: T ) => boolean ) : ListCollection< T >;
-  search ( query: string ) : ListCollection< T >;
+  filter ( predicate: ( item: T ) => boolean ) : Collection< T >;
+  search ( query: string ) : Collection< T >;
 
-  sort ( compare: ( a: ProfileItem< T >, b: ProfileItem< T > ) => number ) : ListCollection< T >;
-  groupBy < K > ( callback: ( item: ProfileItem< T > ) => K ) : Map< K, ListCollection< T > >;
+  sort ( compare: ( a: ProfileItem< T >, b: ProfileItem< T > ) => number ) : Collection< T >;
+  groupBy < K > ( callback: ( item: ProfileItem< T > ) => K ) : Map< K, Collection< T > >;
   toArray () : ProfileItem< T >[];
 
-  take ( count: number ) : ListCollection< T >;
-  skip ( count: number ) : ListCollection< T >;
-  slice ( start?: number, end?: number ) : ListCollection< T >;
+  take ( count: number ) : Collection< T >;
+  skip ( count: number ) : Collection< T >;
+  slice ( start?: number, end?: number ) : Collection< T >;
 
-  page ( page: number, perPage?: number ) : ListCollection< T >;
+  page ( page: number, perPage?: number ) : Collection< T >;
 }

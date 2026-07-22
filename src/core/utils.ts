@@ -1,6 +1,6 @@
 import type { TProfileData, TProfileHistory, TProfileMetaData } from '@rtbnext/schema/src/model/profile';
 import type { Profile } from '../endpoint/Profile';
-import type { ListCollection, ProfileItem } from '../types';
+import type { Collection, ProfileItem } from '../types';
 import type { Resource } from './Resource';
 
 
@@ -21,11 +21,11 @@ export function profileItem < T > ( profile: Profile, item: T & { uri: string } 
   } );
 }
 
-export function listCollection < T > (
+export function collection < T > (
   items: ProfileItem< T >[],
   search: ( item: ProfileItem< T >, query: string, terms: string[] ) => boolean,
   total = items.length
-) : ListCollection< T > {
+) : Collection< T > {
   let idx = -1;
 
   return Object.freeze( {
@@ -55,20 +55,20 @@ export function listCollection < T > (
     },
 
     filter ( predicate: ( item: ProfileItem< T > ) => boolean ) {
-      return listCollection( items.filter( predicate ), search, total );
+      return collection( items.filter( predicate ), search, total );
     },
 
     search ( query: string ) {
       const terms = sanitize( query, ' ' ).split( ' ' );
-      return listCollection( items.filter( i => search( i, query, terms ) ), search, total );
+      return collection( items.filter( i => search( i, query, terms ) ), search, total );
     },
 
     sort ( compare: ( a: ProfileItem< T >, b: ProfileItem< T > ) => number ) {
-      return listCollection( [ ...items ].sort( compare ), search, total );
+      return collection( [ ...items ].sort( compare ), search, total );
     },
 
     groupBy < K > ( callback: ( item: ProfileItem< T > ) => K ) {
-      const groups = new Map< K, ListCollection< T > >();
+      const groups = new Map< K, Collection< T > >();
       const map = new Map< K, ProfileItem< T >[] >();
 
       for ( const item of items ) {
@@ -77,7 +77,7 @@ export function listCollection < T > (
         else map.set( key, [ item ] );
       }
 
-      for ( const [ key, group ] of map ) groups.set( key, listCollection( group, search, group.length ) );
+      for ( const [ key, group ] of map ) groups.set( key, collection( group, search, group.length ) );
       return groups;
     },
 
@@ -86,13 +86,13 @@ export function listCollection < T > (
       return items.map( callback );
     },
 
-    take ( count: number ) { return listCollection( items.slice( 0, count ), search, total ) },
-    skip ( count: number ) { return listCollection( items.slice( count ), search, total ) },
-    slice ( start?: number, end?: number ) { return listCollection( items.slice( start, end ), search, total ) },
+    take ( count: number ) { return collection( items.slice( 0, count ), search, total ) },
+    skip ( count: number ) { return collection( items.slice( count ), search, total ) },
+    slice ( start?: number, end?: number ) { return collection( items.slice( start, end ), search, total ) },
 
     page ( page: number, perPage: number = 10 ) {
       const start = ( page - 1 ) * perPage, end = start + perPage;
-      return listCollection( items.slice( start, end ), search, total );
+      return collection( items.slice( start, end ), search, total );
     },
 
     [ Symbol.iterator ]() { return items[ Symbol.iterator ]() }
