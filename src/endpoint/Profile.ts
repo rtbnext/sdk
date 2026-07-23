@@ -25,7 +25,7 @@ export class Profile extends Endpoint {
   public _collect < I extends { uri: string }, D extends { items: I[] } > (
     path: string, search: CollectionSearchFn< I >
   ) : CollectableResource< D, I, ProfileEntity< I > > {
-    return this.json( path, item => this._entity( item ), search );
+    return this.json( path, { entity: item => this._entity( item ), search } );
   }
 
   public meta ( uri: string ) : Resource< TProfileMetaData > {
