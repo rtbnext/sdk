@@ -13,14 +13,27 @@ export class IndexableResource< D, R > extends Resource< D > {
   }
 
   private traverse ( value: unknown, path: string[] = [] ) : unknown {
-    if ( Array.isArray( value ) ) return this.factory( path, value as readonly string[] );
+    if ( Array.isArray( value ) ) {
+      const out: Record< string, unknown > = {};
+
+      for ( const item of value ) Object.defineProperty( out, String( item ), {
+        enumerable: true, configurable: false,
+        get: () => this.factory( [ ...path, String( item ) ] )
+      } );
+
+      return Object.freeze( out );
+    }
 
     if ( value && typeof value === 'object' ) {
       const out: Record< string, unknown > = {};
 
       for ( const [ key, child ] of Object.entries( value ) ) {
         if ( key === '$metadata' ) continue;
-        out[ key ] = this.traverse( child, [ ...path, key ] );
+
+        Object.defineProperty( out, key, {
+          enumerable: true, configurable: false,
+          get: () => this.traverse( child, [ ...path, key ] )
+        } );
       }
 
       return Object.freeze( out );
