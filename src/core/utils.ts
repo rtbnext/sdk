@@ -7,8 +7,9 @@ export function sanitize ( value: unknown, delimiter: string = '-' ) : string {
 }
 
 export function collection < T, E extends Entity< T > > (
-  items: E[], search: CollectionSearchFn< T >, total = items.length
+  items: E[], search: CollectionSearchFn< T >, total: number = items.length
 ) : Collection< T > {
+  const c = ( items: E[], t: number = total ) => collection( items, search, t );
   let idx = -1;
 
   return Object.freeze( {
@@ -38,12 +39,12 @@ export function collection < T, E extends Entity< T > > (
     },
 
     filter ( predicate: ( item: E ) => boolean ) {
-      return collection( items.filter( predicate ), search, total );
+      return c( items.filter( predicate ) );
     },
 
     search ( query: string ) {
       const terms = sanitize( query, ' ' ).split( ' ' );
-      return collection( items.filter( i => search( i, query, terms ) ), search, total );
+      return c( items.filter( i => search( i, query, terms ) ) );
     },
 
     groupBy < K > ( callback: ( item: E ) => K ) {
@@ -56,21 +57,21 @@ export function collection < T, E extends Entity< T > > (
         else map.set( key, [ item ] );
       }
 
-      for ( const [ key, group ] of map ) groups.set( key, collection( group, search, group.length ) );
+      for ( const [ key, group ] of map ) groups.set( key, c( group, group.length ) );
       return groups;
     },
 
     orderBy ( key: keyof T, dir: 'asc' | 'desc' = 'asc' ) {
       const factor = dir === 'desc' ? -1 : 1;
 
-      return collection( [ ...items ].sort( ( a, b ) => {
+      return c( [ ...items ].sort( ( a, b ) => {
         const av = a[ key ], bv = b[ key ];
         return av === bv ? 0 : av == null ? 1 : bv == null ? -1 : ( av < bv ? -1 : 1 ) * factor;
-      } ), search, total );
+      } ) );
     },
 
     sort ( compare: ( a: E, b: E ) => number ) {
-      return collection( [ ...items ].sort( compare ), search, total );
+      return c( [ ...items ].sort( compare ) );
     },
 
     toArray () { return [ ...items ] },
@@ -78,13 +79,13 @@ export function collection < T, E extends Entity< T > > (
       return items.map( callback );
     },
 
-    take ( count: number ) { return collection( items.slice( 0, count ), search, total ) },
-    skip ( count: number ) { return collection( items.slice( count ), search, total ) },
-    slice ( start?: number, end?: number ) { return collection( items.slice( start, end ), search, total ) },
+    take ( count: number ) { return c( items.slice( 0, count ) ) },
+    skip ( count: number ) { return c( items.slice( count ) ) },
+    slice ( start?: number, end?: number ) { return c( items.slice( start, end ) ) },
 
     page ( page: number, perPage: number = 10 ) {
       const start = ( page - 1 ) * perPage, end = start + perPage;
-      return collection( items.slice( start, end ), search, total );
+      return c( items.slice( start, end ) );
     },
 
     [ Symbol.iterator ]() { return items[ Symbol.iterator ]() }
