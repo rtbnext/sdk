@@ -27,15 +27,15 @@ export class Profile extends Endpoint {
   }
 
   public meta ( uri: string ) : Resource< TProfileMetaData > {
-    return this.json< TProfileMetaData >( `v2/profile/${ uri }/meta.json` );
+    return this.json( `v2/profile/${ uri }/meta.json` );
   }
 
   public data ( uri: string ) : Resource< TProfileData > {
-    return this.json< TProfileData >( `v2/profile/${ uri }/profile.json` );
+    return this.json( `v2/profile/${ uri }/profile.json` );
   }
 
   public history ( uri: string ) : Resource< TProfileHistory > {
-    return this.csv< TProfileHistory >( `v2/profile/${ uri }/history.csv` );
+    return this.csv( `v2/profile/${ uri }/history.csv` );
   }
 
   public index () : CollectableResource< TProfileIndex, Collection< TProfileIndexItem > > {
