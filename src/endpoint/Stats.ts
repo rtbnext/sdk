@@ -1,10 +1,10 @@
+import type { TIndustry } from '@rtbnext/schema/src/base/const';
 import type { TDBStats, TGlobalStats, THistory, TProfileStats, TScatter, TScatterItem, TStatsGroup, TWealthStats } from '@rtbnext/schema/src/model/stats';
 import type { CollectableResource } from '../resource/CollectableResource';
 import type { Resource } from '../resource/Resource';
 import type { ProfileEntity } from '../types';
 import { sanitize } from '../utils';
 import { Endpoint } from './Endpoint';
-import { TIndustry } from '@rtbnext/schema/src/base/const';
 
 
 export class Stats extends Endpoint {
