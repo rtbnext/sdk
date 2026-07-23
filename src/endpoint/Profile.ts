@@ -1,7 +1,8 @@
 import type { TProfileData, TProfileHistory, TProfileIndex, TProfileIndexItem, TProfileMetaData } from '@rtbnext/schema/src/model/profile';
 import type { TSearchIndex, TSearchIndexItem } from '@rtbnext/schema/src/model/search';
+import { collection } from '../core/Collection';
 import type { CollectableResource, Resource } from '../core/Resource';
-import { collection, sanitize } from '../core/utils';
+import { sanitize } from '../core/utils';
 import type { Collection, CollectionSearchFn, ProfileEntity } from '../types';
 import { Endpoint } from './Endpoint';
 
