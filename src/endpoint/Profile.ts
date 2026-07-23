@@ -8,7 +8,7 @@ import { Endpoint } from './Endpoint';
 
 
 export class Profile extends Endpoint {
-  public _entity < I > ( item: I & { uri: string } ) : ProfileEntity< I > {
+  public _entity < I extends { uri: string } > ( item: I ) : ProfileEntity< I > {
     const self = this;
 
     let meta: Resource< TProfileMetaData >;
