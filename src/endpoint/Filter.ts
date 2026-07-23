@@ -1,4 +1,4 @@
-import type { TIndustry } from '@rtbnext/schema/src/base/const';
+import type { TAgeGroup, TGender, TIndustry, TMaritalStatus } from '@rtbnext/schema/src/base/const';
 import type { TFilter, TFilterItem } from '@rtbnext/schema/src/model/filter';
 import type { CollectableResource } from '../core/Resource';
 import { sanitize } from '../core/utils';
@@ -18,5 +18,17 @@ export class Filter extends Endpoint {
 
   public industry ( industry: TIndustry ) : CollectableResource< TFilter, Collection< TFilterItem > > {
     return this._filter( `v2/filter/industry/${ industry.toLowerCase() }.json` );
+  }
+
+  public age ( ageGroup: TAgeGroup ) : CollectableResource< TFilter, Collection< TFilterItem > > {
+    return this._filter( `v2/filter/age/${ ageGroup }.json` );
+  }
+
+  public gender ( gender: TGender ) : CollectableResource< TFilter, Collection< TFilterItem > > {
+    return this._filter( `v2/filter/gender/${ gender.toLowerCase() }.json` );
+  }
+
+  public maritalStatus ( maritalStatus: TMaritalStatus ) : CollectableResource< TFilter, Collection< TFilterItem > > {
+    return this._filter( `v2/filter/maritalStatus/${ maritalStatus.toLowerCase() }.json` );
   }
 }
