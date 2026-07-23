@@ -1,7 +1,7 @@
 import type { Cache, CacheMode, CacheOptions, HttpResponse, RequestOptions, ResourceState } from '../types';
-import { EmptyCache } from './EmptyCache';
+import { EmptyCache } from './cache/EmptyCache';
+import { MemoryCache } from './cache/MemoryCache';
 import type { HttpClient } from './HttpClient';
-import { MemoryCache } from './MemoryCache';
 
 
 export class ResourceLoader {
