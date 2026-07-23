@@ -4,6 +4,7 @@ import type { Resource } from '../resource/Resource';
 import type { ProfileEntity } from '../types';
 import { sanitize } from '../utils';
 import { Endpoint } from './Endpoint';
+import { TIndustry } from '@rtbnext/schema/src/base/const';
 
 
 export class Stats extends Endpoint {
@@ -32,6 +33,10 @@ export class Stats extends Endpoint {
 
   public get history () : Resource< THistory > {
     return this.csv< THistory >( 'v2/stats/history.csv' );
+  }
+
+  public get industryIndex () : Resource< TStatsGroup< TIndustry >[ 'index' ] > {
+    return this.json( 'v2/stats/industry/index.json' );
   }
 
   public get citizenshipIndex () : Resource< TStatsGroup< string >[ 'index' ] > {
