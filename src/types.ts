@@ -5,7 +5,6 @@ import type { Mover } from './endpoint/Mover';
 import type { Profile } from './endpoint/Profile';
 import type { Stats } from './endpoint/Stats';
 import type { System } from './endpoint/System';
-import type { CollectableResource } from './resource/CollectableResource';
 import type { Resource } from './resource/Resource';
 
 
@@ -97,8 +96,6 @@ export interface ProfileResources {
 }
 
 export type ProfileEntity< I > = Entity< I, ProfileResources >;
-
-export type AnyResource< D, I, E extends Entity< I > > = Resource< D > | CollectableResource< D, I, E >;
 
 export interface Collection< D > extends Iterable< D > {
   readonly items: Entity< D >[];
