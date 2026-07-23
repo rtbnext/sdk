@@ -2,9 +2,9 @@ import type { Collection, CollectionSearchFn, Entity } from '../types';
 import { sanitize } from '../utils';
 
 
-export function collection < T, E extends Entity< T > > (
-  items: E[], search: CollectionSearchFn< T >, total: number = items.length
-) : Collection< T > {
+export function collection < I, E extends Entity< I > > (
+  items: E[], search: CollectionSearchFn< I >, total: number = items.length
+) : Collection< I > {
   const c = ( items: E[], t: number = total ) => collection( items, search, t );
   let idx = -1;
 
@@ -44,7 +44,7 @@ export function collection < T, E extends Entity< T > > (
     },
 
     groupBy < K > ( callback: ( item: E ) => K ) {
-      const groups = new Map< K, Collection< T > >();
+      const groups = new Map< K, Collection< I > >();
       const map = new Map< K, E[] >();
 
       for ( const item of items ) {
@@ -57,7 +57,7 @@ export function collection < T, E extends Entity< T > > (
       return groups;
     },
 
-    orderBy ( key: keyof T, dir: 'asc' | 'desc' = 'asc' ) {
+    orderBy ( key: keyof I, dir: 'asc' | 'desc' = 'asc' ) {
       const factor = dir === 'desc' ? -1 : 1;
 
       return c( [ ...items ].sort( ( a, b ) => {

@@ -1,17 +1,19 @@
+import { collection } from '../core/Collection';
 import type { ResourceLoader } from '../core/ResourceLoader';
-import type { ParserFn } from '../types';
+import type { Collection, CollectionSearchFn, Entity, ParserFn } from '../types';
 import { Resource } from './Resource';
 
 
-export class CollectableResource< T, R > extends Resource< T > {
+export class CollectableResource< T, I, E extends Entity< I > > extends Resource< T > {
   constructor (
     path: string, loader: ResourceLoader, parser: ParserFn< T >,
-    protected readonly collectFn: ( data: T ) => Promise< R > | R
+    private readonly factory: ( data: T ) => E[],
+    protected readonly search: CollectionSearchFn< I >
   ) {
     super( path, loader, parser );
   }
 
-  public collect () : Promise< R > {
-    return this.transform( this.collectFn );
+  public collect () : Promise< Collection< I > > {
+    return this.transform( data => collection( this.factory( data ), this.search ) );
   }
 }

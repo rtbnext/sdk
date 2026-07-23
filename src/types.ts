@@ -52,9 +52,9 @@ export type ResourceState = {
   lastModified?: string;
 };
 
-export type AnyResource< T, R > = Resource< T > | CollectableResource< T, R >;
-
 export type ParserFn< T > = ( res: HttpResponse, ...args: any[] ) => T;
+
+export type CollectionSearchFn< T > = ( item: Entity< T >, query: string, terms: string[] ) => boolean;
 
 export interface Cache {
   readonly size: number;
@@ -98,7 +98,7 @@ export interface ProfileResources {
 
 export type ProfileEntity< T > = Entity< T, ProfileResources >;
 
-export type CollectionSearchFn< T > = ( item: Entity< T >, query: string, terms: string[] ) => boolean;
+export type AnyResource< T, I, E extends Entity< I > > = Resource< T > | CollectableResource< T, I, E >;
 
 export interface Collection< T > extends Iterable< T > {
   readonly items: Entity< T >[];
