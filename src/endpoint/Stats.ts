@@ -1,4 +1,4 @@
-import type { TDBStats, TGlobalStats, THistory, TProfileStats, TScatter, TScatterItem, TWealthStats } from '@rtbnext/schema/src/model/stats';
+import type { TDBStats, TGlobalStats, THistory, TProfileStats, TScatter, TScatterItem, TStatsGroup, TWealthStats } from '@rtbnext/schema/src/model/stats';
 import type { CollectableResource } from '../resource/CollectableResource';
 import type { Resource } from '../resource/Resource';
 import type { ProfileEntity } from '../types';
@@ -32,5 +32,9 @@ export class Stats extends Endpoint {
 
   public get history () : Resource< THistory > {
     return this.csv< THistory >( 'v2/stats/history.csv' );
+  }
+
+  public get citizenshipIndex () : Resource< TStatsGroup< string >[ 'index' ] > {
+    return this.json( 'v2/stats/citizenship/index.json' );
   }
 }
