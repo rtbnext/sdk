@@ -97,40 +97,44 @@ export interface ProfileResources {
 
 export type ProfileEntity< I > = Entity< I, ProfileResources >;
 
-export interface Collection< D > extends Iterable< D > {
-  readonly items: Entity< D >[];
+export interface Collection< I > extends Iterable< I > {
+  readonly items: Entity< I >[];
   readonly total: number;
   readonly count: number;
   position: number;
 
-  readonly current: Entity< D > | null;
-  readonly first: Entity< D > | null;
-  readonly last: Entity< D > | null;
+  readonly current: Entity< I > | null;
+  readonly first: Entity< I > | null;
+  readonly last: Entity< I > | null;
 
   readonly hasNext: boolean;
   readonly hasPrev: boolean;
 
-  readonly next: Entity< D > | null;
-  readonly prev: Entity< D > | null;
+  readonly next: Entity< I > | null;
+  readonly prev: Entity< I > | null;
 
-  at ( index: number ) : Entity< D > | null;
-  get ( uri: string ) : Entity< D > | null;
-  find ( uriLike: string ) : Entity< D > | null;
-  filter ( predicate: ( item: Entity< D > ) => boolean ) : Collection< D >;
-  search ( query: string ) : Collection< D >;
+  at ( index: number ) : Entity< I > | null;
+  get ( uri: string ) : Entity< I > | null;
+  find ( uriLike: string ) : Entity< I > | null;
+  filter ( predicate: ( item: Entity< I > ) => boolean ) : Collection< I >;
+  search ( query: string ) : Collection< I >;
 
-  groupBy < K > ( callback: ( item: Entity< D > ) => K ) : Map< K, Collection< D > >;
-  orderBy ( key: keyof D, dir?: 'asc' | 'desc' ) : Collection< D >;
-  sort ( compare: ( a: Entity< D >, b: Entity< D > ) => number ) : Collection< D >;
+  intersect ( other: Collection< I > ) : Collection< I >;
+  exclude ( other: Collection< I > ) : Collection< I >;
+  union ( other: Collection< I > ) : Collection< I >;
 
-  toArray () : Entity< D >[];
-  map < R > ( callback: ( item: Entity< D >, index: number ) => R ) : R[];
+  groupBy < K > ( callback: ( item: Entity< I > ) => K ) : Map< K, Collection< I > >;
+  orderBy ( key: keyof I, dir?: 'asc' | 'desc' ) : Collection< I >;
+  sort ( compare: ( a: Entity< I >, b: Entity< I > ) => number ) : Collection< I >;
 
-  take ( count: number ) : Collection< D >;
-  skip ( count: number ) : Collection< D >;
-  slice ( start?: number, end?: number ) : Collection< D >;
+  toArray () : Entity< I >[];
+  map < R > ( callback: ( item: Entity< I >, index: number ) => R ) : R[];
 
-  page ( page: number, perPage?: number ) : Collection< D >;
+  take ( count: number ) : Collection< I >;
+  skip ( count: number ) : Collection< I >;
+  slice ( start?: number, end?: number ) : Collection< I >;
+
+  page ( page: number, perPage?: number ) : Collection< I >;
 }
 
 export type IndexFactory< R > = ( path: readonly string[] ) => R;
