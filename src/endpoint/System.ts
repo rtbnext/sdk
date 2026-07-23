@@ -1,5 +1,5 @@
 import type { TStatus } from '@rtbnext/schema/src/model/status';
-import type { Resource } from '../core/Resource';
+import type { Resource } from '../core/resource/Resource';
 import { Endpoint } from './Endpoint';
 
 

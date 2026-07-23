@@ -1,5 +1,5 @@
-import type { ParserFn, RequestOptions, ResourceState } from '../types';
-import type { ResourceLoader } from './ResourceLoader';
+import type { ParserFn, RequestOptions, ResourceState } from '../../types';
+import type { ResourceLoader } from '../ResourceLoader';
 
 
 export class Resource< T > {
@@ -67,18 +67,5 @@ export class Resource< T > {
     }
 
     return this.value!;
-  }
-}
-
-export class CollectableResource< T, R > extends Resource< T > {
-  constructor (
-    path: string, loader: ResourceLoader, parser: ParserFn< T >,
-    protected readonly collectFn: ( data: T ) => Promise< R > | R
-  ) {
-    super( path, loader, parser );
-  }
-
-  public collect () : Promise< R > {
-    return this.transform( this.collectFn );
   }
 }

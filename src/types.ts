@@ -1,5 +1,6 @@
 import type { TProfileData, TProfileHistory, TProfileMetaData } from '@rtbnext/schema/src/model/profile';
-import type { CollectableResource, Resource } from './core/Resource';
+import type { CollectableResource } from './core/resource/CollectableResource';
+import type { Resource } from './core/resource/Resource';
 import type { Filter } from './endpoint/Filter';
 import type { List } from './endpoint/List';
 import type { Mover } from './endpoint/Mover';

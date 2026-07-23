@@ -1,4 +1,5 @@
-import { CollectableResource, Resource } from '../core/Resource';
+import { CollectableResource } from '../core/resource/CollectableResource';
+import { Resource } from '../core/resource/Resource';
 import type { ResourceLoader } from '../core/ResourceLoader';
 import { CsvParser } from '../parser/CsvParser';
 import { JsonParser } from '../parser/JsonParser';

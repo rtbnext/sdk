@@ -1,5 +1,6 @@
 import type { TDBStats, TGlobalStats, THistory, TProfileStats, TScatter, TScatterItem, TWealthStats } from '@rtbnext/schema/src/model/stats';
-import type { CollectableResource, Resource } from '../core/Resource';
+import type { CollectableResource } from '../core/resource/CollectableResource';
+import type { Resource } from '../core/resource/Resource';
 import { sanitize } from '../core/utils';
 import type { Collection } from '../types';
 import { Endpoint } from './Endpoint';
