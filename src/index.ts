@@ -1,4 +1,4 @@
-import { RTBNext } from './core/RTBNext';
+import { RTBNext } from './RTBNext';
 import type { RTBNextOptions } from './types';
 
 export type * from './types';

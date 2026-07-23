@@ -1,12 +1,12 @@
-import { Filter } from '../endpoint/Filter';
-import { List } from '../endpoint/List';
-import { Mover } from '../endpoint/Mover';
-import { Profile } from '../endpoint/Profile';
-import { Stats } from '../endpoint/Stats';
-import { System } from '../endpoint/System';
-import type { Endpoints, RTBNextOptions } from '../types';
-import { HttpClient } from './HttpClient';
-import { ResourceLoader } from './ResourceLoader';
+import { HttpClient } from './core/HttpClient';
+import { ResourceLoader } from './core/ResourceLoader';
+import { Filter } from './endpoint/Filter';
+import { List } from './endpoint/List';
+import { Mover } from './endpoint/Mover';
+import { Profile } from './endpoint/Profile';
+import { Stats } from './endpoint/Stats';
+import { System } from './endpoint/System';
+import type { Endpoints, RTBNextOptions } from './types';
 
 
 const DEFAULT_OPTIONS = {

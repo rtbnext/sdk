@@ -1,5 +1,5 @@
-import type { ParserFn, RequestOptions, ResourceState } from '../../types';
-import type { ResourceLoader } from '../ResourceLoader';
+import type { ResourceLoader } from '../core/ResourceLoader';
+import type { ParserFn, RequestOptions, ResourceState } from '../types';
 
 
 export class Resource< T > {

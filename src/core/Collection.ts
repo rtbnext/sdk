@@ -1,5 +1,5 @@
 import type { Collection, CollectionSearchFn, Entity } from '../types';
-import { sanitize } from './utils';
+import { sanitize } from '../utils';
 
 
 export function collection < T, E extends Entity< T > > (

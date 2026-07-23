@@ -1,10 +1,10 @@
 import type { TProfileData, TProfileHistory, TProfileIndex, TProfileIndexItem, TProfileMetaData } from '@rtbnext/schema/src/model/profile';
 import type { TSearchIndex, TSearchIndexItem } from '@rtbnext/schema/src/model/search';
 import { collection } from '../core/Collection';
-import type { CollectableResource } from '../core/resource/CollectableResource';
-import type { Resource } from '../core/resource/Resource';
-import { sanitize } from '../core/utils';
+import type { CollectableResource } from '../resource/CollectableResource';
+import type { Resource } from '../resource/Resource';
 import type { Collection, CollectionSearchFn, ProfileEntity } from '../types';
+import { sanitize } from '../utils';
 import { Endpoint } from './Endpoint';
 
 

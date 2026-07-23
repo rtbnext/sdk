@@ -1,9 +1,9 @@
-import { CollectableResource } from '../core/resource/CollectableResource';
-import { Resource } from '../core/resource/Resource';
 import type { ResourceLoader } from '../core/ResourceLoader';
 import { CsvParser } from '../parser/CsvParser';
 import { JsonParser } from '../parser/JsonParser';
 import { TextParser } from '../parser/TextParser';
+import { CollectableResource } from '../resource/CollectableResource';
+import { Resource } from '../resource/Resource';
 import type { AnyResource, Endpoints } from '../types';
 
 

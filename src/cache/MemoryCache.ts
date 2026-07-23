@@ -1,4 +1,4 @@
-import type { Cache, ResourceState } from '../../types';
+import type { Cache, ResourceState } from '../types';
 
 
 export class MemoryCache implements Cache {

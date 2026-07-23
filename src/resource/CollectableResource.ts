@@ -1,5 +1,5 @@
-import type { ParserFn } from '../../types';
-import type { ResourceLoader } from '../ResourceLoader';
+import type { ResourceLoader } from '../core/ResourceLoader';
+import type { ParserFn } from '../types';
 import { Resource } from './Resource';
 
 

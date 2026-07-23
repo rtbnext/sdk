@@ -1,12 +1,12 @@
 import type { TProfileData, TProfileHistory, TProfileMetaData } from '@rtbnext/schema/src/model/profile';
-import type { CollectableResource } from './core/resource/CollectableResource';
-import type { Resource } from './core/resource/Resource';
 import type { Filter } from './endpoint/Filter';
 import type { List } from './endpoint/List';
 import type { Mover } from './endpoint/Mover';
 import type { Profile } from './endpoint/Profile';
 import type { Stats } from './endpoint/Stats';
 import type { System } from './endpoint/System';
+import type { CollectableResource } from './resource/CollectableResource';
+import type { Resource } from './resource/Resource';
 
 
 export type ClientIdentity = {

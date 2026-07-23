@@ -1,4 +1,4 @@
-import type { Cache } from '../../types';
+import type { Cache } from '../types';
 
 
 export class EmptyCache implements Cache {

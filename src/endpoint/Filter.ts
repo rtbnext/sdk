@@ -1,8 +1,8 @@
 import type { TAgeGroup, TGender, TIndustry, TMaritalStatus } from '@rtbnext/schema/src/base/const';
 import type { TFilter, TFilterItem } from '@rtbnext/schema/src/model/filter';
-import type { CollectableResource } from '../core/resource/CollectableResource';
-import { sanitize } from '../core/utils';
+import type { CollectableResource } from '../resource/CollectableResource';
 import type { Collection } from '../types';
+import { sanitize } from '../utils';
 import { Endpoint } from './Endpoint';
 
 
