@@ -40,7 +40,7 @@ export class Profile extends Endpoint {
     return this.csv( `v2/profile/${ uri }/history.csv` );
   }
 
-  public index () : CollectableResource< TProfileIndex, TProfileIndexItem, ProfileEntity< TProfileIndexItem > > {
+  public get index () : CollectableResource< TProfileIndex, TProfileIndexItem, ProfileEntity< TProfileIndexItem > > {
     return this._collect( 'v2/profile/index.json', ( item, query, terms ) => {
       const name = sanitize( item.name );
 
@@ -51,7 +51,7 @@ export class Profile extends Endpoint {
     } );
   }
 
-  public search () : CollectableResource< TSearchIndex, TSearchIndexItem, ProfileEntity< TSearchIndexItem > > {
+  public get searchIndex () : CollectableResource< TSearchIndex, TSearchIndexItem, ProfileEntity< TSearchIndexItem > > {
     return this._collect( 'v2/profile/search.json', ( item, query, terms ) =>
       item.searchName.includes( query ) || terms.every( t => item.searchName.includes( t ) )
     );

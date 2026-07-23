@@ -8,7 +8,7 @@ const client = rtbnext( {
   }
 } );
 
-const index = await client.profile.search().collect();
+const index = await client.profile.searchIndex.collection();
 
 for ( const item of index.filter( i => i.gender === 'f' ).orderBy( 'networth', 'desc' ).page( 2 ) ) {
   console.log( `${ item.fullName } (${ item.age }) :: $${ ( item.networth / 1000 ).toFixed( 1 ) }B` );

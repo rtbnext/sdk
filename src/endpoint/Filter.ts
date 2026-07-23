@@ -14,19 +14,19 @@ export class Filter extends Endpoint {
     } );
   }
 
-  public deceased () {
+  public get deceased () {
     return this._filter( `v2/filter/special/deceased.json` );
   }
 
-  public dropOff () {
+  public get dropOff () {
     return this._filter( `v2/filter/special/dropOff.json` );
   }
 
-  public family () {
+  public get family () {
     return this._filter( `v2/filter/special/family.json` );
   }
 
-  public selfMade () {
+  public get selfMade () {
     return this._filter( `v2/filter/special/selfMade.json` );
   }
 

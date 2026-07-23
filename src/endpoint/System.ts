@@ -4,7 +4,7 @@ import { Endpoint } from './Endpoint';
 
 
 export class System extends Endpoint {
-  public status () : Resource< TStatus > {
+  public get status () : Resource< TStatus > {
     return this.json( 'v2/system/status.json' );
   }
 }
