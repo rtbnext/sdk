@@ -8,7 +8,7 @@ import { Endpoint } from './Endpoint';
 
 
 export class Profile extends Endpoint {
-  protected entity < T > ( item: T & { uri: string } ) : ProfileEntity< T > {
+  public _entity < T > ( item: T & { uri: string } ) : ProfileEntity< T > {
     const self = this;
 
     let meta: Resource< TProfileMetaData >;
@@ -22,8 +22,8 @@ export class Profile extends Endpoint {
     } );
   }
 
-  protected collect < T extends { uri: string } > ( items: T[], search: CollectionSearchFn< T > ) : Collection< T > {
-    return collection( items.map( i => this.entity( i ) ), search );
+  public _collect < T extends { uri: string } > ( items: T[], search: CollectionSearchFn< T > ) : Collection< T > {
+    return collection( items.map( i => this._entity( i ) ), search );
   }
 
   public meta ( uri: string ) : Resource< TProfileMetaData > {
@@ -40,7 +40,7 @@ export class Profile extends Endpoint {
 
   public index () : CollectableResource< TProfileIndex, Collection< TProfileIndexItem > > {
     return this.json( 'v2/profile/index.json', data =>
-      this.collect( data.items, ( item, query, terms ) => {
+      this._collect( data.items, ( item, query, terms ) => {
         const name = sanitize( item.name );
 
         return (
@@ -53,7 +53,7 @@ export class Profile extends Endpoint {
 
   public search () : CollectableResource< TSearchIndex, Collection< TSearchIndexItem > > {
     return this.json( 'v2/profile/search.json', data =>
-      this.collect( data.items, ( item, query, terms ) =>
+      this._collect( data.items, ( item, query, terms ) =>
         item.searchName.includes( query ) ||
         terms.every( t => item.searchName.includes( t ) )
       )
