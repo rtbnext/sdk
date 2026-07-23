@@ -16,6 +16,22 @@ export class Filter extends Endpoint {
     );
   }
 
+  public deceased () : CollectableResource< TFilter, Collection< TFilterItem > > {
+    return this._filter( `v2/filter/special/deceased.json` );
+  }
+
+  public dropOff () : CollectableResource< TFilter, Collection< TFilterItem > > {
+    return this._filter( `v2/filter/special/dropOff.json` );
+  }
+
+  public family () : CollectableResource< TFilter, Collection< TFilterItem > > {
+    return this._filter( `v2/filter/special/family.json` );
+  }
+
+  public selfMade () : CollectableResource< TFilter, Collection< TFilterItem > > {
+    return this._filter( `v2/filter/special/selfMade.json` );
+  }
+
   public industry ( industry: TIndustry ) : CollectableResource< TFilter, Collection< TFilterItem > > {
     return this._filter( `v2/filter/industry/${ industry.toLowerCase() }.json` );
   }
