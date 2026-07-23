@@ -4,7 +4,7 @@ import { JsonParser } from '../parser/JsonParser';
 import { TextParser } from '../parser/TextParser';
 import { CollectableResource } from '../resource/CollectableResource';
 import { Resource } from '../resource/Resource';
-import type { AnyResource, Endpoints } from '../types';
+import type { AnyResource, CollectionSearchFn, Endpoints, Entity } from '../types';
 
 
 export abstract class Endpoint {
@@ -18,20 +18,28 @@ export abstract class Endpoint {
   }
 
   protected json < T > ( path: string ) : Resource< T >;
-  protected json < T, R > ( path: string, collect: ( data: T ) => Promise< R > | R ) : CollectableResource< T, R >;
+  protected json < T, I, E extends Entity< I > > (
+    path: string, factory: ( data: T ) => E[], search: CollectionSearchFn< I >
+  ) : CollectableResource< T, I, E >;
 
-  protected json < T, R > ( path: string, collect?: ( data: T ) => Promise< R > | R ) : AnyResource< T, R > {
-    return collect
-      ? new CollectableResource( path, this.loader, JsonParser.parse< T >, collect )
+  protected json < T, I, E extends Entity< I > > (
+    path: string, factory?: ( data: T ) => E[], search?: CollectionSearchFn< I >
+  ) : AnyResource< T, I, E > {
+    return factory && search
+      ? new CollectableResource( path, this.loader, JsonParser.parse< T >, factory, search )
       : new Resource( path, this.loader, JsonParser.parse< T > );
   }
 
   protected csv < T > ( path: string ) : Resource< T >;
-  protected csv < T, R > ( path: string, collect: ( data: T ) => Promise< R > | R ) : CollectableResource< T, R >;
+  protected csv < T, I, E extends Entity< I > > (
+    path: string, factory: ( data: T ) => E[], search: CollectionSearchFn< I >
+  ) : CollectableResource< T, I, E >;
 
-  protected csv < T, R > ( path: string, collect?: ( data: T ) => Promise< R > | R ) : AnyResource< T, R > {
-    return collect
-      ? new CollectableResource( path, this.loader, CsvParser.parse< T >, collect )
+  protected csv < T, I, E extends Entity< I > > (
+    path: string, factory?: ( data: T ) => E[], search?: CollectionSearchFn< I >
+  ) : AnyResource< T, I, E > {
+    return factory && search
+      ? new CollectableResource( path, this.loader, CsvParser.parse< T >, factory, search )
       : new Resource< T >( path, this.loader, CsvParser.parse< T > );
   }
 }

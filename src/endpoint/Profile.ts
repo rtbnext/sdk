@@ -1,9 +1,8 @@
 import type { TProfileData, TProfileHistory, TProfileIndex, TProfileIndexItem, TProfileMetaData } from '@rtbnext/schema/src/model/profile';
 import type { TSearchIndex, TSearchIndexItem } from '@rtbnext/schema/src/model/search';
-import { collection } from '../core/Collection';
 import type { CollectableResource } from '../resource/CollectableResource';
 import type { Resource } from '../resource/Resource';
-import type { Collection, CollectionSearchFn, ProfileEntity } from '../types';
+import type { CollectionSearchFn, ProfileEntity } from '../types';
 import { sanitize } from '../utils';
 import { Endpoint } from './Endpoint';
 
@@ -23,8 +22,10 @@ export class Profile extends Endpoint {
     } );
   }
 
-  public _collect < T extends { uri: string } > ( items: T[], search: CollectionSearchFn< T > ) : Collection< T > {
-    return collection( items.map( i => this._entity( i ) ), search );
+  public _collect < I extends { uri: string }, T extends { items: I[] } > (
+    path: string, search: CollectionSearchFn< I >
+  ) : CollectableResource< T, I, ProfileEntity< I > > {
+    return this.json( path, data => data.items.map( i => this._entity( i ) ), search );
   }
 
   public meta ( uri: string ) : Resource< TProfileMetaData > {
@@ -39,25 +40,20 @@ export class Profile extends Endpoint {
     return this.csv( `v2/profile/${ uri }/history.csv` );
   }
 
-  public index () : CollectableResource< TProfileIndex, Collection< TProfileIndexItem > > {
-    return this.json( 'v2/profile/index.json', data =>
-      this._collect( data.items, ( item, query, terms ) => {
-        const name = sanitize( item.name );
+  public index () : CollectableResource< TProfileIndex, TProfileIndexItem, ProfileEntity< TProfileIndexItem > > {
+    return this._collect( 'v2/profile/index.json', ( item, query, terms ) => {
+      const name = sanitize( item.name );
 
-        return (
-          name.includes( query ) || item.text.includes( query ) ||
-          terms.every( t => name.includes( t ) || item.text.includes( t ) )
-        );
-      } )
-    );
+      return (
+        name.includes( query ) || item.text.includes( query ) ||
+        terms.every( t => name.includes( t ) || item.text.includes( t ) )
+      );
+    } );
   }
 
-  public search () : CollectableResource< TSearchIndex, Collection< TSearchIndexItem > > {
-    return this.json( 'v2/profile/search.json', data =>
-      this._collect( data.items, ( item, query, terms ) =>
-        item.searchName.includes( query ) ||
-        terms.every( t => item.searchName.includes( t ) )
-      )
+  public search () : CollectableResource< TSearchIndex, TSearchIndexItem, ProfileEntity< TSearchIndexItem > > {
+    return this._collect( 'v2/profile/search.json', ( item, query, terms ) =>
+      item.searchName.includes( query ) || terms.every( t => item.searchName.includes( t ) )
     );
   }
 }

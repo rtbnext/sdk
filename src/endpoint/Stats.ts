@@ -1,7 +1,7 @@
 import type { TDBStats, TGlobalStats, THistory, TProfileStats, TScatter, TScatterItem, TWealthStats } from '@rtbnext/schema/src/model/stats';
 import type { CollectableResource } from '../resource/CollectableResource';
 import type { Resource } from '../resource/Resource';
-import type { Collection } from '../types';
+import type { ProfileEntity } from '../types';
 import { sanitize } from '../utils';
 import { Endpoint } from './Endpoint';
 
@@ -19,13 +19,11 @@ export class Stats extends Endpoint {
     return this.json( 'v2/stats/profile.json' );
   }
 
-  public scatter () : CollectableResource< TScatter, Collection< TScatterItem > > {
-    return this.json( 'v2/stats/scatter.json', data =>
-      this.endpoints.profile._collect( data.items, ( item, query, terms ) => {
-        const name = sanitize( item.name );
-        return name.includes( query ) || terms.every( t => name.includes( t ) );
-      } )
-    );
+  public scatter () : CollectableResource< TScatter, TScatterItem, ProfileEntity< TScatterItem > > {
+    return this.endpoints.profile._collect( 'v2/stats/scatter.json', ( item, query, terms ) => {
+      const name = sanitize( item.name );
+      return name.includes( query ) || terms.every( t => name.includes( t ) );
+    } );
   }
 
   public wealth () : Resource< TWealthStats > {
