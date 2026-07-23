@@ -132,3 +132,22 @@ export interface Collection< D > extends Iterable< D > {
 
   page ( page: number, perPage?: number ) : Collection< D >;
 }
+
+export type IndexFactory< R > = ( path: readonly string[], values: readonly string[] ) => R;
+
+export type IndexResult< T, R > = T extends readonly any[] ? R : T extends object ? {
+  [ K in keyof T as K extends '$metadata' ? never : K ]: IndexResult< T[ K ], R >
+} : never;
+
+export type CollectOptions< I extends { uri: string }, E extends Entity< I > > = {
+  entity: ( item: I ) => E;
+  search: CollectionSearchFn< I >;
+};
+
+export type IndexOptions< R > = {
+  index: IndexFactory< R >;
+};
+
+export type ResourceOptions< I extends { uri: string }, E extends Entity< I >, R > =
+  | CollectOptions< I, E >
+  | IndexOptions< R >;
