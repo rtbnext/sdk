@@ -40,6 +40,10 @@ export class Profile extends Endpoint {
     return this.csv( `v2/profile/${ uri }/history.csv` );
   }
 
+  public get ( uri: string ) : ProfileEntity< { uri: string } > {
+    return this._entity( { uri } );
+  }
+
   public get index () : CollectableResource< TProfileIndex, TProfileIndexItem, ProfileEntity< TProfileIndexItem > > {
     return this._collect( 'v2/profile/index.json', ( item, query, terms ) => {
       const name = sanitize( item.name );
