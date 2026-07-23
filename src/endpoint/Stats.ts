@@ -8,6 +8,8 @@ import { Endpoint } from './Endpoint';
 
 
 export class Stats extends Endpoint {
+  public _history ( path: string ) {}
+
   public get db () : Resource< TDBStats > {
     return this.json( 'v2/stats/db.json' );
   }
