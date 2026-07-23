@@ -31,4 +31,16 @@ export class Filter extends Endpoint {
   public maritalStatus ( maritalStatus: TMaritalStatus ) : CollectableResource< TFilter, Collection< TFilterItem > > {
     return this._filter( `v2/filter/maritalStatus/${ maritalStatus.toLowerCase() }.json` );
   }
+
+  public citizenship ( isoCode: string ) : CollectableResource< TFilter, Collection< TFilterItem > > {
+    return this._filter( `v2/filter/citizenship/${ isoCode.toUpperCase() }.json` );
+  }
+
+  public country ( isoCode: string ) : CollectableResource< TFilter, Collection< TFilterItem > > {
+    return this._filter( `v2/filter/country/${ isoCode.toUpperCase() }.json` );
+  }
+
+  public state ( uspsCode: string ) : CollectableResource< TFilter, Collection< TFilterItem > > {
+    return this._filter( `v2/filter/state/${ uspsCode.toUpperCase() }.json` );
+  }
 }
