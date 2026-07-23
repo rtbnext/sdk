@@ -13,8 +13,9 @@ export class CollectableResource< D extends { items: I[] }, I extends { uri: str
     super( path, loader, parser );
   }
 
-  private collection ( items: E[], search: CollectionSearchFn< I >, total: number = items.length ) : Collection< I > {
-    const c = ( items: E[], t: number = total ) => this.collection( items, search, t );
+  private collectItems ( items: E[], total: number = items.length ) : Collection< I > {
+    const s = this.search;
+    const c = ( items: E[], t: number = total ) => this.collectItems( items, t );
     let idx = -1;
 
     return Object.freeze( {
@@ -49,7 +50,7 @@ export class CollectableResource< D extends { items: I[] }, I extends { uri: str
 
       search ( query: string ) {
         const terms = sanitize( query, ' ' ).split( ' ' );
-        return c( items.filter( i => search( i, query, terms ) ) );
+        return c( items.filter( i => s( i, query, terms ) ) );
       },
 
       groupBy < K > ( callback: ( item: E ) => K ) {
@@ -97,7 +98,7 @@ export class CollectableResource< D extends { items: I[] }, I extends { uri: str
     } );
   }
 
-  public collect () : Promise< Collection< I > > {
-    return this.transform( data => this.collection( data.items.map( i => this.entity( i ) ), this.search ) );
+  public collection () : Promise< Collection< I > > {
+    return this.transform( data => this.collectItems( data.items.map( i => this.entity( i ) ) ) );
   }
 }
