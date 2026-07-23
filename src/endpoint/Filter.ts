@@ -14,6 +14,12 @@ export class Filter extends Endpoint {
     } );
   }
 
+  public get index () {
+    return this.json( 'v2/filter/index.json', {
+      index: path => this._filter( `v2/filter/${ path.join( '/' ) }.json` )
+    } );
+  }
+
   public get deceased () {
     return this._filter( `v2/filter/special/deceased.json` );
   }
