@@ -36,8 +36,8 @@ export class CsvParser extends TextParser {
     return values;
   }
 
-  public static override parse < T > ( res: HttpResponse ) : T {
+  public static override parse < D > ( res: HttpResponse ) : D {
     return TextParser.parse( res ).split( /\r?\n/ ).filter( l => l.trim().length > 0 )
-      .map( l => CsvParser.parseLine( l, ',' ) ) as T;
+      .map( l => CsvParser.parseLine( l, ',' ) ) as D;
   }
 }

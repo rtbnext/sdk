@@ -13,7 +13,7 @@ export abstract class Endpoint {
     protected readonly endpoints: Endpoints
   ) {}
 
-  protected text ( path: string ) : Resource< string > {
+  protected text ( path: string ) {
     return new Resource< string >( path, this.loader, TextParser.parse );
   }
 
