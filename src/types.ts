@@ -133,11 +133,13 @@ export interface Collection< D > extends Iterable< D > {
   page ( page: number, perPage?: number ) : Collection< D >;
 }
 
-export type IndexFactory< R > = ( path: readonly string[], values: readonly string[] ) => R;
+export type IndexFactory< R > = ( path: readonly string[] ) => R;
 
-export type IndexResult< T, R > = T extends readonly any[] ? R : T extends object ? {
-  [ K in keyof T as K extends '$metadata' ? never : K ]: IndexResult< T[ K ], R >
-} : never;
+export type IndexKeys< T > = Exclude< keyof T, '$metadata' >;
+
+export type IndexResult< T, R > = T extends readonly ( infer I )[]
+  ? I extends string ? Record< I, R > : never
+  : T extends object ? { [ K in IndexKeys< T > ]: IndexResult< T[ K ], R > } : never;
 
 export type CollectOptions< I extends { uri: string }, E extends Entity< I > > = {
   entity: ( item: I ) => E;
