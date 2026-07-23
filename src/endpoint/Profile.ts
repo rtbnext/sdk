@@ -8,7 +8,7 @@ import { Endpoint } from './Endpoint';
 
 
 export class Profile extends Endpoint {
-  public _entity < T > ( item: T & { uri: string } ) : ProfileEntity< T > {
+  public _entity < I > ( item: I & { uri: string } ) : ProfileEntity< I > {
     const self = this;
 
     let meta: Resource< TProfileMetaData >;
@@ -22,9 +22,9 @@ export class Profile extends Endpoint {
     } );
   }
 
-  public _collect < I extends { uri: string }, T extends { items: I[] } > (
+  public _collect < I extends { uri: string }, D extends { items: I[] } > (
     path: string, search: CollectionSearchFn< I >
-  ) : CollectableResource< T, I, ProfileEntity< I > > {
+  ) : CollectableResource< D, I, ProfileEntity< I > > {
     return this.json( path, data => data.items.map( i => this._entity( i ) ), search );
   }
 

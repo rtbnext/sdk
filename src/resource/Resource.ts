@@ -2,7 +2,7 @@ import type { ResourceLoader } from '../core/ResourceLoader';
 import type { ParserFn, RequestOptions, ResourceState } from '../types';
 
 
-export class Resource< TDocument > {
+export class Resource< D > {
   protected readonly hooks = new Map< string, Set< ( self: this ) => void > >();
 
   protected loaded: boolean = false;
@@ -10,15 +10,15 @@ export class Resource< TDocument > {
   protected state?: ResourceState;
 
   protected parsed: boolean = false;
-  protected value?: TDocument;
+  protected value?: D;
 
   constructor (
     protected readonly path: string,
     protected readonly loader: ResourceLoader,
-    protected readonly parser: ParserFn< TDocument >
+    protected readonly parser: ParserFn< D >
   ) {}
 
-  protected transform < R > ( fn: ( data: TDocument ) => Promise< R > | R ) : Promise< R > {
+  protected transform < R > ( fn: ( data: D ) => Promise< R > | R ) : Promise< R > {
     return this.data().then( fn );
   }
 
@@ -58,7 +58,7 @@ export class Resource< TDocument > {
     this.emit( 'refresh', 'update' );
   }
 
-  public async data () : Promise< TDocument > {
+  public async data () : Promise< D > {
     await this.load();
 
     if ( ! this.parsed ) {

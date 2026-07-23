@@ -52,9 +52,9 @@ export type ResourceState = {
   lastModified?: string;
 };
 
-export type ParserFn< T > = ( res: HttpResponse, ...args: any[] ) => T;
+export type ParserFn< D > = ( res: HttpResponse, ...args: any[] ) => D;
 
-export type CollectionSearchFn< T > = ( item: Entity< T >, query: string, terms: string[] ) => boolean;
+export type CollectionSearchFn< I > = ( item: Entity< I >, query: string, terms: string[] ) => boolean;
 
 export interface Cache {
   readonly size: number;
@@ -88,7 +88,7 @@ export interface Endpoints {
   system: System;
 }
 
-export type Entity< T, R = unknown > = Readonly< T & { uri: string } & R >;
+export type Entity< I, T = unknown > = Readonly< I & { uri: string } & T >;
 
 export interface ProfileResources {
   readonly meta: Resource< TProfileMetaData >;
@@ -96,42 +96,42 @@ export interface ProfileResources {
   readonly history: Resource< TProfileHistory >;
 }
 
-export type ProfileEntity< T > = Entity< T, ProfileResources >;
+export type ProfileEntity< I > = Entity< I, ProfileResources >;
 
-export type AnyResource< T, I, E extends Entity< I > > = Resource< T > | CollectableResource< T, I, E >;
+export type AnyResource< D, I, E extends Entity< I > > = Resource< D > | CollectableResource< D, I, E >;
 
-export interface Collection< T > extends Iterable< T > {
-  readonly items: Entity< T >[];
+export interface Collection< D > extends Iterable< D > {
+  readonly items: Entity< D >[];
   readonly total: number;
   readonly count: number;
   position: number;
 
-  readonly current: Entity< T > | null;
-  readonly first: Entity< T > | null;
-  readonly last: Entity< T > | null;
+  readonly current: Entity< D > | null;
+  readonly first: Entity< D > | null;
+  readonly last: Entity< D > | null;
 
   readonly hasNext: boolean;
   readonly hasPrev: boolean;
 
-  readonly next: Entity< T > | null;
-  readonly prev: Entity< T > | null;
+  readonly next: Entity< D > | null;
+  readonly prev: Entity< D > | null;
 
-  at ( index: number ) : Entity< T > | null;
-  get ( uri: string ) : Entity< T > | null;
-  find ( uriLike: string ) : Entity< T > | null;
-  filter ( predicate: ( item: Entity< T > ) => boolean ) : Collection< T >;
-  search ( query: string ) : Collection< T >;
+  at ( index: number ) : Entity< D > | null;
+  get ( uri: string ) : Entity< D > | null;
+  find ( uriLike: string ) : Entity< D > | null;
+  filter ( predicate: ( item: Entity< D > ) => boolean ) : Collection< D >;
+  search ( query: string ) : Collection< D >;
 
-  groupBy < K > ( callback: ( item: Entity< T > ) => K ) : Map< K, Collection< T > >;
-  orderBy ( key: keyof T, dir?: 'asc' | 'desc' ) : Collection< T >;
-  sort ( compare: ( a: Entity< T >, b: Entity< T > ) => number ) : Collection< T >;
+  groupBy < K > ( callback: ( item: Entity< D > ) => K ) : Map< K, Collection< D > >;
+  orderBy ( key: keyof D, dir?: 'asc' | 'desc' ) : Collection< D >;
+  sort ( compare: ( a: Entity< D >, b: Entity< D > ) => number ) : Collection< D >;
 
-  toArray () : Entity< T >[];
-  map < R > ( callback: ( item: Entity< T >, index: number ) => R ) : R[];
+  toArray () : Entity< D >[];
+  map < R > ( callback: ( item: Entity< D >, index: number ) => R ) : R[];
 
-  take ( count: number ) : Collection< T >;
-  skip ( count: number ) : Collection< T >;
-  slice ( start?: number, end?: number ) : Collection< T >;
+  take ( count: number ) : Collection< D >;
+  skip ( count: number ) : Collection< D >;
+  slice ( start?: number, end?: number ) : Collection< D >;
 
-  page ( page: number, perPage?: number ) : Collection< T >;
+  page ( page: number, perPage?: number ) : Collection< D >;
 }
