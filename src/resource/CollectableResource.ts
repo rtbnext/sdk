@@ -4,10 +4,10 @@ import { sanitize } from '../utils';
 import { Resource } from './Resource';
 
 
-function collection < I, E extends Entity< I > > (
-  items: E[], search: CollectionSearchFn< I >, total: number = items.length
-) : Collection< I > {
-  const c = ( items: E[], t: number = total ) => collection( items, search, t );
+function collection < TItem, TEntity extends Entity< TItem > > (
+  items: TEntity[], search: CollectionSearchFn< TItem >, total: number = items.length
+) : Collection< TItem > {
+  const c = ( items: TEntity[], t: number = total ) => collection( items, search, t );
   let idx = -1;
 
   return Object.freeze( {
@@ -36,7 +36,7 @@ function collection < I, E extends Entity< I > > (
       ) ) ?? null;
     },
 
-    filter ( predicate: ( item: E ) => boolean ) {
+    filter ( predicate: ( item: TEntity ) => boolean ) {
       return c( items.filter( predicate ) );
     },
 
@@ -45,9 +45,9 @@ function collection < I, E extends Entity< I > > (
       return c( items.filter( i => search( i, query, terms ) ) );
     },
 
-    groupBy < K > ( callback: ( item: E ) => K ) {
-      const groups = new Map< K, Collection< I > >();
-      const map = new Map< K, E[] >();
+    groupBy < K > ( callback: ( item: TEntity ) => K ) {
+      const groups = new Map< K, Collection< TItem > >();
+      const map = new Map< K, TEntity[] >();
 
       for ( const item of items ) {
         const key = callback( item ), group = map.get( key );
@@ -59,7 +59,7 @@ function collection < I, E extends Entity< I > > (
       return groups;
     },
 
-    orderBy ( key: keyof I, dir: 'asc' | 'desc' = 'asc' ) {
+    orderBy ( key: keyof TItem, dir: 'asc' | 'desc' = 'asc' ) {
       const factor = dir === 'desc' ? -1 : 1;
 
       return c( [ ...items ].sort( ( a, b ) => {
@@ -68,12 +68,12 @@ function collection < I, E extends Entity< I > > (
       } ) );
     },
 
-    sort ( compare: ( a: E, b: E ) => number ) {
+    sort ( compare: ( a: TEntity, b: TEntity ) => number ) {
       return c( [ ...items ].sort( compare ) );
     },
 
     toArray () { return [ ...items ] },
-    map < R > ( callback: ( item: E, index: number ) => R ) {
+    map < R > ( callback: ( item: TEntity, index: number ) => R ) {
       return items.map( callback );
     },
 
@@ -91,16 +91,16 @@ function collection < I, E extends Entity< I > > (
 }
 
 
-export class CollectableResource< T, I, E extends Entity< I > > extends Resource< T > {
+export class CollectableResource< TDocument, TItem, TEntity extends Entity< TItem > > extends Resource< TDocument > {
   constructor (
-    path: string, loader: ResourceLoader, parser: ParserFn< T >,
-    private readonly factory: ( data: T ) => E[],
-    protected readonly search: CollectionSearchFn< I >
+    path: string, loader: ResourceLoader, parser: ParserFn< TDocument >,
+    private readonly factory: ( data: TDocument ) => TEntity[],
+    protected readonly search: CollectionSearchFn< TItem >
   ) {
     super( path, loader, parser );
   }
 
-  public collect () : Promise< Collection< I > > {
+  public collect () : Promise< Collection< TItem > > {
     return this.transform( data => collection( this.factory( data ), this.search ) );
   }
 }
