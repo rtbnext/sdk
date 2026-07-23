@@ -1,16 +1,18 @@
 import type { ResourceLoader } from '../core/ResourceLoader';
-import type { Collection, CollectionSearchFn, Entity, ParserFn } from '../types';
+import type { Collection, CollectionSearchFn, CollectOptions, Entity, ParserFn } from '../types';
 import { sanitize } from '../utils';
 import { Resource } from './Resource';
 
 
 export class CollectableResource< D extends { items: I[] }, I extends { uri: string }, E extends Entity< I > > extends Resource< D > {
-  constructor (
-    path: string, loader: ResourceLoader, parser: ParserFn< D >,
-    private readonly entity: ( data: I ) => E,
-    protected readonly search: CollectionSearchFn< I >
-  ) {
+  private readonly entity: ( data: I ) => E;
+  private readonly search: CollectionSearchFn< I >;
+
+  constructor ( path: string, loader: ResourceLoader, parser: ParserFn< D >, options: CollectOptions< I, E > ) {
     super( path, loader, parser );
+
+    this.entity = options.entity;
+    this.search = options.search;
   }
 
   private collectItems ( items: E[], total: number = items.length ) : Collection< I > {
