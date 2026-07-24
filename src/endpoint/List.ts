@@ -15,7 +15,8 @@ type ListIndex = CollectableResource< TListIndex, TListIndexItem, ListEntity< an
 
 export class List extends Endpoint {
   public _entity < T extends TListItem & { uri: string } > ( item: TListIndexItem ) : ListEntity< T > {
-    return { ...item, dates: this.get( item.uri ) };
+    const self = this; let dates: ListDateIndex< T >;
+    return Object.freeze( { ...item, get dates () { return dates ??= self.get( item.uri ) } } );
   }
 
   public snapshot < T extends TListItem & { uri: string } > ( uri: string, date: string ) : ListSnapshot< T > {
