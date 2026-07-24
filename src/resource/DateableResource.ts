@@ -29,7 +29,13 @@ export class DateableResource< D, R > extends Resource< D > {
       month ( year: number, month: number ) {
         const prefix = `${ year }-${ String( month ).padStart( 2, '0' ) }-`;
         return c( dates.filter( d => d.startsWith( prefix ) ) );
-      }
+      },
+
+      before ( date: string ) { return c( dates.filter( d => d < date ) ) },
+      after ( date: string ) { return c( dates.filter( d => d > date ) ) },
+      since ( date: string ) { return c( dates.filter( d => d >= date ) ) },
+      until ( date: string ) { return c( dates.filter( d => d <= date ) ) },
+      between ( from: string, to: string ) { return c( dates.filter( d => d >= from && d <= to ) ) }
     };
   }
 
