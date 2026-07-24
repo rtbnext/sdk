@@ -23,7 +23,8 @@ export class DateableResource< D extends { dates: string[] }, R > extends Resour
       get first () { return f( dates[ 0 ] ) },
       get last () { return f( dates.at( -1 ) ) },
 
-      get ( date: string ) { return f( dates[ dates.indexOf( date ) ] ) },
+      get ( date: string ) { return dates.includes( date ) ? self.factory( date ) : null },
+      find ( date: string ) { return f( dates.find( d => d === date ) ) },
 
       year ( year: number ) { return c( dates.filter( d => d.startsWith( `${ year }-` ) ) ) },
       month ( year: number, month: number ) {
