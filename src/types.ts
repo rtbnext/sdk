@@ -186,7 +186,14 @@ export interface DateOptions< R > {
   date: ( value: string ) => R;
 }
 
-export type ResourceOptions< I extends { uri: string }, E extends Entity< I >, R, D > =
+export type TimeSeriesOptions< D extends readonly unknown[], R > = {
+  point: ( value: D[ number ] ) => R;
+};
+
+export type JsonOptions< I extends { uri: string }, E extends Entity< I >, R, D > =
   | CollectOptions< I, E >
   | IndexOptions< R >
   | DateOptions< D >;
+
+export type CsvOptions< D extends readonly unknown[], R > =
+  | TimeSeriesOptions< D, R >;
