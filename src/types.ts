@@ -200,8 +200,24 @@ export interface TimeSeries< R > extends Iterable< R > {
   readonly first: R | null;
   readonly last: R | null;
 
+  get ( date: string ) : R | null;
+  find ( date: string ) : R | null;
+
+  year ( year: number ) : TimeSeries< R >;
+  month ( year: number, month: number ) : TimeSeries< R >;
+
+  before ( date: string ) : TimeSeries< R >;
+  after ( date: string ) : TimeSeries< R >;
+  since ( date: string ) : TimeSeries< R >;
+  until ( date: string ) : TimeSeries< R >;
+  between ( from: string, to: string ) : TimeSeries< R >;
+
   toArray () : R[];
   map < T > ( callback: ( item: R, index: number ) => T ) : T[];
+
+  take ( count: number ) : TimeSeries< R >;
+  skip ( count: number ) : TimeSeries< R >;
+  slice ( start?: number, end?: number ) : TimeSeries< R >;
 }
 
 export type CollectOptions< I extends { uri: string }, E extends Entity< I > > = {
