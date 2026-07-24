@@ -46,7 +46,7 @@ export class DateableResource< D, R > extends Resource< D > {
       skip ( count: number ) { return c( dates.slice( count ) ) },
       slice ( start?: number, end?: number ) { return c( dates.slice( start, end ) ) },
 
-      [ Symbol.iterator ]() { return dates.map( self.factory )[ Symbol.iterator ]() }
+      *[ Symbol.iterator ]() { for ( const date of dates ) yield self.factory( date ) }
     };
   }
 
