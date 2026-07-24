@@ -12,10 +12,47 @@ export class TimeSeriesResource< D extends readonly unknown[], R extends { date:
     this.factory = options.point;
   }
 
-  private createSeries ( points: R[], total: number = points.length ) : TimeSeries< R > {
-    const c = ( points: R[] ) => this.createSeries( points );
-    const d = ( point: R ) => String( point.date );
-    const n = ( cb?: ( point: R ) => number ) => points.map( cb ?? ( p => Number( p ) ) );
+  private period ( date: string, period: AggregatePeriod ) : string {
+    const [ y, m, d ] = date.split( '-' ).map( Number );
+
+    if ( period === 'year' ) return `${ y }`;
+    if ( period === 'quarter' ) return `${ y }-Q${ Math.ceil( m / 3 ) }`;
+    if ( period === 'month' ) return `${ y }-${ String( m ).padStart( 2, '0' ) }`;
+    if ( period === 'week' ) return `${ y }-W${ String( Math.ceil( ( ( (
+      new Date( Date.UTC( y, m - 1, d ) ).getTime() -
+      new Date( Date.UTC( y, 0, 1 ) ).getTime()
+    ) / 86400000 ) + 1 ) / 7 ) ).padStart( 2, '0' ) }`;
+
+    throw new Error( `Invalid aggregate period: ${ period }` );
+  }
+
+  private aggregate < T extends { date: string } >( points: T[] ) : AggregatePoint< T > {
+    const result = { date: points[ 0 ].date } as AggregatePoint< T >;
+    const keys = Object.keys( points[ 0 ] );
+
+    for ( const key of keys ) {
+      if ( key === 'date' ) continue;
+
+      const values = points.map( p => Number( p[ key as keyof T ] ) ).filter( Number.isFinite );
+      if ( ! values.length ) continue;
+
+      ( result as any )[ key ] = {
+        first: values[ 0 ], last: values.at( -1 )!,
+        min: Math.min( ...values ), max: Math.max( ...values ),
+        avg: values.reduce( ( a, b ) => a + b, 0 ) / values.length,
+        sum: values.reduce( ( a, b ) => a + b, 0 )
+      };
+    }
+
+    return result;
+  }
+
+  private createSeries < T extends { date: string } > ( points: T[], total: number = points.length ) : TimeSeries< T > {
+    const self = this;
+
+    const c = < U extends { date: string } >( points: U[] ) => this.createSeries( points, total );
+    const d = ( point: T ) => String( point.date );
+    const n = ( cb?: ( point: T ) => number ) => points.map( cb ?? ( p => Number( p ) ) );
 
     return Object.freeze( {
       points, total, count: points.length,
