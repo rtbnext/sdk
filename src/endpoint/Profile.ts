@@ -1,10 +1,14 @@
-import type { TProfileData, TProfileHistory, TProfileIndex, TProfileIndexItem, TProfileMetaData } from '@rtbnext/schema/src/model/profile';
+import type {
+  TProfileData, TProfileHistory, TProfileHistoryItem, TProfileIndex,
+  TProfileIndexItem, TProfileMetaData
+} from '@rtbnext/schema/src/model/profile';
 import type { TSearchIndex, TSearchIndexItem } from '@rtbnext/schema/src/model/search';
 import type { CollectableResource } from '../resource/CollectableResource';
 import type { Resource } from '../resource/Resource';
-import type { CollectionSearchFn, ProfileEntity } from '../types';
+import type { CollectionSearchFn, ProfileEntity, ProfileHistoryPoint } from '../types';
 import { sanitize } from '../utils';
 import { Endpoint } from './Endpoint';
+import { TimeSeriesResource } from '../resource/TimeSeriesResource';
 
 
 export class Profile extends Endpoint {
@@ -13,7 +17,7 @@ export class Profile extends Endpoint {
 
     let meta: Resource< TProfileMetaData >;
     let data: Resource< TProfileData >;
-    let history: Resource< TProfileHistory >;
+    let history: TimeSeriesResource< TProfileHistory, ProfileHistoryPoint >;
   
     return Object.freeze( { ...item,
       get meta () { return meta ??= self.meta( item.uri ) },
@@ -36,8 +40,12 @@ export class Profile extends Endpoint {
     return this.json( `v2/profile/${ uri }/profile.json` );
   }
 
-  public history ( uri: string ) : Resource< TProfileHistory > {
-    return this.csv( `v2/profile/${ uri }/history.csv` );
+  public history ( uri: string ) : TimeSeriesResource< TProfileHistory, ProfileHistoryPoint > {
+    return this.csv( `v2/profile/${ uri }/history.csv`, {
+      point: ( [ date, rank, networth, change, changePct ]: TProfileHistoryItem ) => ( {
+        date, rank, networth, change, changePct
+      } )
+    } );
   }
 
   public get ( uri: string ) : ProfileEntity< { uri: string } > {
