@@ -218,6 +218,11 @@ export interface TimeSeries< R > extends Iterable< R > {
   take ( count: number ) : TimeSeries< R >;
   skip ( count: number ) : TimeSeries< R >;
   slice ( start?: number, end?: number ) : TimeSeries< R >;
+
+  min ( callback?: ( point: R ) => number ) : number;
+  max ( callback?: ( point: R ) => number ) : number;
+  avg ( callback?: ( point: R ) => number ) : number;
+  median ( callback?: ( point: R ) => number ) : number;
 }
 
 export type CollectOptions< I extends { uri: string }, E extends Entity< I > > = {

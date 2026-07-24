@@ -47,6 +47,21 @@ export class TimeSeriesResource< D extends readonly unknown[], R extends { date:
       skip ( count: number ) { return c( points.slice( count ) ) },
       slice ( start?: number, end?: number ) { return c( points.slice( start, end ) ) },
 
+      min ( callback?: ( point: R ) => number ) { return Math.min( ...n( callback ) ) },
+      max ( callback?: ( point: R ) => number ) { return Math.max( ...n( callback ) ) },
+
+      avg ( callback?: ( point: R ) => number ) {
+        const values = n( callback );
+        return values.reduce( ( a, b ) => a + b, 0 ) / values.length;
+      },
+
+      median ( callback?: ( point: R ) => number ) {
+        const values = n( callback ).sort( ( a, b ) => a - b );
+        const mid = Math.floor( values.length / 2 );
+
+        return values.length % 2 ? values[ mid ] : ( values[ mid - 1 ] + values[ mid ] ) / 2;
+      },
+
       *[ Symbol.iterator ]() { yield* points }
     } );
   }
