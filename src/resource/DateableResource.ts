@@ -13,7 +13,7 @@ export class DateableResource< D extends { dates: string[] }, R > extends Resour
   }
 
   private collectDates ( values: string[], total: number = values.length ) : Dates< R > {
-    const dates = [ ...values ].reverse(), self = this;
+    const dates = values.toReversed(), self = this;
     const f = ( value?: string ) => value ? this.factory( value ) : null;
     const c = ( dates: string[] ) => this.collectDates( dates, total );
 

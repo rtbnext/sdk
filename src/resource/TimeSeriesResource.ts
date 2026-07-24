@@ -13,7 +13,7 @@ export class TimeSeriesResource< D extends readonly unknown[], R > extends Resou
   }
 
   private createSeries ( rows: D, total: number = rows.length ) : TimeSeries< R > {
-    const points = rows.map( this.factory );
+    const points = rows.toReversed().map( this.factory );
 
     return Object.freeze( {
       items: points, total, count: points.length,
