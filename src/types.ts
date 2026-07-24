@@ -158,7 +158,7 @@ export interface DateOptions< R > {
   date: ( value: string ) => R;
 }
 
-export type ResourceOptions< I extends { uri: string }, E extends Entity< I >, R > =
+export type ResourceOptions< I extends { uri: string }, E extends Entity< I >, R, D > =
   | CollectOptions< I, E >
   | IndexOptions< R >
-  | DateOptions< R >;
+  | DateOptions< D >;
