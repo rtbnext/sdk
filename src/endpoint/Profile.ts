@@ -11,6 +11,10 @@ import { sanitize } from '../utils';
 import { Endpoint } from './Endpoint';
 
 
+type ProfileIndex = CollectableResource< TProfileIndex, TProfileIndexItem, ProfileEntity< TProfileIndexItem > >;
+type SearchIndex = CollectableResource< TSearchIndex, TSearchIndexItem, ProfileEntity< TSearchIndexItem > >;
+
+
 export class Profile extends Endpoint {
   public _entity < I extends { uri: string } > ( item: I ) : ProfileEntity< I > {
     const self = this;
@@ -52,7 +56,7 @@ export class Profile extends Endpoint {
     return this._entity( { uri } );
   }
 
-  public get index () : CollectableResource< TProfileIndex, TProfileIndexItem, ProfileEntity< TProfileIndexItem > > {
+  public get index () : ProfileIndex {
     return this._collect( 'v2/profile/index.json', ( item, query, terms ) => {
       const name = sanitize( item.name );
 
@@ -63,7 +67,7 @@ export class Profile extends Endpoint {
     } );
   }
 
-  public get searchIndex () : CollectableResource< TSearchIndex, TSearchIndexItem, ProfileEntity< TSearchIndexItem > > {
+  public get searchIndex () : SearchIndex {
     return this._collect( 'v2/profile/search.json', ( item, query, terms ) =>
       item.searchName.includes( query ) || terms.every( t => item.searchName.includes( t ) )
     );
