@@ -25,47 +25,47 @@ export class Filter extends Endpoint {
     } );
   }
 
-  public get deceased () {
+  public get deceased () : FilterCollection {
     return this._filter( `v2/filter/special/deceased.json` );
   }
 
-  public get dropOff () {
+  public get dropOff () : FilterCollection {
     return this._filter( `v2/filter/special/dropOff.json` );
   }
 
-  public get family () {
+  public get family () : FilterCollection {
     return this._filter( `v2/filter/special/family.json` );
   }
 
-  public get selfMade () {
+  public get selfMade () : FilterCollection {
     return this._filter( `v2/filter/special/selfMade.json` );
   }
 
-  public industry ( industry: TIndustry ) {
+  public industry ( industry: TIndustry ) : FilterCollection {
     return this._filter( `v2/filter/industry/${ industry.toLowerCase() }.json` );
   }
 
-  public age ( ageGroup: TAgeGroup ) {
+  public age ( ageGroup: TAgeGroup ) : FilterCollection {
     return this._filter( `v2/filter/age/${ ageGroup }.json` );
   }
 
-  public gender ( gender: TGender ) {
+  public gender ( gender: TGender ) : FilterCollection {
     return this._filter( `v2/filter/gender/${ gender.toLowerCase() }.json` );
   }
 
-  public maritalStatus ( maritalStatus: TMaritalStatus ) {
+  public maritalStatus ( maritalStatus: TMaritalStatus ) : FilterCollection {
     return this._filter( `v2/filter/maritalStatus/${ maritalStatus.toLowerCase() }.json` );
   }
 
-  public citizenship ( isoCode: string ) {
+  public citizenship ( isoCode: string ) : FilterCollection {
     return this._filter( `v2/filter/citizenship/${ isoCode.toUpperCase() }.json` );
   }
 
-  public country ( isoCode: string ) {
+  public country ( isoCode: string ) : FilterCollection {
     return this._filter( `v2/filter/country/${ isoCode.toUpperCase() }.json` );
   }
 
-  public state ( uspsCode: string ) {
+  public state ( uspsCode: string ) : FilterCollection {
     return this._filter( `v2/filter/state/${ uspsCode.toUpperCase() }.json` );
   }
 }
