@@ -36,6 +36,10 @@ export class DateableResource< D, R > extends Resource< D > {
       since ( date: string ) { return c( dates.filter( d => d >= date ) ) },
       until ( date: string ) { return c( dates.filter( d => d <= date ) ) },
       between ( from: string, to: string ) { return c( dates.filter( d => d >= from && d <= to ) ) }
+
+      take ( count: number ) { return c( dates.slice( 0, count ) ) },
+      skip ( count: number ) { return c( dates.slice( count ) ) },
+      slice ( start?: number, end?: number ) { return c( dates.slice( start, end ) ) },
     };
   }
 
