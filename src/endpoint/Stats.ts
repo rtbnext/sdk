@@ -1,13 +1,21 @@
 import type { TIndustry } from '@rtbnext/schema/src/base/const';
-import type { TDBStats, TGlobalStats, THistory, TProfileStats, TScatter, TScatterItem, TStatsGroup, TWealthStats } from '@rtbnext/schema/src/model/stats';
+import type {
+  TDBStats, TGlobalStats, THistory, THistoryItem, TProfileStats, TScatter,
+  TScatterItem, TStatsGroup, TWealthStats
+} from '@rtbnext/schema/src/model/stats';
 import type { CollectableResource } from '../resource/CollectableResource';
 import type { Resource } from '../resource/Resource';
-import type { ProfileEntity } from '../types';
+import type { TimeSeriesResource } from '../resource/TimeSeriesResource';
+import type { HistoryPoint, ProfileEntity } from '../types';
 import { sanitize } from '../utils';
 import { Endpoint } from './Endpoint';
 
 
 export class Stats extends Endpoint {
+  public _point ( [ date, count, total, woman, quota, change, changePct ]: THistoryItem ) : HistoryPoint {
+    return { date, count, total, woman, quota, change, changePct };
+  }
+
   public get db () : Resource< TDBStats > {
     return this.json( 'v2/stats/db.json' );
   }
@@ -28,26 +36,30 @@ export class Stats extends Endpoint {
   }
 
   public get wealth () : Resource< TWealthStats > {
-    return this.json< TWealthStats >( 'v2/stats/wealth.json' );
+    return this.json( 'v2/stats/wealth.json' );
   }
 
-  public get history () : Resource< THistory > {
-    return this.csv< THistory >( 'v2/stats/history.csv' );
+  public get history () : TimeSeriesResource< THistory, HistoryPoint > {
+    return this.csv( 'v2/stats/history.csv', { point: row => this._point( row ) } );
   }
 
   public get industryIndex () : Resource< TStatsGroup< TIndustry >[ 'index' ] > {
     return this.json( 'v2/stats/industry/index.json' );
   }
 
-  public industry ( industry: TIndustry ) : Resource< THistory > {
-    return this.csv( `v2/stats/industry/${ industry.toLowerCase() }.csv` );
+  public industry ( industry: TIndustry ) : TimeSeriesResource< THistory, HistoryPoint > {
+    return this.csv( `v2/stats/industry/${ industry.toLowerCase() }.csv`, {
+      point: row => this._point( row )
+    } );
   }
 
   public get citizenshipIndex () : Resource< TStatsGroup< string >[ 'index' ] > {
     return this.json( 'v2/stats/citizenship/index.json' );
   }
 
-  public citizenship ( isoCode: string ) : Resource< THistory > {
-    return this.csv( `v2/stats/citizenship/${ isoCode.toUpperCase() }.csv` );
+  public citizenship ( isoCode: string ) : TimeSeriesResource< THistory, HistoryPoint > {
+    return this.csv( `v2/stats/citizenship/${ isoCode.toUpperCase() }.csv`, {
+      point: row => this._point( row )
+    } );
   }
 }
