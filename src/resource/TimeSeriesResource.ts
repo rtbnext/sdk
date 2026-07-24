@@ -3,7 +3,7 @@ import type { ParserFn, TimeSeries, TimeSeriesOptions } from '../types';
 import { Resource } from './Resource';
 
 
-export class TimeSeriesResource< D extends readonly unknown[], R > extends Resource< D > {
+export class TimeSeriesResource< D extends readonly unknown[], R extends { date: string } > extends Resource< D > {
   private readonly factory: ( row: D[ number ] ) => R;
 
   constructor ( path: string, loader: ResourceLoader, parser: ParserFn< D >, options: TimeSeriesOptions< D, R > ) {
@@ -12,8 +12,10 @@ export class TimeSeriesResource< D extends readonly unknown[], R > extends Resou
     this.factory = options.point;
   }
 
-  private createSeries ( rows: D, total: number = rows.length ) : TimeSeries< R > {
-    const points = rows.toReversed().map( this.factory );
+  private createSeries ( points: R[], total: number = points.length ) : TimeSeries< R > {
+    const c = ( points: R[] ) => this.createSeries( points );
+    const d = ( point: R ) => String( point.date );
+    const n = ( cb?: ( point: R ) => number ) => points.map( cb ?? ( p => Number( p ) ) );
 
     return Object.freeze( {
       items: points, total, count: points.length,
@@ -29,6 +31,6 @@ export class TimeSeriesResource< D extends readonly unknown[], R > extends Resou
   }
 
   public series () : Promise< TimeSeries< R > > {
-    return this.transform( data => this.createSeries( data ) );
+    return this.transform( data => this.createSeries( data.toReversed().map( this.factory ) ) );
   }
 }

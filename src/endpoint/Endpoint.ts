@@ -44,7 +44,7 @@ export abstract class Endpoint {
   }
 
   protected csv < D > ( path: string ) : Resource< D >;
-  protected csv < D extends readonly unknown[], R > (
+  protected csv < D extends readonly unknown[], R extends { date: string } > (
     path: string, options: TimeSeriesOptions< D, R >
   ) : TimeSeriesResource< D, R >;
 
