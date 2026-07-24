@@ -1,5 +1,5 @@
 import type { ResourceLoader } from '../core/ResourceLoader';
-import type { ParserFn, TimeSeries, TimeSeriesOptions } from '../types';
+import type { AggregatePeriod, AggregatePoint, ParserFn, TimeSeries, TimeSeriesOptions } from '../types';
 import { Resource } from './Resource';
 
 
