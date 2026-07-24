@@ -119,7 +119,7 @@ export class CollectableResource< D extends { items: I[] }, I extends { uri: str
         return c( items.slice( start, end ) );
       },
 
-      [ Symbol.iterator ]() { return items[ Symbol.iterator ]() }
+      *[ Symbol.iterator ]() { yield* items }
     } );
   }
 
