@@ -3,9 +3,10 @@ import { CsvParser } from '../parser/CsvParser';
 import { JsonParser } from '../parser/JsonParser';
 import { TextParser } from '../parser/TextParser';
 import { CollectableResource } from '../resource/CollectableResource';
+import { DateableResource } from '../resource/DateableResource';
 import { IndexableResource } from '../resource/IndexableResource';
 import { Resource } from '../resource/Resource';
-import type { CollectOptions, Endpoints, Entity, IndexOptions, ResourceOptions } from '../types';
+import type { CollectOptions, DateOptions, Endpoints, Entity, IndexOptions, ResourceOptions } from '../types';
 
 
 export abstract class Endpoint {
@@ -23,11 +24,17 @@ export abstract class Endpoint {
     path: string, options: CollectOptions< I, E >
   ) : CollectableResource< D, I, E >;
   protected json < D, R > ( path: string, options: IndexOptions< R > ) : IndexableResource< D, R >;
+  protected json < D, R > ( path: string, options: DateOptions< R > ) : DateableResource< D, R >;
 
-  protected json ( path: string, options?: ResourceOptions< any, any, any > ) {
-    if ( ! options ) return new Resource( path, this.loader, JsonParser.parse );
-    if ( 'entity' in options ) return new CollectableResource( path, this.loader, JsonParser.parse, options );
-    return new IndexableResource( path, this.loader, JsonParser.parse, options );
+  protected json ( path: string, options?: ResourceOptions< any, any, any, any > ) {
+    const parser = JsonParser.parse;
+
+    if ( ! options ) return new Resource( path, this.loader, parser );
+    if ( 'entity' in options ) return new CollectableResource( path, this.loader, parser, options );
+    if ( 'index' in options ) return new IndexableResource( path, this.loader, parser, options );
+    if ( 'date' in options ) return new DateableResource( path, this.loader, parser, options );
+
+    throw new Error( 'Invalid resource options' );
   }
 
   protected csv < D > ( path: string ) : Resource< D >;
