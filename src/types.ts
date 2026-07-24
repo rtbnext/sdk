@@ -185,11 +185,22 @@ export interface Dates< R > extends Iterable< R > {
   between ( from: string, to: string ) : Dates< R >;
 
   toArray () : R[];
-  map< T > ( callback: ( item: R, index: number ) => T ) : T[];
+  map < T > ( callback: ( item: R, index: number ) => T ) : T[];
 
   take ( count: number ) : Dates< R >;
   skip ( count: number ) : Dates< R >;
   slice ( start?: number, end?: number ) : Dates< R >;
+}
+
+export interface TimeSeries< R > extends Iterable< R > {
+  readonly items: R[];
+  readonly count: number;
+
+  readonly first: R | null;
+  readonly last: R | null;
+
+  toArray () : R[];
+  map < T > ( callback: ( item: R, index: number ) => T ) : T[];
 }
 
 export type CollectOptions< I extends { uri: string }, E extends Entity< I > > = {
