@@ -154,6 +154,7 @@ export interface Dates< R > extends Iterable< R > {
   readonly last: R | null;
 
   get ( date: string ) : R | null;
+  find ( date: string ) : R | null;
 
   year ( year: number ) : Dates< R >;
   month ( year: number, month: number ) : Dates< R >;
