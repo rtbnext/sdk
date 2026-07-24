@@ -6,6 +6,7 @@ import type { Profile } from './endpoint/Profile';
 import type { Stats } from './endpoint/Stats';
 import type { System } from './endpoint/System';
 import type { Resource } from './resource/Resource';
+import type { TimeSeriesResource } from './resource/TimeSeriesResource';
 
 
 export type ClientIdentity = {
@@ -89,10 +90,18 @@ export interface Endpoints {
 
 export type Entity< I, T = unknown > = Readonly< I & { uri: string } & T >;
 
+export type ProfileHistoryPoint = {
+  date: string;
+  rank: number;
+  networth: number;
+  change: number;
+  changePct: number;
+};
+
 export interface ProfileResources {
   readonly meta: Resource< TProfileMetaData >;
   readonly data: Resource< TProfileData >;
-  readonly history: Resource< TProfileHistory >;
+  readonly history: TimeSeriesResource< TProfileHistory, ProfileHistoryPoint >;
 }
 
 export type ProfileEntity< I > = Entity< I, ProfileResources >;
@@ -187,7 +196,7 @@ export interface DateOptions< R > {
 }
 
 export type TimeSeriesOptions< D extends readonly unknown[], R > = {
-  point: ( value: D[ number ] ) => R;
+  point: ( row: D[ number ] ) => R;
 };
 
 export type JsonOptions< I extends { uri: string }, E extends Entity< I >, R, D > =
