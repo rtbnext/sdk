@@ -113,6 +113,29 @@ export class TimeSeriesResource< D extends readonly unknown[], R extends { date:
         return result;
       },
 
+      sample ( count: number ) {
+        if ( count >= points.length ) return c( points.map( p => self.aggregate( [ p ] ) ) );
+        const size = points.length / count, result: AggregatePoint< T >[] = [];
+
+        for ( let i = 0; i < count; i++ ) {
+          const start = Math.floor( i * size ), end = Math.floor( ( i + 1 ) * size );
+          result.push( self.aggregate( points.slice( start, end ) ) );
+        }
+
+        return c( result );
+      },
+
+      aggregate ( period: AggregatePeriod | ( ( point: T ) => string ) ) {
+        const groups = new Map< string, T[] >();
+
+        for ( const point of points ) {
+          const key = typeof period === 'function' ? period( point ) : self.period( point.date, period );
+          ( groups.get( key ) ?? groups.set( key, [] ).get( key )! ).push( point );
+        }
+
+        return c( [ ...groups.values() ].map( group => self.aggregate( group ) ) );
+      },
+
       *[ Symbol.iterator ]() { yield* points }
     } );
   }
