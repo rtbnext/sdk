@@ -17,7 +17,7 @@ export class DateableResource< D extends { dates: string[] }, R > extends Resour
     const f = ( value?: string ) => value ? this.factory( value ) : null;
     const c = ( dates: string[] ) => this.collectDates( dates, total );
 
-    return {
+    return Object.freeze( {
       items: dates, total, count: dates.length,
 
       get first () { return f( dates[ 0 ] ) },
@@ -47,7 +47,7 @@ export class DateableResource< D extends { dates: string[] }, R > extends Resour
       slice ( start?: number, end?: number ) { return c( dates.slice( start, end ) ) },
 
       *[ Symbol.iterator ]() { for ( const date of dates ) yield self.factory( date ) }
-    };
+    } );
   }
 
   public dates () : Promise< Dates< R > > {
