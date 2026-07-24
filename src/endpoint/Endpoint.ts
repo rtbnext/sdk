@@ -37,21 +37,7 @@ export abstract class Endpoint {
     throw new Error( 'Invalid resource options' );
   }
 
-  protected csv < D > ( path: string ) : Resource< D >;
-  protected csv < D extends { items: I[] }, I extends { uri: string }, E extends Entity< I > > (
-    path: string, options: CollectOptions< I, E >
-  ) : CollectableResource< D, I, E >;
-  protected csv < D, R > ( path: string, options: IndexOptions< R > ) : IndexableResource< D, R >;
-  protected csv < D, R > ( path: string, options: DateOptions< R > ) : DateableResource< D, R >;
-
-  protected csv ( path: string, options?: ResourceOptions< any, any, any, any > ) {
-    const parser = CsvParser.parse;
-
-    if ( ! options ) return new Resource( path, this.loader, parser );
-    if ( 'entity' in options ) return new CollectableResource( path, this.loader, parser, options );
-    if ( 'index' in options ) return new IndexableResource( path, this.loader, parser, options );
-    if ( 'date' in options ) return new DateableResource( path, this.loader, parser, options );
-
-    throw new Error( 'Invalid resource options' );
+  protected csv < D > ( path: string ) : Resource< D > {
+    return new Resource( path, this.loader, CsvParser.parse< D > );
   }
 }
