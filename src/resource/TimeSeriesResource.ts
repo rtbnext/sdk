@@ -26,19 +26,26 @@ export class TimeSeriesResource< D extends readonly unknown[], R extends { date:
     throw new Error( `Invalid aggregate period: ${ period }` );
   }
 
-  private aggregate < T extends { date: string } >( points: T[] ) : AggregatePoint< T > {
-    const result = { date: points[ 0 ].date } as AggregatePoint< T >;
-    const keys = Object.keys( points[ 0 ] );
+  private aggregate < T extends { date: string } > ( points: T[], label?: string ) : AggregatePoint< T > {
+    const sorted = [ ...points ].sort( ( a, b ) => a.date.localeCompare( b.date ) );
+    const keys = Object.keys( sorted[ 0 ] );
+
+    const result = {
+      date: sorted.at( -1 )!.date, label: label ?? sorted.at( -1 )!.date,
+      range: { from: sorted[ 0 ].date, to: sorted.at( -1 )!.date }
+    } as AggregatePoint< T >;
 
     for ( const key of keys ) {
       if ( key === 'date' ) continue;
 
-      const values = points.map( p => Number( p[ key as keyof T ] ) ).filter( Number.isFinite );
+      const values = sorted.map( p => Number( p[ key as keyof T ] ) ).filter( Number.isFinite );
       if ( ! values.length ) continue;
 
       ( result as any )[ key ] = {
-        first: values[ 0 ], last: values.at( -1 )!,
-        min: Math.min( ...values ), max: Math.max( ...values ),
+        first: values[ 0 ],
+        last: values.at( -1 )!,
+        min: Math.min( ...values ),
+        max: Math.max( ...values ),
         avg: values.reduce( ( a, b ) => a + b, 0 ) / values.length,
         sum: values.reduce( ( a, b ) => a + b, 0 )
       };
