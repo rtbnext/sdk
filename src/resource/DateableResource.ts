@@ -13,7 +13,7 @@ export class DateableResource< D, R > extends Resource< D > {
   }
 
   private collectDates ( values: string[], total: number = values.length ) : Dates< R > {
-    const dates = [ ...values ].reverse();
+    const dates = [ ...values ].reverse(), self = this;
     const f = ( value?: string ) => value ? this.factory( value ) : null;
     const c = ( dates: string[] ) => this.collectDates( dates );
 
@@ -35,11 +35,16 @@ export class DateableResource< D, R > extends Resource< D > {
       after ( date: string ) { return c( dates.filter( d => d > date ) ) },
       since ( date: string ) { return c( dates.filter( d => d >= date ) ) },
       until ( date: string ) { return c( dates.filter( d => d <= date ) ) },
-      between ( from: string, to: string ) { return c( dates.filter( d => d >= from && d <= to ) ) }
+      between ( from: string, to: string ) { return c( dates.filter( d => d >= from && d <= to ) ) },
 
       take ( count: number ) { return c( dates.slice( 0, count ) ) },
       skip ( count: number ) { return c( dates.slice( count ) ) },
       slice ( start?: number, end?: number ) { return c( dates.slice( start, end ) ) },
+
+      toArray () { return dates.map( self.factory ) },
+      map< T > ( callback: ( item: R, index: number ) => T ) {
+        return dates.map( ( d, i ) => callback( self.factory( d ), i ) );
+      },
     };
   }
 
