@@ -7,6 +7,9 @@ import { sanitize } from '../utils';
 import { Endpoint } from './Endpoint';
 
 
+type FilterIndex = IndexableResource< TFilter, CollectableResource< TFilter, TFilterItem, ProfileEntity< TFilterItem > > >;
+
+
 export class Filter extends Endpoint {
   public _filter ( path: string ) : CollectableResource< TFilter, TFilterItem, ProfileEntity< TFilterItem > > {
     return this.endpoints.profile._collect( path, ( item, query, terms ) => {
@@ -15,7 +18,7 @@ export class Filter extends Endpoint {
     } );
   }
 
-  public get index () : IndexableResource< TFilter, CollectableResource< TFilter, TFilterItem, ProfileEntity< TFilterItem > > > {
+  public get index () : FilterIndex {
     return this.json( 'v2/filter/index.json', {
       index: path => this._filter( `v2/filter/${ path.join( '/' ) }.json` )
     } );
