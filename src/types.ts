@@ -152,6 +152,8 @@ export interface Dates< R > {
 
   readonly first: R | null;
   readonly last: R | null;
+
+  get ( date: string ) : R | null;
 }
 
 export type CollectOptions< I extends { uri: string }, E extends Entity< I > > = {

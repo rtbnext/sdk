@@ -22,6 +22,8 @@ export class DateableResource< D, R > extends Resource< D > {
 
       get first () { return f( dates[ 0 ] ) },
       get last () { return f( dates.at( -1 ) ) },
+
+      get ( date: string ) { return f( dates[ dates.indexOf( date ) ] ) }
     };
   }
 
