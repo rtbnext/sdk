@@ -163,6 +163,13 @@ export interface Dates< R > {
   since ( date: string ) : Dates< R >;
   until ( date: string ) : Dates< R >;
   between ( from: string, to: string ) : Dates< R >;
+
+  toArray () : R[];
+  map< T > ( callback: ( item: R, index: number ) => T ) : T[];
+
+  take ( count: number ) : Dates< R >;
+  skip ( count: number ) : Dates< R >;
+  slice ( start?: number, end?: number ) : Dates< R >;
 }
 
 export type CollectOptions< I extends { uri: string }, E extends Entity< I > > = {
