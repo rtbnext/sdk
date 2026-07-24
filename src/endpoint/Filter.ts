@@ -1,6 +1,7 @@
 import type { TAgeGroup, TGender, TIndustry, TMaritalStatus } from '@rtbnext/schema/src/base/const';
 import type { TFilter, TFilterItem } from '@rtbnext/schema/src/model/filter';
 import type { CollectableResource } from '../resource/CollectableResource';
+import type { IndexableResource } from '../resource/IndexableResource';
 import type { ProfileEntity } from '../types';
 import { sanitize } from '../utils';
 import { Endpoint } from './Endpoint';
@@ -14,7 +15,7 @@ export class Filter extends Endpoint {
     } );
   }
 
-  public get index () {
+  public get index () : IndexableResource< TFilter, CollectableResource< TFilter, TFilterItem, ProfileEntity< TFilterItem > > > {
     return this.json( 'v2/filter/index.json', {
       index: path => this._filter( `v2/filter/${ path.join( '/' ) }.json` )
     } );
