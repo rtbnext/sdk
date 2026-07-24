@@ -192,6 +192,29 @@ export interface Dates< R > extends Iterable< R > {
   slice ( start?: number, end?: number ) : Dates< R >;
 }
 
+export type AggregatePeriod = 'week' | 'month' | 'quarter' | 'year';
+
+export type AggregateValue = {
+  first: number;
+  last: number;
+  min: number;
+  max: number;
+  avg: number;
+  sum: number;
+};
+
+export type AggregatePoint< R extends { date: string } > = {
+  date: string;
+  label: string;
+  range: {
+    from: string;
+    to: string;
+  };
+} & {
+  [ K in keyof Omit< R, 'date' > ]:
+    R[ K ] extends number ? AggregateValue : R[ K ];
+};
+
 export interface TimeSeries< R extends { date: string } > extends Iterable< R > {
   readonly points: R[];
   readonly total: number;
@@ -228,10 +251,13 @@ export interface TimeSeries< R extends { date: string } > extends Iterable< R > 
   values ( callback: ( point: R ) => number ) : number[];
   column < K extends keyof R > ( key: K ) : R[ K ][];
   columns () : Record< keyof R, unknown[] >;
+
+  sample ( count: number ) : TimeSeries< AggregatePoint< R > >;
+  aggregate ( period: AggregatePeriod | ( ( point: R ) => string ) ) : TimeSeries< AggregatePoint< R > >;
 }
 
 export type CollectOptions< I extends { uri: string }, E extends Entity< I > > = {
-  entity: ( item: I ) => E;
+  entity ( item: I ) : E;
   search: CollectionSearchFn< I >;
 };
 
@@ -240,11 +266,11 @@ export type IndexOptions< R > = {
 };
 
 export interface DateOptions< R > {
-  date: ( value: string ) => R;
+  date ( value: string ) : R;
 }
 
 export type TimeSeriesOptions< D extends readonly unknown[], R > = {
-  point: ( row: D[ number ] ) => R;
+  point ( row: D[ number ] ) : R;
 };
 
 export type JsonOptions< I extends { uri: string }, E extends Entity< I >, R, D > =
