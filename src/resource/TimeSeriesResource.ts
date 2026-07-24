@@ -32,6 +32,14 @@ export class TimeSeriesResource< D extends readonly unknown[], R extends { date:
         return c( points.filter( p => d( p ).startsWith( prefix ) ) );
       },
 
+      before ( date: string ) { return c( points.filter( p => d( p ) < date ) ) },
+      after ( date: string ) { return c( points.filter( p => d( p ) > date ) ) },
+      since ( date: string ) { return c( points.filter( p => d( p ) >= date ) ) },
+      until ( date: string ) { return c( points.filter( p => d( p ) <= date ) ) },
+      between ( from: string, to: string ) { return c( points.filter( p => {
+        const date = d( p ); return date >= from && date <= to;
+      } ) ) },
+
       toArray () { return [ ...points ] },
       map < T > ( callback: ( item: R, index: number ) => T ) { return points.map( callback ) },
 
