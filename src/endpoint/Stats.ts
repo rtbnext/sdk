@@ -4,11 +4,16 @@ import type {
   TScatterItem, TStatsGroup, TWealthStats
 } from '@rtbnext/schema/src/model/stats';
 import type { CollectableResource } from '../resource/CollectableResource';
+import type { IndexableResource } from '../resource/IndexableResource';
 import type { Resource } from '../resource/Resource';
 import type { TimeSeriesResource } from '../resource/TimeSeriesResource';
 import type { HistoryPoint, ProfileEntity } from '../types';
 import { sanitize } from '../utils';
 import { Endpoint } from './Endpoint';
+
+
+type StatsHistory = TimeSeriesResource< THistory, HistoryPoint >;
+type StatsGroup< T extends string > = IndexableResource< TStatsGroup< T >[ 'index' ], StatsHistory >;
 
 
 export class Stats extends Endpoint {
@@ -39,27 +44,35 @@ export class Stats extends Endpoint {
     return this.json( 'v2/stats/wealth.json' );
   }
 
-  public get history () : TimeSeriesResource< THistory, HistoryPoint > {
+  public get history () : StatsHistory {
     return this.csv( 'v2/stats/history.csv', { point: row => this._point( row ) } );
   }
 
-  public get industryIndex () : Resource< TStatsGroup< TIndustry >[ 'index' ] > {
-    return this.json( 'v2/stats/industry/index.json' );
-  }
-
-  public industry ( industry: TIndustry ) : TimeSeriesResource< THistory, HistoryPoint > {
+  public industry ( industry: TIndustry ) : StatsHistory {
     return this.csv( `v2/stats/industry/${ industry.toLowerCase() }.csv`, {
       point: row => this._point( row )
     } );
   }
 
-  public get citizenshipIndex () : Resource< TStatsGroup< string >[ 'index' ] > {
-    return this.json( 'v2/stats/citizenship/index.json' );
+  public get industryIndex () : StatsGroup< TIndustry > {
+    return this.json( 'v2/stats/industry/index.json', {
+      index: ( [ industry ] ) => this.industry( industry as TIndustry ),
+      keys: value => value && typeof value === 'object' && 'items' in value
+        ? Object.keys( value.items as object ) : null
+    } );
   }
 
-  public citizenship ( isoCode: string ) : TimeSeriesResource< THistory, HistoryPoint > {
+  public citizenship ( isoCode: string ) : StatsHistory {
     return this.csv( `v2/stats/citizenship/${ isoCode.toUpperCase() }.csv`, {
       point: row => this._point( row )
+    } );
+  }
+
+  public get citizenshipIndex () : StatsGroup< string > {
+    return this.json( 'v2/stats/citizenship/index.json', {
+      index: ( [ isoCode ] ) => this.citizenship( isoCode ),
+      keys: value => value && typeof value === 'object' && 'items' in value
+        ? Object.keys( value.items as object ) : null
     } );
   }
 }
