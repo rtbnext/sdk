@@ -160,9 +160,21 @@ export type IndexFactory< R > = ( path: readonly string[] ) => R;
 
 export type IndexKeys< T > = Exclude< keyof T, '$metadata' >;
 
-export type IndexResult< T, R > = T extends readonly ( infer I )[]
-  ? I extends string ? Record< I, R > : never
-  : T extends object ? { [ K in IndexKeys< T > ]: IndexResult< T[ K ], R > } : never;
+type IndexLeaf< T > =
+  T extends readonly ( infer I )[]
+    ? I extends string ? I : never
+    : T extends { items: infer I }
+      ? Extract< keyof I, string >
+      : never;
+
+export type IndexResult< T, R > =
+  IndexLeaf< T > extends never
+    ? T extends object
+      ? {
+          [ K in IndexKeys< T > ]: IndexResult< T[ K ], R >;
+        }
+      : never
+    : Record< IndexLeaf< T >, R >;
 
 export interface Dates< R > extends Iterable< R > {
   readonly dates: string[];
