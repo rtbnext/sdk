@@ -14,10 +14,14 @@ export class DateableResource< D, R > extends Resource< D > {
 
   private collectDates ( values: string[], total: number = values.length ) : Dates< R > {
     const dates = [ ...values ].reverse();
+    const f = ( value?: string ) => value ? this.factory( value ) : null;
     const c = ( dates: string[] ) => this.collectDates( dates );
 
     return {
-      items: dates, total, count: dates.length
+      items: dates, total, count: dates.length,
+
+      get first () { return f( dates[ 0 ] ) },
+      get last () { return f( dates.at( -1 ) ) },
     };
   }
 
