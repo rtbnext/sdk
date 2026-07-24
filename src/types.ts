@@ -154,6 +154,11 @@ export type IndexOptions< R > = {
   index: IndexFactory< R >;
 };
 
+export interface DateOptions< R > {
+  date: ( value: string ) => R;
+}
+
 export type ResourceOptions< I extends { uri: string }, E extends Entity< I >, R > =
   | CollectOptions< I, E >
-  | IndexOptions< R >;
+  | IndexOptions< R >
+  | DateOptions< R >;
