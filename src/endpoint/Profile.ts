@@ -5,10 +5,10 @@ import type {
 import type { TSearchIndex, TSearchIndexItem } from '@rtbnext/schema/src/model/search';
 import type { CollectableResource } from '../resource/CollectableResource';
 import type { Resource } from '../resource/Resource';
+import type { TimeSeriesResource } from '../resource/TimeSeriesResource';
 import type { CollectionSearchFn, ProfileEntity, ProfileHistoryPoint } from '../types';
 import { sanitize } from '../utils';
 import { Endpoint } from './Endpoint';
-import { TimeSeriesResource } from '../resource/TimeSeriesResource';
 
 
 export class Profile extends Endpoint {
