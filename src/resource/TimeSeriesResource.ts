@@ -23,6 +23,15 @@ export class TimeSeriesResource< D extends readonly unknown[], R extends { date:
       first: points[ 0 ] ?? null,
       last: points.at( -1 ) ?? null,
 
+      get ( date: string ) { return this.find( date ) },
+      find ( date: string ) { return points.find( p => d( p ) === date ) ?? null },
+
+      year ( year: number ) { return c( points.filter( p => d( p ).startsWith( `${ year }-` ) ) ) },
+      month ( year: number, month: number ) {
+        const prefix = `${ year }-${ String( month ).padStart( 2, '0' ) }-`;
+        return c( points.filter( p => d( p ).startsWith( prefix ) ) );
+      },
+
       toArray () { return [ ...points ] },
       map < T > ( callback: ( item: R, index: number ) => T ) { return points.map( callback ) },
 
