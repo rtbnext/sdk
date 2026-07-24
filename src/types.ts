@@ -116,7 +116,7 @@ export interface ProfileResources {
 
 export type ProfileEntity< I > = Entity< I, ProfileResources >;
 
-export interface Collection< I > extends Iterable< I > {
+export interface Collection< I extends { uri: string } > extends Iterable< I > {
   readonly items: Entity< I >[];
   readonly total: number;
   readonly count: number;
@@ -192,7 +192,7 @@ export interface Dates< R > extends Iterable< R > {
   slice ( start?: number, end?: number ) : Dates< R >;
 }
 
-export interface TimeSeries< R > extends Iterable< R > {
+export interface TimeSeries< R extends { date: string } > extends Iterable< R > {
   readonly points: R[];
   readonly total: number;
   readonly count: number;
@@ -223,6 +223,11 @@ export interface TimeSeries< R > extends Iterable< R > {
   max ( callback?: ( point: R ) => number ) : number;
   avg ( callback?: ( point: R ) => number ) : number;
   median ( callback?: ( point: R ) => number ) : number;
+
+  labels () : string[];
+  values ( callback: ( point: R ) => number ) : number[];
+  column < K extends keyof R > ( key: K ) : R[ K ][];
+  columns () : Record< keyof R, unknown[] >;
 }
 
 export type CollectOptions< I extends { uri: string }, E extends Entity< I > > = {

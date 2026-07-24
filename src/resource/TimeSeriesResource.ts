@@ -20,8 +20,8 @@ export class TimeSeriesResource< D extends readonly unknown[], R extends { date:
     return Object.freeze( {
       points, total, count: points.length,
 
-      first: points[ 0 ] ?? null,
-      last: points.at( -1 ) ?? null,
+      get first () { return points[ 0 ] ?? null },
+      get last () { return points.at( -1 ) ?? null },
 
       get ( date: string ) { return this.find( date ) },
       find ( date: string ) { return points.find( p => d( p ) === date ) ?? null },
@@ -60,6 +60,20 @@ export class TimeSeriesResource< D extends readonly unknown[], R extends { date:
         const mid = Math.floor( values.length / 2 );
 
         return values.length % 2 ? values[ mid ] : ( values[ mid - 1 ] + values[ mid ] ) / 2;
+      },
+
+      labels () { return points.map( d ) },
+      values ( callback: ( point: R ) => number ) { return points.map( callback ) },
+      column < K extends keyof R > ( key: K ) { return points.map( p => p[ key ] ) },
+
+      columns () {
+        const result = {} as Record< keyof R, unknown[] >;
+
+        for ( const point of points )
+          for ( const [ key, value ] of Object.entries( point as object ) )
+            ( result[ key as keyof R ] ??= [] ).push( value );
+
+        return result;
       },
 
       *[ Symbol.iterator ]() { yield* points }
