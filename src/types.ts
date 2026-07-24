@@ -194,6 +194,7 @@ export interface Dates< R > extends Iterable< R > {
 
 export interface TimeSeries< R > extends Iterable< R > {
   readonly items: R[];
+  readonly total: number;
   readonly count: number;
 
   readonly first: R | null;

@@ -1,5 +1,5 @@
 import type { ResourceLoader } from '../core/ResourceLoader';
-import type { ParserFn, TimeSeriesOptions } from '../types';
+import type { ParserFn, TimeSeries, TimeSeriesOptions } from '../types';
 import { Resource } from './Resource';
 
 
@@ -10,5 +10,25 @@ export class TimeSeriesResource< D extends readonly unknown[], R > extends Resou
     super( path, loader, parser );
 
     this.factory = options.point;
+  }
+
+  private createSeries ( rows: D, total: number = rows.length ) : TimeSeries< R > {
+    const points = rows.map( this.factory );
+
+    return Object.freeze( {
+      items: points, total, count: points.length,
+
+      first: points[ 0 ] ?? null,
+      last: points.at( -1 ) ?? null,
+
+      toArray () { return [ ...points ] },
+      map < T > ( callback: ( item: R, index: number ) => T ) { return points.map( callback ) },
+
+      *[ Symbol.iterator ]() { yield* points }
+    } );
+  }
+
+  public series () : Promise< TimeSeries< R > > {
+    return this.transform( data => this.createSeries( data ) );
   }
 }
