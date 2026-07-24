@@ -263,6 +263,7 @@ export type CollectOptions< I extends { uri: string }, E extends Entity< I > > =
 
 export type IndexOptions< R > = {
   index: IndexFactory< R >;
+  keys? ( value: unknown ) : readonly string[] | null;
 };
 
 export interface DateOptions< R > {
