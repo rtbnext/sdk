@@ -140,7 +140,7 @@ export class TimeSeriesResource< D extends readonly unknown[], R extends { date:
           ( groups.get( key ) ?? groups.set( key, [] ).get( key )! ).push( point );
         }
 
-        return c( [ ...groups.values() ].map( group => self.aggregate( group ) ) );
+        return c( [ ...groups.entries() ].map( ( [ label, group ] ) => self.aggregate( group, label ) ) );
       },
 
       *[ Symbol.iterator ]() { yield* points }
