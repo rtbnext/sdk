@@ -23,7 +23,13 @@ export class DateableResource< D, R > extends Resource< D > {
       get first () { return f( dates[ 0 ] ) },
       get last () { return f( dates.at( -1 ) ) },
 
-      get ( date: string ) { return f( dates[ dates.indexOf( date ) ] ) }
+      get ( date: string ) { return f( dates[ dates.indexOf( date ) ] ) },
+
+      year ( year: number ) { return c( dates.filter( d => d.startsWith( `${ year }-` ) ) ) },
+      month ( year: number, month: number ) {
+        const prefix = `${ year }-${ String( month ).padStart( 2, '0' ) }-`;
+        return c( dates.filter( d => d.startsWith( prefix ) ) );
+      }
     };
   }
 
