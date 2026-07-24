@@ -8,10 +8,12 @@ const client = rtbnext( {
   }
 } );
 
-/*const index = await client.profile.searchIndex.collection();
+const index = await client.profile.searchIndex.collection();
 
 for ( const item of index.filter( i => i.gender === 'f' ).orderBy( 'networth', 'desc' ).page( 2 ) ) {
   console.log( `${ item.fullName } (${ item.age }) :: $${ ( item.networth / 1000 ).toFixed( 1 ) }B` );
-}*/
+}
 
-client.profile.history( 'bill-gates' ).series().then( series => console.log( series.first ) );
+client.profile.history( 'bill-gates' ).series().then(
+  series => console.log( JSON.stringify( series.buckets( 3 ).points, null, 2 ) )
+);

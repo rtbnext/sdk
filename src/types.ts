@@ -252,7 +252,7 @@ export interface TimeSeries< R extends { date: string } > extends Iterable< R > 
   column < K extends keyof R > ( key: K ) : R[ K ][];
   columns () : Record< keyof R, unknown[] >;
 
-  sample ( count: number ) : TimeSeries< AggregatePoint< R > >;
+  buckets ( count: number ) : TimeSeries< AggregatePoint< R > >;
   aggregate ( period: AggregatePeriod | ( ( point: R ) => string ) ) : TimeSeries< AggregatePoint< R > >;
 }
 
