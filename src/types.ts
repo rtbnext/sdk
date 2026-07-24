@@ -90,6 +90,16 @@ export interface Endpoints {
 
 export type Entity< I, T = unknown > = Readonly< I & { uri: string } & T >;
 
+export type HistoryPoint = {
+  date: string;
+  count: number;
+  total: number;
+  woman: number;
+  quota: number;
+  change: number;
+  changePct: number;
+};
+
 export type ProfileHistoryPoint = {
   date: string;
   rank: number;
