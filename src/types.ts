@@ -149,6 +149,9 @@ export interface Dates< R > {
   readonly items: string[];
   readonly total: number;
   readonly count: number;
+
+  readonly first: R | null;
+  readonly last: R | null;
 }
 
 export type CollectOptions< I extends { uri: string }, E extends Entity< I > > = {
