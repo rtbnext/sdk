@@ -20,7 +20,7 @@ export class List extends Endpoint {
     );
   }
 
-  public list < T extends TListItem & { uri: string } > ( uri: string ) : ListDateIndex< T > {
+  public get < T extends TListItem & { uri: string } > ( uri: string ) : ListDateIndex< T > {
     return this.json( `v2/list/${ sanitize( uri ) }/index.json`, {
       date: ( value: string ) => this.snapshot< T >( uri, value )
     } );
