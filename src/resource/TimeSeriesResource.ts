@@ -43,6 +43,10 @@ export class TimeSeriesResource< D extends readonly unknown[], R extends { date:
       toArray () { return [ ...points ] },
       map < T > ( callback: ( item: R, index: number ) => T ) { return points.map( callback ) },
 
+      take ( count: number ) { return c( points.slice( 0, count ) ) },
+      skip ( count: number ) { return c( points.slice( count ) ) },
+      slice ( start?: number, end?: number ) { return c( points.slice( start, end ) ) },
+
       *[ Symbol.iterator ]() { yield* points }
     } );
   }
