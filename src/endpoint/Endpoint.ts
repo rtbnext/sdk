@@ -24,7 +24,7 @@ export abstract class Endpoint {
     path: string, options: CollectOptions< I, E >
   ) : CollectableResource< D, I, E >;
   protected json < D, R > ( path: string, options: IndexOptions< R > ) : IndexableResource< D, R >;
-  protected json < D, R > ( path: string, options: DateOptions< R > ) : DateableResource< D, R >;
+  protected json < D extends { dates: string[] }, R > ( path: string, options: DateOptions< R > ) : DateableResource< D, R >;
 
   protected json ( path: string, options?: ResourceOptions< any, any, any, any > ) {
     const parser = JsonParser.parse;
