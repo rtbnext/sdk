@@ -78,21 +78,21 @@ export class TimeSeriesResource< D extends readonly unknown[], R extends { date:
       } ) ) },
 
       toArray () { return [ ...points ] },
-      map < T > ( callback: ( item: R, index: number ) => T ) { return points.map( callback ) },
+      map < U > ( callback: ( item: T, index: number ) => U ) { return points.map( callback ) },
 
       take ( count: number ) { return c( points.slice( 0, count ) ) },
       skip ( count: number ) { return c( points.slice( count ) ) },
       slice ( start?: number, end?: number ) { return c( points.slice( start, end ) ) },
 
-      min ( callback?: ( point: R ) => number ) { return Math.min( ...n( callback ) ) },
-      max ( callback?: ( point: R ) => number ) { return Math.max( ...n( callback ) ) },
+      min ( callback?: ( point: T ) => number ) { return Math.min( ...n( callback ) ) },
+      max ( callback?: ( point: T ) => number ) { return Math.max( ...n( callback ) ) },
 
-      avg ( callback?: ( point: R ) => number ) {
+      avg ( callback?: ( point: T ) => number ) {
         const values = n( callback );
         return values.reduce( ( a, b ) => a + b, 0 ) / values.length;
       },
 
-      median ( callback?: ( point: R ) => number ) {
+      median ( callback?: ( point: T ) => number ) {
         const values = n( callback ).sort( ( a, b ) => a - b );
         const mid = Math.floor( values.length / 2 );
 
@@ -100,15 +100,15 @@ export class TimeSeriesResource< D extends readonly unknown[], R extends { date:
       },
 
       labels () { return points.map( d ) },
-      values ( callback: ( point: R ) => number ) { return points.map( callback ) },
-      column < K extends keyof R > ( key: K ) { return points.map( p => p[ key ] ) },
+      values ( callback: ( point: T ) => number ) { return points.map( callback ) },
+      column < K extends keyof T > ( key: K ) { return points.map( p => p[ key ] ) },
 
       columns () {
-        const result = {} as Record< keyof R, unknown[] >;
+        const result = {} as Record< keyof T, unknown[] >;
 
         for ( const point of points )
           for ( const [ key, value ] of Object.entries( point as object ) )
-            ( result[ key as keyof R ] ??= [] ).push( value );
+            ( result[ key as keyof T ] ??= [] ).push( value );
 
         return result;
       },
@@ -118,6 +118,8 @@ export class TimeSeriesResource< D extends readonly unknown[], R extends { date:
   }
 
   public series () : Promise< TimeSeries< R > > {
-    return this.transform( data => this.createSeries( data.toReversed().map( this.factory ) ) );
+    return this.transform( data => this.createSeries(
+      data.toReversed().map( row => this.factory( row ) )
+    ) );
   }
 }
