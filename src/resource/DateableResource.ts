@@ -3,7 +3,7 @@ import type { DateOptions, Dates, ParserFn } from '../types';
 import { Resource } from './Resource';
 
 
-export class DateableResource< D, R > extends Resource< D > {
+export class DateableResource< D extends { dates: string[] }, R > extends Resource< D > {
   private readonly factory: ( value: string ) => R;
 
   constructor ( path: string, loader: ResourceLoader, parser: ParserFn< D >, options: DateOptions< R > ) {
@@ -50,7 +50,7 @@ export class DateableResource< D, R > extends Resource< D > {
     };
   }
 
-  public dates () : Promise< unknown > {
-    return this.transform( data => undefined );
+  public dates () : Promise< Dates< R > > {
+    return this.transform( data => this.collectDates( data.dates ) );
   }
 }
