@@ -7,11 +7,12 @@ import { sanitize } from '../utils';
 import { Endpoint } from './Endpoint';
 
 
-type FilterIndex = IndexableResource< TFilter, CollectableResource< TFilter, TFilterItem, ProfileEntity< TFilterItem > > >;
+type FilterCollection = CollectableResource< TFilter, TFilterItem, ProfileEntity< TFilterItem > >;
+type FilterIndex = IndexableResource< TFilter, FilterCollection >;
 
 
 export class Filter extends Endpoint {
-  public _filter ( path: string ) : CollectableResource< TFilter, TFilterItem, ProfileEntity< TFilterItem > > {
+  public _filter ( path: string ) : FilterCollection {
     return this.endpoints.profile._collect( path, ( item, query, terms ) => {
       const name = sanitize( item.name );
       return name.includes( query ) || terms.every( t => name.includes( t ) );
