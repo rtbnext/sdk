@@ -12,10 +12,10 @@ export class DateableResource< D extends { dates: string[] }, R > extends Resour
     this.factory = options.date;
   }
 
-  private collectDates ( values: string[], total: number = values.length ) : Dates< R > {
-    const dates = values.toReversed(), self = this;
-    const f = ( value?: string ) => value ? this.factory( value ) : null;
+  private collectDates ( dates: string[], total: number = dates.length ) : Dates< R > {
     const c = ( dates: string[] ) => this.collectDates( dates, total );
+    const f = ( value?: string ) => value ? this.factory( value ) : null;
+    const self = this;
 
     return Object.freeze( {
       items: dates, total, count: dates.length,
@@ -23,7 +23,7 @@ export class DateableResource< D extends { dates: string[] }, R > extends Resour
       get first () { return f( dates[ 0 ] ) },
       get last () { return f( dates.at( -1 ) ) },
 
-      get ( date: string ) { return dates.includes( date ) ? self.factory( date ) : null },
+      get ( date: string ) { return dates.includes( date ) ? f( date ) : null },
       find ( date: string ) { return f( dates.find( d => d === date ) ) },
 
       year ( year: number ) { return c( dates.filter( d => d.startsWith( `${ year }-` ) ) ) },
@@ -52,6 +52,6 @@ export class DateableResource< D extends { dates: string[] }, R > extends Resour
   }
 
   public dates () : Promise< Dates< R > > {
-    return this.transform( data => this.collectDates( data.dates ) );
+    return this.transform( data => this.collectDates( data.dates.toReversed() ) );
   }
 }
