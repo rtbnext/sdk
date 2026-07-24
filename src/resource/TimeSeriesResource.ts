@@ -18,7 +18,7 @@ export class TimeSeriesResource< D extends readonly unknown[], R extends { date:
     const n = ( cb?: ( point: R ) => number ) => points.map( cb ?? ( p => Number( p ) ) );
 
     return Object.freeze( {
-      items: points, total, count: points.length,
+      points, total, count: points.length,
 
       first: points[ 0 ] ?? null,
       last: points.at( -1 ) ?? null,

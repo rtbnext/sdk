@@ -18,7 +18,7 @@ export class DateableResource< D extends { dates: string[] }, R > extends Resour
     const self = this;
 
     return Object.freeze( {
-      items: dates, total, count: dates.length,
+      dates, total, count: dates.length,
 
       get first () { return f( dates[ 0 ] ) },
       get last () { return f( dates.at( -1 ) ) },

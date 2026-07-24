@@ -165,7 +165,7 @@ export type IndexResult< T, R > = T extends readonly ( infer I )[]
   : T extends object ? { [ K in IndexKeys< T > ]: IndexResult< T[ K ], R > } : never;
 
 export interface Dates< R > extends Iterable< R > {
-  readonly items: string[];
+  readonly dates: string[];
   readonly total: number;
   readonly count: number;
 
@@ -193,7 +193,7 @@ export interface Dates< R > extends Iterable< R > {
 }
 
 export interface TimeSeries< R > extends Iterable< R > {
-  readonly items: R[];
+  readonly points: R[];
   readonly total: number;
   readonly count: number;
 
