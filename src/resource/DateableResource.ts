@@ -15,7 +15,7 @@ export class DateableResource< D extends { dates: string[] }, R > extends Resour
   private collectDates ( values: string[], total: number = values.length ) : Dates< R > {
     const dates = [ ...values ].reverse(), self = this;
     const f = ( value?: string ) => value ? this.factory( value ) : null;
-    const c = ( dates: string[] ) => this.collectDates( dates );
+    const c = ( dates: string[] ) => this.collectDates( dates, total );
 
     return {
       items: dates, total, count: dates.length,
