@@ -12,6 +12,8 @@ export class Mover extends Endpoint {
   }
 
   public get index () : DateableResource< TSnapshotIndex, Resource< TMover > > {
-    return this.json( 'v2/mover/index.json', { date: ( value: string ) => this.snapshot( value ) } );
+    return this.json( 'v2/mover/index.json', {
+      date: ( value: string ) => this.snapshot( value )
+    } );
   }
 }
