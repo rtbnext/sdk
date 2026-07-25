@@ -162,42 +162,77 @@ export interface IFilter {
 
 // --- stats ---
 
+/** A point in a statistics time series. */
 export type HistoryPoint = {
+  /** The ISO date of the history point. */
   date: string;
+  /** The total count of profiles at that date. */
   count: number;
+  /** The total net worth of profiles at that date. */
   total: number;
+  /** The woman count at that date. */
   woman: number;
+  /** The woman quota at that date. */
   quota: number;
+  /** The net worth change since the prior date. */
   change: number;
+  /** The percentage change in net worth since the prior date. */
   changePct: number;
 };
 
+/** The database statistics resource. */
 export type DBStats = Resource< TDBStats >;
+
+/** The global statistics resource. */
 export type GlobalStats = Resource< TGlobalStats >;
+
+/** The profile statistics resource. */
 export type ProfileStats = Resource< TProfileStats >;
+
+/** A profile scatter statistics collection resource. */
 export type Scatter = CollectableResource< TScatter, TScatterItem, ProfileEntity< TScatterItem > >;
+
+/** The wealth statistics resource. */
 export type WealthStats = Resource< TWealthStats >;
+
+/** The stats history time series resource. */
 export type StatsHistory = TimeSeriesResource< THistory, HistoryPoint >;
+
+/** A grouped stats index resource. */
 export type StatsGroup< T extends string > = IndexableResource< TStatsGroup< T >[ 'index' ], StatsHistory >;
 
+/** The stats endpoint interface. */
 export interface IStats {
+  /** Database statistics resource. */
   readonly db: DBStats;
+  /** Global statistics resource. */
   readonly global: GlobalStats;
+  /** Personal profile statistics resource. */
   readonly profile: ProfileStats;
+  /** Profile scatter statistics resource. */
   readonly scatter: Scatter;
+  /** Wealth statistics resource. */
   readonly wealth: WealthStats;
+  /** Historical statistics resource. */
   readonly history: StatsHistory;
+  /** Retrieve industry statistics for a date. */
   industry ( industry: TIndustry ) : StatsHistory;
+  /** Retrieve citizenship statistics for a date. */
   citizenship ( isoCode: string ) : StatsHistory;
+  /** Industry index resource. */
   readonly industryIndex: StatsGroup< TIndustry >;
+  /** Citizenship index resource. */
   readonly citizenshipIndex: StatsGroup< string >;
 }
 
 // --- system ---
 
+/** The system status resource. */
 export type SystemStatus = Resource< TStatus >;
 
+/** The system endpoint interface. */
 export interface ISystem {
+  /** System status resource. */
   readonly status: SystemStatus;
 }
 
