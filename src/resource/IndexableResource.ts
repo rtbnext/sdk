@@ -1,6 +1,6 @@
 import type { ResourceLoader } from '../core/ResourceLoader';
 import type { ParserFn } from '../types/core';
-import type { IndexFn, IndexOptions, KeysFn } from '../types/resource';
+import type { IndexFn, IndexOptions, IndexResult, KeysFn } from '../types/resource';
 import { Resource } from './Resource';
 
 
@@ -55,5 +55,9 @@ export class IndexableResource< D, R > extends Resource< D > {
     }
 
     return undefined;
+  }
+
+  public get () : Promise< IndexResult< D, R > > {
+    return this.transform( data => this.traverse( data ) as IndexResult< D, R > );
   }
 }
