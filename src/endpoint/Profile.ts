@@ -1,14 +1,14 @@
 import type { TProfileHistoryItem } from '@rtbnext/schema/src/model/profile';
 import type {
   IProfile, ProfileCollection, ProfileData, ProfileEntity,
-  ProfileHistory, ProfileIndex, ProfileMeta, SearchIndex
+  ProfileHistory, ProfileHistoryPoint, ProfileIndex, ProfileMeta, SearchIndex
 } from '../types/endpoint';
 import type { FindFn, SearchFn } from '../types/resource';
 import { Endpoint } from './Endpoint';
 
 
 export class Profile extends Endpoint implements IProfile {
-  private entity < I extends { uri: string } > ( item: I ) : ProfileEntity< I > {
+  protected entity < I extends { uri: string } > ( item: I ) : ProfileEntity< I > {
     let meta: ProfileMeta, data: ProfileData, history: ProfileHistory;
     const self = this;
   
@@ -19,14 +19,22 @@ export class Profile extends Endpoint implements IProfile {
     } );
   }
 
-  private collect < D extends { items: I[] }, I extends { uri: string } > (
+  protected collect < D extends { items: I[] }, I extends { uri: string } > (
     path: string, find?: FindFn< I >, search?: SearchFn< I >
   ) : ProfileCollection< D, I > {
     return this.json( path, { entity: item => this.entity( item ), find, search } );
   }
 
+  protected point ( [ date, rank, networth, change, changePct ]: TProfileHistoryItem ) : ProfileHistoryPoint {
+    return { date, rank, networth, change, changePct };
+  }
+
   public get use () {
-    return { entity: this.entity.bind( this ), collect: this.collect.bind( this ) }
+    return {
+      entity: this.entity.bind( this ),
+      collect: this.collect.bind( this ),
+      point: this.point.bind( this )
+    }
   }
 
   public meta ( uri: string ) : ProfileMeta {
@@ -38,11 +46,7 @@ export class Profile extends Endpoint implements IProfile {
   }
 
   public history ( uri: string ) : ProfileHistory {
-    return this.csv( `v2/profile/${ uri }/history.csv`, {
-      point: ( [ date, rank, networth, change, changePct ]: TProfileHistoryItem ) => ( {
-        date, rank, networth, change, changePct
-      } )
-    } );
+    return this.csv( `v2/profile/${ uri }/history.csv`, { point: row => this.point( row ) } );
   }
 
   public get ( uri: string ) : ProfileEntity< { uri: string } > {
