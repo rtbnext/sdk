@@ -10,7 +10,14 @@ const defaultFind: FindFn< any > = ( items, uriLike ) => {
   return items.find( i => i.uri === uri ) ?? null;
 }
 
-const defaultSearch: SearchFn< any > = ( item, query, terms ) => false;
+const defaultSearch: SearchFn< any > = ( item, query, terms ) => {
+  const name = item.searchName ?? sanitize( item.name ?? '' ), text = item.text ?? '';
+
+  return (
+    name.includes( query ) || text.includes( query ) ||
+    terms.every( t => name.includes( t ) || text.includes( t ) )
+  );
+};
 
 
 export class CollectableResource< D extends { items: I[] }, I extends { uri: string }, E extends Entity< I > > extends Resource< D > {
