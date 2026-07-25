@@ -104,6 +104,18 @@ export class CollectableResource< D extends { items: I[] }, I extends { uri: str
       sort ( compare: ( a: E, b: E ) => number ) {
         return c( [ ...items ].sort( compare ) );
       },
+
+      toArray () { return [ ...items ] },
+      map < R > ( callback: ( item: E, index: number ) => R ) { return items.map( callback ) },
+
+      take ( count: number ) { return c( items.slice( 0, count ) ) },
+      skip ( count: number ) { return c( items.slice( count ) ) },
+      slice ( start?: number, end?: number ) { return c( items.slice( start, end ) ) },
+
+      page ( page: number, perPage: number = 10 ) {
+        const start = ( page - 1 ) * perPage, end = start + perPage;
+        return c( items.slice( start, end ) );
+      }
     } );
   }
 
