@@ -82,8 +82,7 @@ export class HttpClient {
 
       return { url, ok: res.ok, status: res.status, body, headers: res.headers, latency };
     } catch ( err ) {
-      console.error( 'Fetch error:', err );
-      throw new Error( 'Fetch failed' );
+      throw new Error( `Fetch failed: ${ err instanceof Error ? err.message : String( err ) }` );
     }
   }
 
