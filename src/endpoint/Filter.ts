@@ -8,6 +8,22 @@ export class Filter extends Endpoint implements IFilter {
     return profileProvider( this.endpoints.profile ).collect( path );
   }
 
+  public get deceased () : FilterCollection {
+    return this.filter( `v2/filter/special/deceased.json` );
+  }
+
+  public get dropOff () : FilterCollection {
+    return this.filter( `v2/filter/special/dropOff.json` );
+  }
+
+  public get family () : FilterCollection {
+    return this.filter( `v2/filter/special/family.json` );
+  }
+
+  public get selfMade () : FilterCollection {
+    return this.filter( `v2/filter/special/selfMade.json` );
+  }
+
   public get index () : FilterIndex {
     return this.json( 'v2/filter/index.json', {
       index: path => this.filter( `v2/filter/${ path.join( '/' ) }.json` )
