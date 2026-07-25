@@ -1,5 +1,33 @@
-import type { IProfile } from '../types/endpoint';
+import type { TProfileHistoryItem } from '@rtbnext/schema/src/model/profile';
+import type { IProfile, ProfileData, ProfileEntity, ProfileHistory, ProfileMeta } from '../types/endpoint';
 import { Endpoint } from './Endpoint';
 
 
-export class Profile extends Endpoint implements IProfile {}
+export class Profile extends Endpoint implements IProfile {
+  private entity < I extends { uri: string } > ( item: I ) : ProfileEntity< I > {
+    let meta: ProfileMeta, data: ProfileData, history: ProfileHistory;
+    const self = this;
+  
+    return Object.freeze( { ...item,
+      get meta () { return meta ??= self.meta( item.uri ) },
+      get data () { return data ??= self.data( item.uri ) },
+      get history () { return history ??= self.history( item.uri ) }
+    } );
+  }
+
+  public meta ( uri: string ) : ProfileMeta {
+    return this.json( `v2/profile/${ uri }/meta.json` );
+  }
+
+  public data ( uri: string ) : ProfileData {
+    return this.json( `v2/profile/${ uri }/profile.json` );
+  }
+
+  public history ( uri: string ) : ProfileHistory {
+    return this.csv( `v2/profile/${ uri }/history.csv`, {
+      point: ( [ date, rank, networth, change, changePct ]: TProfileHistoryItem ) => ( {
+        date, rank, networth, change, changePct
+      } )
+    } );
+  }
+}
