@@ -23,4 +23,15 @@ export class IndexableResource< D, R > extends Resource< D > {
     this.factory = options.index;
     this.keys = options.keys ?? defaultKeys;
   }
+
+  private createIndex ( keys: readonly string[], path: string[] ) : Readonly< Record< string, unknown > > {
+    const out: Record< string, unknown > = {};
+
+    for ( const key of keys ) Object.defineProperty( out, key, {
+      enumerable: true, configurable: false,
+      get: () => this.factory( [ ...path, key ] )
+    } );
+
+    return Object.freeze( out );
+  }
 }
