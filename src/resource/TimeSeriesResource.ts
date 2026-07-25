@@ -62,6 +62,7 @@ export class TimeSeriesResource< D extends readonly unknown[], R extends { date:
     const n = ( cb?: ( point: T ) => number ) => points.map( cb ?? ( p => Number( p ) ) );
 
     return Object.freeze( {
+      *[ Symbol.iterator ]() { yield* points },
       points, total, count: points.length,
 
       get first () { return points[ 0 ] ?? null },
@@ -144,7 +145,7 @@ export class TimeSeriesResource< D extends readonly unknown[], R extends { date:
         }
 
         return c( result );
-      },
+      }
     } );
   }
 
