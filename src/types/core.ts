@@ -63,3 +63,58 @@ export type HttpResponse = {
   /** The latency of the request in milliseconds. */
   latency: number;
 };
+
+// --- resource loader ---
+
+/** The state of a cached resource. */
+export type ResourceState = {
+  /** The HTTP response associated with the resource. */
+  response: HttpResponse;
+  /** The timestamp when the resource was created in the cache. */
+  created: number;
+  /** The timestamp when the resource expires in the cache, if applicable. */
+  expires?: number;
+  /** The ETag of the resource, if applicable. */
+  etag?: string;
+  /** The Last-Modified header of the resource, if applicable. */
+  lastModified?: string;
+};
+
+// --- cache ---
+
+/** The interface for a cache implementation. */
+export interface Cache {
+  /** The number of items currently stored in the cache. */
+  readonly size: number;
+  /** Retrieves a resource state from the cache by its key. */
+  get ( key: string ) : Promise< ResourceState | null >;
+  /** Stores a resource state in the cache with the given key. */
+  set ( key: string, value: ResourceState ) : Promise< void >;
+  /** Deletes a resource state from the cache by its key. */
+  delete ( key: string ) : Promise< void >;
+  /** Clears all resource states from the cache. */
+  clear () : Promise< void >;
+}
+
+/**
+ * The mode of caching to use when loading resources.
+ * 
+ *  - 'ttl': Use the cached resource if it exists and is not expired.
+ *  - 'revalidate': Always fetch the resource from the server and update the cache.
+ *  - 'session': Use the cached resource if it exists, regardless of expiration.
+ */
+export type CacheMode = 'ttl' | 'revalidate' | 'session';
+
+/**
+ * The type of cache to use, either false (no cache), 'memory' (in-memory cache),
+ * or a custom cache implementation.
+ */
+export type CacheType = false | 'memory' | Cache;
+
+/** Options for configuring the cache behavior. */
+export type CacheOptions = {
+  /** The type of cache to use. */
+  type?: CacheType;
+  /** The mode of caching to use. */
+  mode?: CacheMode;
+};
