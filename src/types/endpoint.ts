@@ -1,3 +1,4 @@
+import type { TDBStats, TGlobalStats, TProfileStats, TWealthStats } from '@rtbnext/schema/src/model/stats';
 import type { TStatus } from '@rtbnext/schema/src/model/status';
 import type { Filter } from '../endpoint/Filter';
 import type { List } from '../endpoint/List';
@@ -25,6 +26,13 @@ export interface Endpoints {
   /** The System endpoint. */
   system: System;
 }
+
+// --- stats ---
+
+export type DBStats = Resource< TDBStats >;
+export type GlobalStats = Resource< TGlobalStats >;
+export type ProfileStats = Resource< TProfileStats >;
+export type WealthStats = Resource< TWealthStats >;
 
 // --- system ---
 
