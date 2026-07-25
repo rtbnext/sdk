@@ -1,10 +1,15 @@
-import type { TStatus } from '@rtbnext/schema/src/model/status';
-import type { Resource } from '../resource/Resource';
+import type { ISystem, SystemStatus } from '../types/endpoint';
 import { Endpoint } from './Endpoint';
 
 
-export class System extends Endpoint {
-  public get status () : Resource< TStatus > {
+/**
+ * Endpoint implementation for system resources.
+ * 
+ * Provides access to system status information.
+ */
+export class System extends Endpoint implements ISystem {
+  /** Returns the current system status resource. */
+  public get status () : SystemStatus {
     return this.json( 'v2/system/status.json' );
   }
 }

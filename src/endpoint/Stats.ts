@@ -1,78 +1,95 @@
 import type { TIndustry } from '@rtbnext/schema/src/base/const';
+import type { THistoryItem } from '@rtbnext/schema/src/model/stats';
 import type {
-  TDBStats, TGlobalStats, THistory, THistoryItem, TProfileStats, TScatter,
-  TScatterItem, TStatsGroup, TWealthStats
-} from '@rtbnext/schema/src/model/stats';
-import type { CollectableResource } from '../resource/CollectableResource';
-import type { IndexableResource } from '../resource/IndexableResource';
-import type { Resource } from '../resource/Resource';
-import type { TimeSeriesResource } from '../resource/TimeSeriesResource';
-import type { HistoryPoint, ProfileEntity } from '../types';
-import { sanitize } from '../utils';
+  DBStats, GlobalStats, HistoryPoint, IStats, ProfileStats, Scatter,
+  StatsGroup, StatsHistory, WealthStats
+} from '../types/endpoint';
 import { Endpoint } from './Endpoint';
+import { profileProvider } from './Profile';
 
 
-type StatsHistory = TimeSeriesResource< THistory, HistoryPoint >;
-type StatsGroup< T extends string > = IndexableResource< TStatsGroup< T >[ 'index' ], StatsHistory >;
-
-
-export class Stats extends Endpoint {
-  public _point ( [ date, count, total, woman, quota, change, changePct ]: THistoryItem ) : HistoryPoint {
+/**
+ * Endpoint implementation for statistics resources.
+ * 
+ * Provides various stats resources, scatter collections, and grouped indices.
+ */
+export class Stats extends Endpoint implements IStats {
+  /**
+   * Converts a raw history row into a typed history point.
+   * 
+   * @param row - The raw stats history row.
+   * @returns The converted, typed history point.
+   */
+  protected point ( [ date, count, total, woman, quota, change, changePct ]: THistoryItem ) : HistoryPoint {
     return { date, count, total, woman, quota, change, changePct };
   }
 
-  public get db () : Resource< TDBStats > {
+  /**
+   * Builds an industry or citizenship stats group index.
+   * 
+   * @template K - The type of the group key, which must be a string.
+   * @param group - The group type to build.
+   * @returns The stats group index resource.
+   */
+  protected group < K extends string > ( group: 'industry' | 'citizenship' ) : StatsGroup< K > {
+    return this.json( `v2/stats/${ group }/index.json`, {
+      index: ( [ key ] ) => this[ group ]( key as any ),
+      keys: value => value && typeof value === 'object' && 'items' in value
+        ? Object.keys( value.items as object ) : null
+    } );
+  }
+
+  /** Database stats resource. */
+  public get db () : DBStats {
     return this.json( 'v2/stats/db.json' );
   }
 
-  public get global () : Resource< TGlobalStats > {
+  /** Global stats resource. */
+  public get global () : GlobalStats {
     return this.json( 'v2/stats/global.json' );
   }
 
-  public get profile () : Resource< TProfileStats > {
+  /** Profile stats resource. */
+  public get profile () : ProfileStats {
     return this.json( 'v2/stats/profile.json' );
   }
 
-  public get scatter () : CollectableResource< TScatter, TScatterItem, ProfileEntity< TScatterItem > > {
-    return this.endpoints.profile._collect( 'v2/stats/scatter.json', ( item, query, terms ) => {
-      const name = sanitize( item.name );
-      return name.includes( query ) || terms.every( t => name.includes( t ) );
-    } );
+  /** Profile scatter stats collection resource. */
+  public get scatter () : Scatter {
+    return profileProvider( this.endpoints.profile ).collect( 'v2/stats/scatter.json' );
   }
 
-  public get wealth () : Resource< TWealthStats > {
+  /** Wealth stats resource. */
+  public get wealth () : WealthStats {
     return this.json( 'v2/stats/wealth.json' );
   }
 
+  /** Historical stats time-series resource. */
   public get history () : StatsHistory {
-    return this.csv( 'v2/stats/history.csv', { point: row => this._point( row ) } );
+    return this.csv( 'v2/stats/history.csv', { point: row => this.point( row ) } );
   }
 
+  /** Industry stats time series for a specific industry. */
   public industry ( industry: TIndustry ) : StatsHistory {
     return this.csv( `v2/stats/industry/${ industry.toLowerCase() }.csv`, {
-      point: row => this._point( row )
+      point: row => this.point( row )
     } );
   }
 
-  public get industryIndex () : StatsGroup< TIndustry > {
-    return this.json( 'v2/stats/industry/index.json', {
-      index: ( [ industry ] ) => this.industry( industry as TIndustry ),
-      keys: value => value && typeof value === 'object' && 'items' in value
-        ? Object.keys( value.items as object ) : null
-    } );
-  }
-
+  /** Citizenship stats time series for a specific country. */
   public citizenship ( isoCode: string ) : StatsHistory {
     return this.csv( `v2/stats/citizenship/${ isoCode.toUpperCase() }.csv`, {
-      point: row => this._point( row )
+      point: row => this.point( row )
     } );
   }
 
+  /** Industry stats group index. */
+  public get industryIndex () : StatsGroup< TIndustry > {
+    return this.group( 'industry' );
+  }
+
+  /** Citizenship stats group index. */
   public get citizenshipIndex () : StatsGroup< string > {
-    return this.json( 'v2/stats/citizenship/index.json', {
-      index: ( [ isoCode ] ) => this.citizenship( isoCode ),
-      keys: value => value && typeof value === 'object' && 'items' in value
-        ? Object.keys( value.items as object ) : null
-    } );
+    return this.group( 'citizenship' );
   }
 }

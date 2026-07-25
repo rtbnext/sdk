@@ -1,26 +1,75 @@
 import type { ResourceLoader } from '../core/ResourceLoader';
-import type { Collection, CollectionSearchFn, CollectOptions, Entity, ParserFn } from '../types';
+import type { ParserFn } from '../types/core';
+import type { Collection, CollectOptions, Entity, EntityFn, FindFn, SearchFn } from '../types/resource';
 import { sanitize } from '../utils';
 import { Resource } from './Resource';
+import { sliceMethods } from './helpers';
 
 
+/** Default URI lookup implementation for collectable resources. */
+const defaultFind: FindFn< any > = ( items, uriLike ) => {
+  const uri = sanitize( uriLike );
+  return items.find( i => i.uri === uri ) ?? null;
+}
+
+/** Default search implementation for collectable resources. */
+const defaultSearch: SearchFn< any > = ( item, query, terms ) => {
+  const name = item.searchName ?? sanitize( item.name ?? '' ), text = item.text ?? '';
+
+  return (
+    name.includes( query ) || text.includes( query ) ||
+    terms.every( t => name.includes( t ) || text.includes( t ) )
+  );
+};
+
+
+/**
+ * A resource wrapper for collection-oriented endpoints.
+ * 
+ * This class enables collecting items, searching, filtering, and paging.
+ * 
+ * @template D - The raw data type of the resource, which must include an `items` array.
+ * @template I - The type of individual items in the collection, which must include a `uri` string.
+ * @template E - The entity type that wraps individual items, extending the base `Entity` interface.
+ */
 export class CollectableResource< D extends { items: I[] }, I extends { uri: string }, E extends Entity< I > > extends Resource< D > {
-  private readonly entity: ( data: I ) => E;
-  private readonly search: CollectionSearchFn< I >;
+  /** Converts raw item payloads into collection entity instances. */
+  private readonly entity: EntityFn< I, E >;
+  /** Custom item lookup function by URI-like string. */
+  private readonly find: FindFn< I >;
+  /** Custom search predicate used by the collection search implementation. */
+  private readonly search: SearchFn< I >;
 
+  /**
+   * Creates a new instance of `CollectableResource`.
+   * 
+   * @param path - The resource path relative to the API base URL.
+   * @param loader - The resource loader responsible for fetching and caching the resource.
+   * @param parser - The parser function that converts raw HTTP responses into the expected data type.
+   * @param options - Configuration options for entity conversion, lookup, and search behavior.
+   */
   constructor ( path: string, loader: ResourceLoader, parser: ParserFn< D >, options: CollectOptions< I, E > ) {
     super( path, loader, parser );
 
     this.entity = options.entity;
-    this.search = options.search;
+    this.find = options.find ?? defaultFind;
+    this.search = options.search ?? defaultSearch;
   }
 
+  /**
+   * Builds a collection object from the parsed entity list.
+   * 
+   * @param items - The entity items to include in the collection.
+   * @param total - The total number of available items.
+   * @returns A frozen collection instance.
+   */
   private collectItems ( items: E[], total: number = items.length ) : Collection< I > {
-    const s = this.search;
+    const s = this.search, f = this.find;
     const c = ( items: E[], t: number = total ) => this.collectItems( items, t );
     let idx = -1;
 
     return Object.freeze( {
+      *[ Symbol.iterator ]() { yield* items },
       items, total, count: items.length,
 
       get position () { return idx },
@@ -38,17 +87,8 @@ export class CollectableResource< D extends { items: I[] }, I extends { uri: str
 
       at ( index: number ) { return items[ index ] ?? null },
       get ( uri: string ) { return items.find( i => i.uri === uri ) ?? null },
-
-      find ( uriLike: string ) {
-        const uri = sanitize( uriLike );
-        return items.find( i => i.uri === uri || (
-          'aliases' in i && Array.isArray( i.aliases ) && i.aliases.includes( uri )
-        ) ) ?? null;
-      },
-
-      filter ( predicate: ( item: E ) => boolean ) {
-        return c( items.filter( predicate ) );
-      },
+      filter ( predicate: ( item: E ) => boolean ) { return c( items.filter( predicate ) ) },
+      find ( uriLike: string ) { return f( items, uriLike ) },
 
       search ( query: string ) {
         const terms = sanitize( query, ' ' ).split( ' ' );
@@ -68,12 +108,8 @@ export class CollectableResource< D extends { items: I[] }, I extends { uri: str
       union ( other: Collection< I > ) {
         const seen = new Set< string >(), merged: E[] = [];
 
-        for ( const item of [ ...items, ...other.items ] ) {
-          if ( ! seen.has( item.uri ) ) {
-            seen.add( item.uri );
-            merged.push( item as E );
-          }
-        }
+        for ( const item of [ ...items, ...other.items ] ) if ( ! seen.has( item.uri ) )
+          seen.add( item.uri ), merged.push( item as E );
 
         return c( merged );
       },
@@ -84,6 +120,7 @@ export class CollectableResource< D extends { items: I[] }, I extends { uri: str
 
         for ( const item of items ) {
           const key = callback( item ), group = map.get( key );
+
           if ( group ) group.push( item );
           else map.set( key, [ item ] );
         }
@@ -106,24 +143,25 @@ export class CollectableResource< D extends { items: I[] }, I extends { uri: str
       },
 
       toArray () { return [ ...items ] },
-      map < R > ( callback: ( item: E, index: number ) => R ) {
-        return items.map( callback );
-      },
+      map < R > ( callback: ( item: E, index: number ) => R ) { return items.map( callback ) },
 
-      take ( count: number ) { return c( items.slice( 0, count ) ) },
-      skip ( count: number ) { return c( items.slice( count ) ) },
-      slice ( start?: number, end?: number ) { return c( items.slice( start, end ) ) },
+      ...sliceMethods( items, c ),
 
       page ( page: number, perPage: number = 10 ) {
         const start = ( page - 1 ) * perPage, end = start + perPage;
         return c( items.slice( start, end ) );
-      },
-
-      *[ Symbol.iterator ]() { yield* items }
+      }
     } );
   }
 
+  /**
+   * Returns the parsed collection as a collection object.
+   * 
+   * @returns A resolved collection instance.
+   */
   public collection () : Promise< Collection< I > > {
-    return this.transform( data => this.collectItems( data.items.map( i => this.entity( i ) ) ) );
+    return this.transform( data => this.collectItems(
+      data.items.map( i => this.entity( i ) )
+    ) );
   }
 }

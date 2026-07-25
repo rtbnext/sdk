@@ -1,17 +1,42 @@
 import type { ResourceLoader } from '../core/ResourceLoader';
-import type { AggregatePeriod, AggregatePoint, ParserFn, TimeSeries, TimeSeriesOptions } from '../types';
+import type { ParserFn } from '../types/core';
+import type { AggregatePeriod, AggregatePoint, PointFn, TimeSeries, TimeSeriesOptions } from '../types/resource';
 import { Resource } from './Resource';
+import { rangeMethods, sliceMethods, yearMonthMethods } from './helpers';
 
 
+/**
+ * A resource wrapper for time-series endpoints.
+ * 
+ * This class exposes series data, aggregation, and date-based grouping.
+ * 
+ * @template D - The raw data type of the resource, which must be an array of rows.
+ * @template R - The type of individual time-series points returned by the factory function.
+ */
 export class TimeSeriesResource< D extends readonly unknown[], R extends { date: string } > extends Resource< D > {
-  private readonly factory: ( row: D[ number ] ) => R;
+  /** Converts raw rows into typed time-series points. */
+  private readonly factory: PointFn< D, R >;
 
+  /**
+   * Creates a new instance of `TimeSeriesResource`.
+   * 
+   * @param path - The resource path relative to the API base URL.
+   * @param loader - The resource loader responsible for fetching and caching the resource.
+   * @param parser - The parser function that converts raw HTTP responses into the expected data type.
+   * @param options - Configuration options for point conversion and time-series behavior.
+   */
   constructor ( path: string, loader: ResourceLoader, parser: ParserFn< D >, options: TimeSeriesOptions< D, R > ) {
     super( path, loader, parser );
-
     this.factory = options.point;
   }
 
+  /**
+   * Converts a date string into the requested aggregation period key.
+   * 
+   * @param date - The input date string.
+   * @param period - The aggregation period.
+   * @returns The aggregate period key.
+   */
   private period ( date: string, period: AggregatePeriod ) : string {
     const [ y, m, d ] = date.split( '-' ).map( Number );
 
@@ -26,6 +51,13 @@ export class TimeSeriesResource< D extends readonly unknown[], R extends { date:
     throw new Error( `Invalid aggregate period: ${ period }` );
   }
 
+  /**
+   * Aggregates a group of points into a single summary point.
+   * 
+   * @param points - The points to aggregate.
+   * @param label - Optional label for the aggregate point.
+   * @returns The aggregated point.
+   */
   private aggregate < T extends { date: string } > ( points: T[], label?: string ) : AggregatePoint< T > {
     const sorted = [ ...points ].sort( ( a, b ) => a.date.localeCompare( b.date ) );
     const keys = Object.keys( sorted[ 0 ] );
@@ -54,45 +86,38 @@ export class TimeSeriesResource< D extends readonly unknown[], R extends { date:
     return result;
   }
 
+  /**
+   * Builds a time-series object from raw points.
+   * 
+   * @param points - The point records to wrap.
+   * @param total - The total number of points.
+   * @returns A frozen time-series instance.
+   */
   private createSeries < T extends { date: string } > ( points: T[], total: number = points.length ) : TimeSeries< T > {
     const self = this;
 
-    const c = < U extends { date: string } >( points: U[] ) => this.createSeries( points, total );
+    const c = < U extends { date: string } >( points: U[] ) => self.createSeries( points, total );
     const d = ( point: T ) => String( point.date );
     const n = ( cb?: ( point: T ) => number ) => points.map( cb ?? ( p => Number( p ) ) );
 
     return Object.freeze( {
+      *[ Symbol.iterator ]() { yield* points },
       points, total, count: points.length,
 
       get first () { return points[ 0 ] ?? null },
       get last () { return points.at( -1 ) ?? null },
 
-      get ( date: string ) { return this.find( date ) },
       find ( date: string ) { return points.find( p => d( p ) === date ) ?? null },
-
-      year ( year: number ) { return c( points.filter( p => d( p ).startsWith( `${ year }-` ) ) ) },
-      month ( year: number, month: number ) {
-        const prefix = `${ year }-${ String( month ).padStart( 2, '0' ) }-`;
-        return c( points.filter( p => d( p ).startsWith( prefix ) ) );
-      },
-
-      before ( date: string ) { return c( points.filter( p => d( p ) < date ) ) },
-      after ( date: string ) { return c( points.filter( p => d( p ) > date ) ) },
-      since ( date: string ) { return c( points.filter( p => d( p ) >= date ) ) },
-      until ( date: string ) { return c( points.filter( p => d( p ) <= date ) ) },
-      between ( from: string, to: string ) { return c( points.filter( p => {
-        const date = d( p ); return date >= from && date <= to;
-      } ) ) },
-
       toArray () { return [ ...points ] },
       map < U > ( callback: ( item: T, index: number ) => U ) { return points.map( callback ) },
 
-      take ( count: number ) { return c( points.slice( 0, count ) ) },
-      skip ( count: number ) { return c( points.slice( count ) ) },
-      slice ( start?: number, end?: number ) { return c( points.slice( start, end ) ) },
+      ...sliceMethods( points, c ),
+      ...yearMonthMethods( points, c, d ),
+      ...rangeMethods( points, c, d ),
 
       min ( callback?: ( point: T ) => number ) { return Math.min( ...n( callback ) ) },
       max ( callback?: ( point: T ) => number ) { return Math.max( ...n( callback ) ) },
+      sum ( callback?: ( point: T ) => number ) { return n( callback ).reduce( ( a, b ) => a + b, 0 ) },
 
       avg ( callback?: ( point: T ) => number ) {
         const values = n( callback );
@@ -100,17 +125,12 @@ export class TimeSeriesResource< D extends readonly unknown[], R extends { date:
       },
 
       median ( callback?: ( point: T ) => number ) {
-        const values = n( callback ).sort( ( a, b ) => a - b );
-        const mid = Math.floor( values.length / 2 );
-
+        const values = n( callback ).sort( ( a, b ) => a - b ), mid = Math.floor( values.length / 2 );
         return values.length % 2 ? values[ mid ] : ( values[ mid - 1 ] + values[ mid ] ) / 2;
       },
 
-      labels () { return points.map( d ) },
-      values ( callback: ( point: T ) => number ) { return points.map( callback ) },
-      column < K extends keyof T > ( key: K ) { return points.map( p => p[ key ] ) },
-
-      columns () {
+      get labels () { return points.map( d ) },
+      get columns () {
         const result = {} as Record< keyof T, unknown[] >;
 
         for ( const point of points )
@@ -120,21 +140,8 @@ export class TimeSeriesResource< D extends readonly unknown[], R extends { date:
         return result;
       },
 
-      buckets ( count: number ) {
-        if ( count >= points.length ) return c( points.map(
-          ( p, i ) => self.aggregate( [ p ], `${ i + 1 }/${ points.length }` )
-        ) );
-
-        const size = points.length / count;
-        const result: AggregatePoint< T >[] = [];
-
-        for ( let i = 0; i < count; i++ ) {
-          const start = Math.floor( i * size ), end = Math.floor( ( i + 1 ) * size );
-          result.push( self.aggregate( points.slice( start, end ), `${ i + 1 }/${ count }` ) );
-        }
-
-        return c( result );
-      },
+      values ( callback: ( point: T ) => number ) { return points.map( callback ) },
+      column < K extends keyof T > ( key: K ) { return points.map( p => p[ key ] ) },
 
       aggregate ( period: AggregatePeriod | ( ( point: T ) => string ) ) {
         const groups = new Map< string, T[] >();
@@ -147,13 +154,32 @@ export class TimeSeriesResource< D extends readonly unknown[], R extends { date:
         return c( [ ...groups.entries() ].map( ( [ label, group ] ) => self.aggregate( group, label ) ) );
       },
 
-      *[ Symbol.iterator ]() { yield* points }
+      buckets ( count: number ) {
+        if ( count >= points.length ) return c( points.map( ( p, i ) =>
+          self.aggregate( [ p ], `${ i + 1 }/${ points.length }` )
+        ) );
+
+        const size = points.length / count;
+        const result: AggregatePoint< T >[] = [];
+
+        for ( let i = 0; i < count; i++ ) {
+          const start = Math.floor( i * size ), end = Math.floor( ( i + 1 ) * size );
+          result.push( self.aggregate( points.slice( start, end ), `${ i + 1 }/${ count }` ) );
+        }
+
+        return c( result );
+      }
     } );
   }
 
+  /**
+   * Returns the parsed time-series data as a typed series.
+   * 
+   * @returns A resolved time-series instance.
+   */
   public series () : Promise< TimeSeries< R > > {
     return this.transform( data => this.createSeries(
-      data.toReversed().map( row => this.factory( row ) )
+      [ ...data ].reverse().map( row => this.factory( row ) )
     ) );
   }
 }

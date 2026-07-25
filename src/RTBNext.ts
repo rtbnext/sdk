@@ -6,9 +6,11 @@ import { Mover } from './endpoint/Mover';
 import { Profile } from './endpoint/Profile';
 import { Stats } from './endpoint/Stats';
 import { System } from './endpoint/System';
-import type { Endpoints, RTBNextOptions } from './types';
+import type { RTBNextOptions } from './types/core';
+import type { Endpoints, IFilter, IList, IMover, IProfile, IStats, ISystem } from './types/endpoint';
 
 
+/** Default configuration options for the RTBNext SDK. */
 const DEFAULT_OPTIONS = {
   sdkVersion: '1.0.0',
   baseUrl: 'https://api.rtbnext.de',
@@ -18,18 +20,38 @@ const DEFAULT_OPTIONS = {
 } as const;
 
 
+/**
+ * The primary SDK entry point for interacting with the RTBNext API.
+ * 
+ * This class configures the HTTP client, cache loader, and all available
+ * endpoint clients so they can be used from a single SDK instance.
+ */
 export class RTBNext {
+  /** The HTTP client used for all API requests. */
   public readonly httpClient: HttpClient;
+  /** The resource loader used for caching and fetching resources. */
   public readonly resourceLoader: ResourceLoader;
+  /** The collection of endpoint clients available in the SDK. */
   public readonly endpoints: Endpoints;
 
-  public readonly profile: Profile;
-  public readonly list: List;
-  public readonly mover: Mover;
-  public readonly filter: Filter;
-  public readonly stats: Stats;
-  public readonly system: System;
+  /** The Profile endpoint. */
+  public readonly profile: IProfile;
+  /** The List endpoint. */
+  public readonly list: IList;
+  /** The Mover endpoint. */
+  public readonly mover: IMover;
+  /** The Filter endpoint. */
+  public readonly filter: IFilter;
+  /** The Stats endpoint. */
+  public readonly stats: IStats;
+  /** The System endpoint. */
+  public readonly system: ISystem;
 
+  /**
+   * Creates a new RTBNext SDK instance.
+   * 
+   * @param options - Configuration options for the SDK.
+   */
   constructor ( options: RTBNextOptions ) {
     this.httpClient = new HttpClient( {
       baseUrl: options.baseUrl ?? DEFAULT_OPTIONS.baseUrl,
