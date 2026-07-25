@@ -1,12 +1,23 @@
 import type { TIndustry } from '@rtbnext/schema/src/base/const';
 import type { THistoryItem } from '@rtbnext/schema/src/model/stats';
-import type { DBStats, GlobalStats, HistoryPoint, IStats, ProfileStats, StatsHistory, WealthStats } from '../types/endpoint';
+import type {
+  DBStats, GlobalStats, HistoryPoint, IStats, ProfileStats, Scatter,
+  StatsGroup, StatsHistory, WealthStats
+} from '../types/endpoint';
 import { Endpoint } from './Endpoint';
 
 
 export class Stats extends Endpoint implements IStats {
-  private point ( [ date, count, total, woman, quota, change, changePct ]: THistoryItem ) : HistoryPoint {
+  protected point ( [ date, count, total, woman, quota, change, changePct ]: THistoryItem ) : HistoryPoint {
     return { date, count, total, woman, quota, change, changePct };
+  }
+
+  protected group < K extends string > ( group: 'industry' | 'citizenship' ) : StatsGroup< K > {
+    return this.json( `v2/stats/${ group }/index.json`, {
+      index: ( [ key ] ) => this[ group ]( key as any ),
+      keys: value => value && typeof value === 'object' && 'items' in value
+        ? Object.keys( value.items as object ) : null
+    } );
   }
 
   public get db () : DBStats {
@@ -19,6 +30,10 @@ export class Stats extends Endpoint implements IStats {
 
   public get profile () : ProfileStats {
     return this.json( 'v2/stats/profile.json' );
+  }
+
+  public get scatter () : Scatter {
+    return ( this.endpoints.profile as any ).use.collect( 'v2/stats/scatter.json' );
   }
 
   public get wealth () : WealthStats {
@@ -39,5 +54,13 @@ export class Stats extends Endpoint implements IStats {
     return this.csv( `v2/stats/citizenship/${ isoCode.toUpperCase() }.csv`, {
       point: row => this.point( row )
     } );
+  }
+
+  public get industryIndex () : StatsGroup< TIndustry > {
+    return this.group( 'industry' );
+  }
+
+  public get citizenshipIndex () : StatsGroup< string > {
+    return this.group( 'citizenship' );
   }
 }

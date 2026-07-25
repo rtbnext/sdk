@@ -3,10 +3,11 @@ import type { TSnapshotIndex } from '@rtbnext/schema/src/base/generic';
 import type { TMover } from '@rtbnext/schema/src/model/mover';
 import type { TProfileData, TProfileHistory, TProfileIndex, TProfileIndexItem, TProfileMetaData } from '@rtbnext/schema/src/model/profile';
 import type { TSearchIndex, TSearchIndexItem } from '@rtbnext/schema/src/model/search';
-import type { TDBStats, TGlobalStats, THistory, TProfileStats, TWealthStats } from '@rtbnext/schema/src/model/stats';
+import type { TDBStats, TGlobalStats, THistory, TProfileStats, TScatter, TScatterItem, TStatsGroup, TWealthStats } from '@rtbnext/schema/src/model/stats';
 import type { TStatus } from '@rtbnext/schema/src/model/status';
 import type { CollectableResource } from '../resource/CollectableResource';
 import type { DateableResource } from '../resource/DateableResource';
+import type { IndexableResource } from '../resource/IndexableResource';
 import type { Resource } from '../resource/Resource';
 import type { TimeSeriesResource } from '../resource/TimeSeriesResource';
 import type { Entity } from './resource';
@@ -79,17 +80,22 @@ export type HistoryPoint = {
 export type DBStats = Resource< TDBStats >;
 export type GlobalStats = Resource< TGlobalStats >;
 export type ProfileStats = Resource< TProfileStats >;
+export type Scatter = CollectableResource< TScatter, TScatterItem, ProfileEntity< TScatterItem > >;
 export type WealthStats = Resource< TWealthStats >;
 export type StatsHistory = TimeSeriesResource< THistory, HistoryPoint >;
+export type StatsGroup< T extends string > = IndexableResource< TStatsGroup< T >[ 'index' ], StatsHistory >;
 
 export interface IStats {
   readonly db: DBStats;
   readonly global: GlobalStats;
   readonly profile: ProfileStats;
+  readonly scatter: Scatter;
   readonly wealth: WealthStats;
   readonly history: StatsHistory;
   industry ( industry: TIndustry ) : StatsHistory;
   citizenship ( isoCode: string ) : StatsHistory;
+  readonly industryIndex: StatsGroup< TIndustry >;
+  readonly citizenshipIndex: StatsGroup< string >;
 }
 
 // --- system ---
