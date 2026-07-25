@@ -126,21 +126,37 @@ export interface IMover {
 
 // --- filter ---
 
+/** A collection of filter items. */
 export type FilterCollection = CollectableResource< TFilter, TFilterItem, ProfileEntity< TFilterItem > >;
+
+/** A filter index resource. */
 export type FilterIndex = IndexableResource< TFilter, FilterCollection >;
 
+/** The filter endpoint interface. */
 export interface IFilter {
+  /** Filter resource for deceased profiles. */
   readonly deceased: FilterCollection;
+  /** Filter resource for drop-off profiles. */
   readonly dropOff: FilterCollection;
+  /** Filter resource for family profiles. */
   readonly family: FilterCollection;
+  /** Filter resource for self-made profiles. */
   readonly selfMade: FilterCollection;
+  /** Retrieve a filter collection by industry. */
   industry ( industry: TIndustry ) : FilterCollection;
+  /** Retrieve a filter collection by age group. */
   age ( ageGroup: TAgeGroup ) : FilterCollection;
+  /** Retrieve a filter collection by gender. */
   gender ( gender: TGender ) : FilterCollection;
+  /** Retrieve a filter collection by marital status. */
   maritalStatus ( maritalStatus: TMaritalStatus ) : FilterCollection;
+  /** Retrieve a filter collection by citizenship ISO code. */
   citizenship ( isoCode: string ) : FilterCollection;
+  /** Retrieve a filter collection by country ISO code. */
   country ( isoCode: string ) : FilterCollection;
+  /** Retrieve a filter collection by USPS state code. */
   state ( uspsCode: string ) : FilterCollection;
+  /** The root filter index resource. */
   readonly index: FilterIndex;
 }
 
