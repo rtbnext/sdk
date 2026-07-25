@@ -1,9 +1,11 @@
+import type { TStatus } from '@rtbnext/schema/src/model/status';
 import type { Filter } from '../endpoint/Filter';
 import type { List } from '../endpoint/List';
 import type { Mover } from '../endpoint/Mover';
 import type { Profile } from '../endpoint/Profile';
 import type { Stats } from '../endpoint/Stats';
 import type { System } from '../endpoint/System';
+import type { Resource } from '../resource/Resource';
 
 
 // --- endpoints ---
@@ -23,3 +25,7 @@ export interface Endpoints {
   /** The System endpoint. */
   system: System;
 }
+
+// --- system ---
+
+export type SystemStatus = Resource< TStatus >;
