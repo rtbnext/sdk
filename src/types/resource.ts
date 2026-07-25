@@ -1,4 +1,12 @@
-// --- time series ---
+// --- dated resource ---
+
+export type DateFn< R > = ( value: string ) => R;
+
+export interface DateOptions< R > {
+  date: DateFn< R >;
+}
+
+// --- time series resource ---
 
 export type PointFn< D extends readonly unknown[], R extends { date: string } > = ( row: D[ number ] ) => R;
 
