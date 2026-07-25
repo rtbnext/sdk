@@ -1,5 +1,5 @@
 import type { ResourceLoader } from '../core/ResourceLoader';
-import type { ParserFn, ResourceState } from '../types/core';
+import type { ParserFn, RequestOptions, ResourceState } from '../types/core';
 
 
 export class Resource< D > {
@@ -33,5 +33,19 @@ export class Resource< D > {
     this.hooks.get( event )?.delete( handler );
 
     return this;
+  }
+
+  public async load ( options?: RequestOptions ) : Promise< void > {
+    if ( this.loaded ) return;
+
+    this.loading ??= this.loader.load( this.path, options )
+      .then( state => {
+        this.state = state, this.loaded = true;
+        this.parsed = false, this.value = undefined;
+        this.emit( 'load', 'update' );
+      } )
+      .finally( () => this.loading = undefined );
+
+    return this.loading;
   }
 }
