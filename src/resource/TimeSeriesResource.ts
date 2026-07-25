@@ -66,6 +66,15 @@ export class TimeSeriesResource< D extends readonly unknown[], R extends { date:
 
       get first () { return points[ 0 ] ?? null },
       get last () { return points.at( -1 ) ?? null },
+
+      get ( date: string ) { return this.find( date ) },
+      find ( date: string ) { return points.find( p => d( p ) === date ) ?? null },
+
+      year ( year: number ) { return c( points.filter( p => d( p ).startsWith( `${ year }-` ) ) ) },
+      month ( year: number, month: number ) {
+        const prefix = `${ year }-${ String( month ).padStart( 2, '0' ) }-`;
+        return c( points.filter( p => d( p ).startsWith( prefix ) ) );
+      },
     } );
   }
 
