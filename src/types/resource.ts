@@ -70,3 +70,8 @@ export interface TimeSeries< R extends { date: string } > extends Iterable< R > 
   aggregate ( period: AggregatePeriod | ( ( point: R ) => string ) ) : TimeSeries< AggregatePoint< R > >;
   buckets ( count: number ) : TimeSeries< AggregatePoint< R > >;
 }
+
+// --- options ---
+
+export type CsvOptions< D extends readonly unknown[], R extends { date: string } > =
+  | TimeSeriesOptions< D, R >;
