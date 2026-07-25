@@ -1,4 +1,15 @@
-// --- dated resource ---
+// --- indexable resource ---
+
+export type IndexFn< R > = ( path: readonly string[] ) => R;
+
+export type KeysFn = ( value: unknown ) => readonly string[] | null;
+
+export interface IndexOptions< R > {
+  index: IndexFn< R >;
+  keys?: KeysFn;
+}
+
+// --- dateable resource ---
 
 export type DateFn< R > = ( value: string ) => R;
 
