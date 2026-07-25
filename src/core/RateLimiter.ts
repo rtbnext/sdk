@@ -39,4 +39,23 @@ export class RateLimiter {
   private processQueue () : void {
     while ( this.tokens-- > 0 && this.queue.length ) this.queue.shift()?.();
   }
+
+  /**
+   * Handles requests in burst mode.
+   * 
+   * If there are available tokens, the request is processed immediately.
+   * If not, the request is queued and will be processed when tokens are refilled.
+   */
+  public async burst () : Promise< void > {
+    if ( this.tokens > 0 ) return void this.tokens--;
+
+    return new Promise( resolve => {
+      this.queue.push( resolve );
+
+      if ( ! this.spreadTimer ) this.spreadTimer = setTimeout( () => {
+        this.tokens = this.options.maxRequests, this.spreadTimer = null;
+        this.processQueue();
+      }, this.options.perMs );
+    } );
+  }
 }
