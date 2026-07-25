@@ -33,9 +33,7 @@ export class RateLimiter {
     this.tokens = maxRequests;
   }
 
-  /**
-   * Processes the queued requests if there are available tokens.
-   */
+  /** Processes the queued requests if there are available tokens. */
   private processQueue () : void {
     while ( this.tokens-- > 0 && this.queue.length ) this.queue.shift()?.();
   }
