@@ -21,6 +21,22 @@ export class DateableResource< D extends { dates: string[] }, R > extends Resour
     return Object.freeze( {
       *[ Symbol.iterator ]() { for ( const date of dates ) yield self.factory( date ) },
       dates, total, count: dates.length,
+
+      get first () { return f( dates[ 0 ] ) },
+      get last () { return f( dates.at( -1 ) ) },
+
+      find ( date: string ) { return f( dates.find( d => d === date ) ) },
+      year ( year: number ) { return c( dates.filter( d => d.startsWith( `${ year }-` ) ) ) },
+      month ( year: number, month: number ) {
+        const prefix = `${ year }-${ String( month ).padStart( 2, '0' ) }-`;
+        return c( dates.filter( d => d.startsWith( prefix ) ) );
+      },
+
+      before ( date: string ) { return c( dates.filter( d => d < date ) ) },
+      after ( date: string ) { return c( dates.filter( d => d > date ) ) },
+      since ( date: string ) { return c( dates.filter( d => d >= date ) ) },
+      until ( date: string ) { return c( dates.filter( d => d <= date ) ) },
+      between ( from: string, to: string ) { return c( dates.filter( d => d >= from && d <= to ) ) },
     } );
   }
 
