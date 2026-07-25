@@ -3,6 +3,8 @@ import type { ParserFn, ResourceState } from '../types/core';
 
 
 export class Resource< D > {
+  protected readonly hooks = new Map< string, Set< ( self: this ) => void > >();
+
   protected loaded: boolean = false;
   protected loading?: Promise< void >;
   protected state?: ResourceState;
