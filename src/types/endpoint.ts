@@ -4,6 +4,7 @@ import type { TMover } from '@rtbnext/schema/src/model/mover';
 import type { TProfileData, TProfileHistory, TProfileMetaData } from '@rtbnext/schema/src/model/profile';
 import type { TDBStats, TGlobalStats, THistory, TProfileStats, TWealthStats } from '@rtbnext/schema/src/model/stats';
 import type { TStatus } from '@rtbnext/schema/src/model/status';
+import type { CollectableResource } from '../resource/CollectableResource';
 import type { DateableResource } from '../resource/DateableResource';
 import type { Resource } from '../resource/Resource';
 import type { TimeSeriesResource } from '../resource/TimeSeriesResource';
@@ -31,6 +32,7 @@ export interface ProfileResources {
 }
 
 export type ProfileEntity< I extends { uri: string } > = Entity< I, ProfileResources >;
+export type ProfileCollection< D extends { items: I[] }, I extends { uri: string } > = CollectableResource< D, I, ProfileEntity< I > >;
 
 export interface IProfile {}
 

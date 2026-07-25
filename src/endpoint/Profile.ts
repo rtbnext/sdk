@@ -1,5 +1,6 @@
 import type { TProfileHistoryItem } from '@rtbnext/schema/src/model/profile';
-import type { IProfile, ProfileData, ProfileEntity, ProfileHistory, ProfileMeta } from '../types/endpoint';
+import type { IProfile, ProfileCollection, ProfileData, ProfileEntity, ProfileHistory, ProfileMeta } from '../types/endpoint';
+import type { FindFn, SearchFn } from '../types/resource';
 import { Endpoint } from './Endpoint';
 
 
@@ -13,6 +14,12 @@ export class Profile extends Endpoint implements IProfile {
       get data () { return data ??= self.data( item.uri ) },
       get history () { return history ??= self.history( item.uri ) }
     } );
+  }
+
+  private collect < D extends { items: I[] }, I extends { uri: string } > (
+    path: string, find?: FindFn< I >, search?: SearchFn< I >
+  ) : ProfileCollection< D, I > {
+    return this.json( path, { entity: item => this.entity( item ), find, search } );
   }
 
   public meta ( uri: string ) : ProfileMeta {
