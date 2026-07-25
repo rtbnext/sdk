@@ -128,35 +128,57 @@ export type IndexResult< T, R > =
 
 // --- dateable resource ---
 
+/** A function that maps a string date to a resource. */
 export type DateFn< R > = ( value: string ) => R;
 
+/** Options for date-indexed resources. */
 export interface DateOptions< R > {
+  /** Builds a resource for the given date. */
   date: DateFn< R >;
 }
 
+/** A date-indexed collection of resources. */
 export interface Dates< R > extends Iterable< R > {
+  /** The list of available date strings. */
   readonly dates: string[];
+  /** The total number of date entries available. */
   readonly total: number;
+  /** The number of entries in the current view. */
   readonly count: number;
 
+  /** The first date entry. */
   readonly first: R | null;
+  /** The last date entry. */
   readonly last: R | null;
 
+  /** Find an entry by date string. */
   find ( date: string ) : R | null;
+  /** Get the entries for a full year. */
   year ( year: number ) : Dates< R >;
+  /** Get the entries for a specific month. */
   month ( year: number, month: number ) : Dates< R >;
 
+  /** Get entries before the specified date. */
   before ( date: string ) : Dates< R >;
+  /** Get entries after the specified date. */
   after ( date: string ) : Dates< R >;
+  /** Get entries since the specified date. */
   since ( date: string ) : Dates< R >;
+  /** Get entries until the specified date. */
   until ( date: string ) : Dates< R >;
+  /** Get entries between two dates. */
   between ( from: string, to: string ) : Dates< R >;
 
+  /** Convert dates to an array of resources. */
   toArray () : R[];
+  /** Map each dated resource to a new value. */
   map < T > ( callback: ( item: R, index: number ) => T ) : T[];
 
+  /** Take the first count date entries. */
   take ( count: number ) : Dates< R >;
+  /** Skip the first count date entries. */
   skip ( count: number ) : Dates< R >;
+  /** Slice a range of date entries. */
   slice ( start?: number, end?: number ) : Dates< R >;
 }
 
