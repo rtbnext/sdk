@@ -6,6 +6,8 @@ export interface DateOptions< R > {
   date: DateFn< R >;
 }
 
+export interface Dates< R > extends Iterable< R > {}
+
 // --- time series resource ---
 
 export type PointFn< D extends readonly unknown[], R extends { date: string } > = ( row: D[ number ] ) => R;
