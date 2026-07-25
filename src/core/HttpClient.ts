@@ -36,4 +36,20 @@ export class HttpClient {
 
     return { signal: AbortSignal.timeout( options?.timeout ?? this.options.timeout ), headers };
   }
+
+  private async execute ( url: URL, options?: RequestOptions ) : Promise< HttpResponse > {
+    await this.limiter[ options?.mode ?? 'spread' ]();
+
+    try {
+      const start = performance.now();
+      const res = await fetch( url, this.requestInit( options ) );
+      const latency = Math.round( performance.now() - start );
+      const body = new Uint8Array( await res.arrayBuffer() );
+
+      return { url, ok: res.ok, status: res.status, body, headers: res.headers, latency };
+    } catch ( err ) {
+      console.error( 'Fetch error:', err );
+      throw new Error( 'Fetch failed' );
+    }
+  }
 }
