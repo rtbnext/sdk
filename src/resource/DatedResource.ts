@@ -23,4 +23,8 @@ export class DateableResource< D extends { dates: string[] }, R > extends Resour
       dates, total, count: dates.length,
     } );
   }
+
+  public get () : Promise< Dates< R > > {
+    return this.transform( data => this.collectDates( data.dates.toReversed() ) );
+  }
 }

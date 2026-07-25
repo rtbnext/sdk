@@ -46,9 +46,7 @@ export interface TimeSeries< R extends { date: string } > extends Iterable< R > 
   readonly first: R | null;
   readonly last: R | null;
 
-  get ( date: string ) : R | null;
   find ( date: string ) : R | null;
-
   year ( year: number ) : TimeSeries< R >;
   month ( year: number, month: number ) : TimeSeries< R >;
 
