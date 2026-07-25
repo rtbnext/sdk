@@ -1,14 +1,36 @@
 import type { TIndustry } from '@rtbnext/schema/src/base/const';
 import type { TSnapshotIndex } from '@rtbnext/schema/src/base/generic';
 import type { TMover } from '@rtbnext/schema/src/model/mover';
+import type { TProfileData, TProfileHistory, TProfileMetaData } from '@rtbnext/schema/src/model/profile';
 import type { TDBStats, TGlobalStats, THistory, TProfileStats, TWealthStats } from '@rtbnext/schema/src/model/stats';
 import type { TStatus } from '@rtbnext/schema/src/model/status';
 import type { DateableResource } from '../resource/DateableResource';
 import type { Resource } from '../resource/Resource';
 import type { TimeSeriesResource } from '../resource/TimeSeriesResource';
+import type { Entity } from './resource';
 
 
 // --- profile ---
+
+export interface ProfileHistoryPoint {
+  date: string;
+  rank: number;
+  networth: number;
+  change: number;
+  changePct: number;
+}
+
+export type ProfileMeta = Resource< TProfileMetaData >;
+export type ProfileData = Resource< TProfileData >;
+export type ProfileHistory = TimeSeriesResource< TProfileHistory, ProfileHistoryPoint >;
+
+export interface ProfileResources {
+  readonly meta: ProfileMeta;
+  readonly data: ProfileData;
+  readonly history: ProfileHistory;
+}
+
+export type ProfileEntity< I extends { uri: string } > = Entity< I, ProfileResources >;
 
 export interface IProfile {}
 
