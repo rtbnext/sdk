@@ -61,7 +61,12 @@ export class TimeSeriesResource< D extends readonly unknown[], R extends { date:
     const d = ( point: T ) => String( point.date );
     const n = ( cb?: ( point: T ) => number ) => points.map( cb ?? ( p => Number( p ) ) );
 
-    return Object.freeze( {} );
+    return Object.freeze( {
+      points, total, count: points.length,
+
+      get first () { return points[ 0 ] ?? null },
+      get last () { return points.at( -1 ) ?? null },
+    } );
   }
 
   public series () : Promise< TimeSeries< R > > {
