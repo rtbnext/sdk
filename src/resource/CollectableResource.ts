@@ -1,6 +1,6 @@
 import { ResourceLoader } from '../core/ResourceLoader';
 import { ParserFn } from '../types/core';
-import type { CollectOptions, Entity, EntityFn, SearchFn } from '../types/resource';
+import type { Collection, CollectOptions, Entity, EntityFn, SearchFn } from '../types/resource';
 import { Resource } from './Resource';
 
 
@@ -15,5 +15,19 @@ export class CollectableResource< D extends { items: I[] }, I extends { uri: str
     super( path, loader, parser );
     this.entity = options.entity;
     this.search = options.search ?? defaultSearch;
+  }
+
+  private collectItems ( items: E[], total: number = items.length ) : Collection< I > {
+    const s = this.search;
+    const c = ( items: E[], t: number = total ) => this.collectItems( items, t );
+    let idx = -1;
+
+    return Object.freeze( {} );
+  }
+
+  public get () : Promise< Collection< I > > {
+    return this.transform( data => this.collectItems(
+      data.items.map( i => this.entity( i ) )
+    ) );
   }
 }
