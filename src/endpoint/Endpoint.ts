@@ -14,12 +14,27 @@ import type {
 } from '../types/resource';
 
 
+/**
+ * Abstract base class for SDK endpoint implementations.
+ * 
+ * Provides shared resource factory helpers for text, JSON, CSV, collection, index,
+ * time series, and date resources.
+ */
 export abstract class Endpoint {
+  /**
+   * @param loader - The shared resource loader instance.
+   * @param endpoints - The root endpoint registry for cross-endpoint references.
+   */
   constructor (
     protected readonly loader: ResourceLoader,
     protected readonly endpoints: Endpoints
   ) {}
 
+  /**
+   * Creates a text resource for the given endpoint path.
+   * 
+   * @param path - The resource path to load.
+   */
   protected text ( path: string ) : Resource< string > {
     return new Resource< string >( path, this.loader, TextParser.parse );
   }
@@ -31,6 +46,12 @@ export abstract class Endpoint {
   protected json < D extends { dates: string[] }, R > ( path: string, options: DateOptions< R > ) : DateableResource< D, R >;
   protected json < D, R > ( path: string, options: IndexOptions< R > ) : IndexableResource< D, R >;
 
+  /**
+   * Creates a JSON-backed resource using the appropriate resource wrapper.
+   * 
+   * @param path - The resource path to load.
+   * @param options - Optional resource options for collection, indexing, or dates.
+   */
   protected json ( path: string, options?: JsonOptions< any, any, any, any > ) {
     const parser = JsonParser.parse;
 
@@ -47,6 +68,12 @@ export abstract class Endpoint {
     path: string, options: TimeSeriesOptions< D, R >
   ) : TimeSeriesResource< D, R >;
 
+  /**
+   * Creates a CSV-backed resource using the appropriate resource wrapper.
+   * 
+   * @param path - The resource path to load.
+   * @param options - Optional time-series options.
+   */
   protected csv ( path: string, options?: CsvOptions< any, any > ) {
     const parser = CsvParser.parse;
 
