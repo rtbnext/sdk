@@ -21,7 +21,6 @@ export class MemoryCache implements Cache {
    * Retrieves a resource state from the cache by its key.
    * 
    * @param key - The key associated with the cached resource.
-   * @returns A promise that resolves to the cached `ResourceState` or `null` if key not exists.
    */
   public async get ( key: string ) : Promise< ResourceState | null > {
     return this.cache.get( key ) ?? null;
@@ -33,7 +32,6 @@ export class MemoryCache implements Cache {
    * 
    * @param key - The key to associate with the cached resource.
    * @param value - The `ResourceState` to store in the cache.
-   * @returns A promise that resolves when the operation is complete.
    */
   public async set ( key: string, value: ResourceState ) : Promise< void > {
     this.cache.set( key, value );
@@ -43,17 +41,12 @@ export class MemoryCache implements Cache {
    * Deletes a resource state from the cache by its key.
    * 
    * @param key - The key associated with the cached resource to delete.
-   * @returns A promise that resolves when the operation is complete.
    */
   public async delete ( key: string ) : Promise< void > {
     this.cache.delete( key );
   }
 
-  /**
-   * Clears all resource states from the cache.
-   * 
-   * @returns A promise that resolves when the operation is complete.
-   */
+  /** Clears all resource states from the cache. */
   public async clear () : Promise< void > {
     this.cache.clear();
   }
