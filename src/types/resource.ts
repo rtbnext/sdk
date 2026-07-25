@@ -2,6 +2,15 @@
 
 export type Entity< I, T = unknown > = Readonly< I & { uri: string } & T >;
 
+export type EntityFn< I extends { uri: string }, E extends Entity< I > > = ( data: I ) => E;
+
+export type CollectOptions< I extends { uri: string }, E extends Entity< I > > = {
+  entity: EntityFn< I, E >;
+  search?: SearchFn< I >;
+};
+
+export type SearchFn< I > = ( item: Entity< I >, query: string, terms: string[] ) => boolean;
+
 export interface Collection< I extends { uri: string } > extends Iterable< I > {
   readonly items: Entity< I >[];
   readonly total: number;
@@ -175,7 +184,8 @@ export interface TimeSeries< R extends { date: string } > extends Iterable< R > 
 
 // --- options ---
 
-export type JsonOptions< R, D > =
+export type JsonOptions< I extends { uri: string }, E extends Entity< I >, R, D > =
+  | CollectOptions< I, E >
   | IndexOptions< R >
   | DateOptions< D >;
 
