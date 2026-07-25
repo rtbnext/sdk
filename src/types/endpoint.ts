@@ -34,6 +34,17 @@ export type GlobalStats = Resource< TGlobalStats >;
 export type ProfileStats = Resource< TProfileStats >;
 export type WealthStats = Resource< TWealthStats >;
 
+export interface IStats {
+  readonly db: DBStats;
+  readonly global: GlobalStats;
+  readonly profile: ProfileStats;
+  readonly wealth: WealthStats;
+}
+
 // --- system ---
 
 export type SystemStatus = Resource< TStatus >;
+
+export interface ISystem {
+  readonly status: SystemStatus;
+}
