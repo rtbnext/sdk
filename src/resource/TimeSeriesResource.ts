@@ -1,6 +1,6 @@
 import type { ResourceLoader } from '../core/ResourceLoader';
 import type { ParserFn } from '../types/core';
-import type { AggregatePeriod, AggregatePoint, PointFn, TimeSeriesOptions } from '../types/resource';
+import type { AggregatePeriod, AggregatePoint, PointFn, TimeSeries, TimeSeriesOptions } from '../types/resource';
 import { Resource } from './Resource';
 
 
@@ -52,5 +52,21 @@ export class TimeSeriesResource< D extends readonly unknown[], R extends { date:
     }
 
     return result;
+  }
+
+  private createSeries < T extends { date: string } > ( points: T[], total: number = points.length ) : TimeSeries< T > {
+    const self = this;
+
+    const c = < U extends { date: string } >( points: U[] ) => self.createSeries( points, total );
+    const d = ( point: T ) => String( point.date );
+    const n = ( cb?: ( point: T ) => number ) => points.map( cb ?? ( p => Number( p ) ) );
+
+    return Object.freeze( {} );
+  }
+
+  public series () : Promise< TimeSeries< R > > {
+    return this.transform( data => this.createSeries(
+      [ ...data ].reverse().map( row => this.factory( row ) )
+    ) );
   }
 }
