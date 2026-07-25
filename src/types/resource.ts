@@ -27,3 +27,44 @@ export type AggregatePoint< R extends { date: string } > = {
     to: string;
   };
 };
+
+export interface TimeSeries< R extends { date: string } > extends Iterable< R > {
+  readonly points: R[];
+  readonly total: number;
+  readonly count: number;
+
+  readonly first: R | null;
+  readonly last: R | null;
+
+  get ( date: string ) : R | null;
+  find ( date: string ) : R | null;
+
+  year ( year: number ) : TimeSeries< R >;
+  month ( year: number, month: number ) : TimeSeries< R >;
+
+  before ( date: string ) : TimeSeries< R >;
+  after ( date: string ) : TimeSeries< R >;
+  since ( date: string ) : TimeSeries< R >;
+  until ( date: string ) : TimeSeries< R >;
+  between ( from: string, to: string ) : TimeSeries< R >;
+
+  readonly toArray: R[];
+  map < T > ( callback: ( item: R, index: number ) => T ) : T[];
+
+  take ( count: number ) : TimeSeries< R >;
+  skip ( count: number ) : TimeSeries< R >;
+  slice ( start?: number, end?: number ) : TimeSeries< R >;
+
+  min ( callback?: ( point: R ) => number ) : number;
+  max ( callback?: ( point: R ) => number ) : number;
+  avg ( callback?: ( point: R ) => number ) : number;
+  median ( callback?: ( point: R ) => number ) : number;
+
+  readonly labels: string[];
+  readonly columns: Record< keyof R, unknown[] >;
+  values ( callback: ( point: R ) => number ) : number[];
+  column < K extends keyof R > ( key: K ) : R[ K ][];
+
+  aggregate ( period: AggregatePeriod | ( ( point: R ) => string ) ) : TimeSeries< AggregatePoint< R > >;
+  buckets ( count: number ) : TimeSeries< AggregatePoint< R > >;
+}
