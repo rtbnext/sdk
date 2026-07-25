@@ -43,5 +43,14 @@ export class RTBNext {
     this.resourceLoader = ResourceLoader.getInstance( this.httpClient, {
       ...DEFAULT_OPTIONS.cache, ...options.cache
     } );
+
+    const endpoints = {} as Endpoints;
+
+    this.profile = new Profile( this.resourceLoader, endpoints );
+    this.list = new List( this.resourceLoader, endpoints );
+    this.mover = new Mover( this.resourceLoader, endpoints );
+    this.filter = new Filter( this.resourceLoader, endpoints );
+    this.stats = new Stats( this.resourceLoader, endpoints );
+    this.system = new System( this.resourceLoader, endpoints );
   }
 }
