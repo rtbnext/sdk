@@ -1,4 +1,4 @@
-import type { TIndustry } from '@rtbnext/schema/src/base/const';
+import type { TAgeGroup, TGender, TIndustry, TMaritalStatus } from '@rtbnext/schema/src/base/const';
 import type { TSnapshotIndex } from '@rtbnext/schema/src/base/generic';
 import type { TFilter, TFilterItem } from '@rtbnext/schema/src/model/filter';
 import type { TMover } from '@rtbnext/schema/src/model/mover';
@@ -67,7 +67,20 @@ export interface IMover {
 export type FilterCollection = CollectableResource< TFilter, TFilterItem, ProfileEntity< TFilterItem > >;
 export type FilterIndex = IndexableResource< TFilter, FilterCollection >;
 
-export interface IFilter {}
+export interface IFilter {
+  readonly deceased: FilterCollection;
+  readonly dropOff: FilterCollection;
+  readonly family: FilterCollection;
+  readonly selfMade: FilterCollection;
+  industry ( industry: TIndustry ) : FilterCollection;
+  age ( ageGroup: TAgeGroup ) : FilterCollection;
+  gender ( gender: TGender ) : FilterCollection;
+  maritalStatus ( maritalStatus: TMaritalStatus ) : FilterCollection;
+  citizenship ( isoCode: string ) : FilterCollection;
+  country ( isoCode: string ) : FilterCollection;
+  state ( uspsCode: string ) : FilterCollection;
+  readonly index: FilterIndex;
+}
 
 // --- stats ---
 
