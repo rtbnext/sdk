@@ -16,5 +16,17 @@ export class RTBNext {
   public readonly httpClient: HttpClient;
   public readonly resourceLoader: ResourceLoader;
 
-  constructor ( options: RTBNextOptions ) {}
+  constructor ( options: RTBNextOptions ) {
+    this.httpClient = new HttpClient( {
+      baseUrl: options.baseUrl ?? DEFAULT_OPTIONS.baseUrl,
+      sdkVersion: DEFAULT_OPTIONS.sdkVersion,
+      client: options.client,
+      limiter: DEFAULT_OPTIONS.limiter,
+      timeout: options.httpTimeout ?? DEFAULT_OPTIONS.httpTimeout
+    } );
+
+    this.resourceLoader = ResourceLoader.getInstance( this.httpClient, {
+      ...DEFAULT_OPTIONS.cache, ...options.cache
+    } );
+  }
 }
