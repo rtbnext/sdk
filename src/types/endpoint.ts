@@ -1,31 +1,23 @@
 import type { TDBStats, TGlobalStats, TProfileStats, TWealthStats } from '@rtbnext/schema/src/model/stats';
 import type { TStatus } from '@rtbnext/schema/src/model/status';
-import type { Filter } from '../endpoint/Filter';
-import type { List } from '../endpoint/List';
-import type { Mover } from '../endpoint/Mover';
-import type { Profile } from '../endpoint/Profile';
-import type { Stats } from '../endpoint/Stats';
-import type { System } from '../endpoint/System';
 import type { Resource } from '../resource/Resource';
 
 
-// --- endpoints ---
+// --- profile ---
 
-/** Endpoints available in the RTBNext SDK. */
-export interface Endpoints {
-  /** The Profile endpoint. */
-  profile: Profile;
-  /** The List endpoint. */
-  list: List;
-  /** The Mover endpoint. */
-  mover: Mover;
-  /** The Filter endpoint. */
-  filter: Filter;
-  /** The Stats endpoint. */
-  stats: Stats;
-  /** The System endpoint. */
-  system: System;
-}
+export interface IProfile {}
+
+// --- list ---
+
+export interface IList {}
+
+// --- mover ---
+
+export interface IMover {}
+
+// --- filter ---
+
+export interface IFilter {}
 
 // --- stats ---
 
@@ -47,4 +39,22 @@ export type SystemStatus = Resource< TStatus >;
 
 export interface ISystem {
   readonly status: SystemStatus;
+}
+
+// --- endpoints ---
+
+/** Endpoints available in the RTBNext SDK. */
+export interface Endpoints {
+  /** The Profile endpoint. */
+  profile: IProfile;
+  /** The List endpoint. */
+  list: IList;
+  /** The Mover endpoint. */
+  mover: IMover;
+  /** The Filter endpoint. */
+  filter: IFilter;
+  /** The Stats endpoint. */
+  stats: IStats;
+  /** The System endpoint. */
+  system: ISystem;
 }
