@@ -25,6 +25,10 @@ export class Profile extends Endpoint implements IProfile {
     return this.json( path, { entity: item => this.entity( item ), find, search } );
   }
 
+  public get use () {
+    return { entity: this.entity.bind( this ), collect: this.collect.bind( this ) }
+  }
+
   public meta ( uri: string ) : ProfileMeta {
     return this.json( `v2/profile/${ uri }/meta.json` );
   }
