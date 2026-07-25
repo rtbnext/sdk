@@ -83,7 +83,7 @@ export class TimeSeriesResource< D extends readonly unknown[], R extends { date:
         const date = d( p ); return date >= from && date <= to;
       } ) ) },
 
-      get toArray () { return [ ...points ] },
+      toArray () { return [ ...points ] },
       map < U > ( callback: ( item: T, index: number ) => U ) { return points.map( callback ) },
 
       take ( count: number ) { return c( points.slice( 0, count ) ) },

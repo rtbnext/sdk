@@ -24,7 +24,7 @@ export interface Dates< R > extends Iterable< R > {
   until ( date: string ) : Dates< R >;
   between ( from: string, to: string ) : Dates< R >;
 
-  readonly toArray: R[];
+  toArray () : R[];
   map < T > ( callback: ( item: R, index: number ) => T ) : T[];
 
   take ( count: number ) : Dates< R >;
@@ -80,7 +80,7 @@ export interface TimeSeries< R extends { date: string } > extends Iterable< R > 
   until ( date: string ) : TimeSeries< R >;
   between ( from: string, to: string ) : TimeSeries< R >;
 
-  readonly toArray: R[];
+  toArray () : R[];
   map < T > ( callback: ( item: R, index: number ) => T ) : T[];
 
   take ( count: number ) : TimeSeries< R >;

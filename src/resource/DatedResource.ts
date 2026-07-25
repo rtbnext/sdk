@@ -38,7 +38,7 @@ export class DateableResource< D extends { dates: string[] }, R > extends Resour
       until ( date: string ) { return c( dates.filter( d => d <= date ) ) },
       between ( from: string, to: string ) { return c( dates.filter( d => d >= from && d <= to ) ) },
 
-      get toArray () { return dates.map( self.factory ) },
+      toArray () { return dates.map( self.factory ) },
       map < T > ( callback: ( item: R, index: number ) => T ) {
         return dates.map( ( d, i ) => callback( self.factory( d ), i ) );
       },
