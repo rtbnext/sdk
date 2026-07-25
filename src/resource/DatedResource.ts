@@ -50,6 +50,6 @@ export class DateableResource< D extends { dates: string[] }, R > extends Resour
   }
 
   public get () : Promise< Dates< R > > {
-    return this.transform( data => this.collectDates( data.dates.toReversed() ) );
+    return this.transform( data => this.collectDates( [ ...data.dates ].reverse() ) );
   }
 }
