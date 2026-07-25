@@ -58,6 +58,29 @@ export class CollectableResource< D extends { items: I[] }, I extends { uri: str
         const terms = sanitize( query, ' ' ).split( ' ' );
         return c( items.filter( i => s( i, query, terms ) ) );
       },
+
+      intersect ( other: Collection< I > ) {
+        const set = new Set( other.map( i => i.uri ) );
+        return c( items.filter( i => set.has( i.uri ) ) );
+      },
+
+      exclude ( other: Collection< I > ) {
+        const set = new Set( other.map( i => i.uri ) );
+        return c( items.filter( i => ! set.has( i.uri ) ) );
+      },
+
+      union ( other: Collection< I > ) {
+        const seen = new Set< string >(), merged: E[] = [];
+
+        for ( const item of [ ...items, ...other.items ] ) {
+          if ( ! seen.has( item.uri ) ) {
+            seen.add( item.uri );
+            merged.push( item as E );
+          }
+        }
+
+        return c( merged );
+      },
     } );
   }
 
