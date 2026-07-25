@@ -2,6 +2,7 @@ import type { ResourceLoader } from '../core/ResourceLoader';
 import type { ParserFn } from '../types/core';
 import type { DateFn, DateOptions, Dates } from '../types/resource';
 import { Resource } from './Resource';
+import { rangeMethods, sliceMethods, yearMonthMethods } from './helpers';
 
 
 export class DateableResource< D extends { dates: string[] }, R > extends Resource< D > {
@@ -26,26 +27,14 @@ export class DateableResource< D extends { dates: string[] }, R > extends Resour
       get last () { return f( dates.at( -1 ) ) },
 
       find ( date: string ) { return f( dates.find( d => d === date ) ) },
-      year ( year: number ) { return c( dates.filter( d => d.startsWith( `${ year }-` ) ) ) },
-      month ( year: number, month: number ) {
-        const prefix = `${ year }-${ String( month ).padStart( 2, '0' ) }-`;
-        return c( dates.filter( d => d.startsWith( prefix ) ) );
-      },
-
-      before ( date: string ) { return c( dates.filter( d => d < date ) ) },
-      after ( date: string ) { return c( dates.filter( d => d > date ) ) },
-      since ( date: string ) { return c( dates.filter( d => d >= date ) ) },
-      until ( date: string ) { return c( dates.filter( d => d <= date ) ) },
-      between ( from: string, to: string ) { return c( dates.filter( d => d >= from && d <= to ) ) },
-
       toArray () { return dates.map( self.factory ) },
       map < T > ( callback: ( item: R, index: number ) => T ) {
         return dates.map( ( d, i ) => callback( self.factory( d ), i ) );
       },
 
-      take ( count: number ) { return c( dates.slice( 0, count ) ) },
-      skip ( count: number ) { return c( dates.slice( count ) ) },
-      slice ( start?: number, end?: number ) { return c( dates.slice( start, end ) ) }
+      ...sliceMethods( dates, c ),
+      ...yearMonthMethods( dates, c, d => d ),
+      ...rangeMethods( dates, c, d => d )
     } );
   }
 

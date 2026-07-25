@@ -3,6 +3,7 @@ import type { ParserFn } from '../types/core';
 import type { Collection, CollectOptions, Entity, EntityFn, FindFn, SearchFn } from '../types/resource';
 import { sanitize } from '../utils';
 import { Resource } from './Resource';
+import { sliceMethods } from './helpers';
 
 
 const defaultFind: FindFn< any > = ( items, uriLike ) => {
@@ -115,9 +116,7 @@ export class CollectableResource< D extends { items: I[] }, I extends { uri: str
       toArray () { return [ ...items ] },
       map < R > ( callback: ( item: E, index: number ) => R ) { return items.map( callback ) },
 
-      take ( count: number ) { return c( items.slice( 0, count ) ) },
-      skip ( count: number ) { return c( items.slice( count ) ) },
-      slice ( start?: number, end?: number ) { return c( items.slice( start, end ) ) },
+      ...sliceMethods( items, c ),
 
       page ( page: number, perPage: number = 10 ) {
         const start = ( page - 1 ) * perPage, end = start + perPage;

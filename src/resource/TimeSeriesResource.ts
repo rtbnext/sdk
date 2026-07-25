@@ -2,6 +2,7 @@ import type { ResourceLoader } from '../core/ResourceLoader';
 import type { ParserFn } from '../types/core';
 import type { AggregatePeriod, AggregatePoint, PointFn, TimeSeries, TimeSeriesOptions } from '../types/resource';
 import { Resource } from './Resource';
+import { rangeMethods, sliceMethods, yearMonthMethods } from './helpers';
 
 
 export class TimeSeriesResource< D extends readonly unknown[], R extends { date: string } > extends Resource< D > {
@@ -69,26 +70,12 @@ export class TimeSeriesResource< D extends readonly unknown[], R extends { date:
       get last () { return points.at( -1 ) ?? null },
 
       find ( date: string ) { return points.find( p => d( p ) === date ) ?? null },
-      year ( year: number ) { return c( points.filter( p => d( p ).startsWith( `${ year }-` ) ) ) },
-      month ( year: number, month: number ) {
-        const prefix = `${ year }-${ String( month ).padStart( 2, '0' ) }-`;
-        return c( points.filter( p => d( p ).startsWith( prefix ) ) );
-      },
-
-      before ( date: string ) { return c( points.filter( p => d( p ) < date ) ) },
-      after ( date: string ) { return c( points.filter( p => d( p ) > date ) ) },
-      since ( date: string ) { return c( points.filter( p => d( p ) >= date ) ) },
-      until ( date: string ) { return c( points.filter( p => d( p ) <= date ) ) },
-      between ( from: string, to: string ) { return c( points.filter( p => {
-        const date = d( p ); return date >= from && date <= to;
-      } ) ) },
-
       toArray () { return [ ...points ] },
       map < U > ( callback: ( item: T, index: number ) => U ) { return points.map( callback ) },
 
-      take ( count: number ) { return c( points.slice( 0, count ) ) },
-      skip ( count: number ) { return c( points.slice( count ) ) },
-      slice ( start?: number, end?: number ) { return c( points.slice( start, end ) ) },
+      ...sliceMethods( points, c ),
+      ...yearMonthMethods( points, c, d ),
+      ...rangeMethods( points, c, d ),
 
       min ( callback?: ( point: T ) => number ) { return Math.min( ...n( callback ) ) },
       max ( callback?: ( point: T ) => number ) { return Math.max( ...n( callback ) ) },
