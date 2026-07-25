@@ -7,7 +7,7 @@ import { Profile } from './endpoint/Profile';
 import { Stats } from './endpoint/Stats';
 import { System } from './endpoint/System';
 import type { RTBNextOptions } from './types/core';
-import type { Endpoints } from './types/endpoint';
+import type { Endpoints, IFilter, IList, IMover, IProfile, IStats, ISystem } from './types/endpoint';
 
 
 /** Default configuration options for the RTBNext SDK. */
@@ -35,17 +35,17 @@ export class RTBNext {
   public readonly endpoints: Endpoints;
 
   /** The Profile endpoint. */
-  public readonly profile: Profile;
+  public readonly profile: IProfile;
   /** The List endpoint. */
-  public readonly list: List;
+  public readonly list: IList;
   /** The Mover endpoint. */
-  public readonly mover: Mover;
+  public readonly mover: IMover;
   /** The Filter endpoint. */
-  public readonly filter: Filter;
+  public readonly filter: IFilter;
   /** The Stats endpoint. */
-  public readonly stats: Stats;
+  public readonly stats: IStats;
   /** The System endpoint. */
-  public readonly system: System;
+  public readonly system: ISystem;
 
   /**
    * Creates a new RTBNext SDK instance.
