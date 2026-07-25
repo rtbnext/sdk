@@ -52,5 +52,14 @@ export class RTBNext {
     this.filter = new Filter( this.resourceLoader, endpoints );
     this.stats = new Stats( this.resourceLoader, endpoints );
     this.system = new System( this.resourceLoader, endpoints );
+
+    endpoints.profile = this.profile;
+    endpoints.list = this.list;
+    endpoints.mover = this.mover;
+    endpoints.filter = this.filter;
+    endpoints.stats = this.stats;
+    endpoints.system = this.system;
+
+    this.endpoints = Object.freeze( endpoints );
   }
 }
