@@ -4,6 +4,16 @@ import type { IndexFn, IndexOptions, KeysFn } from '../types/resource';
 import { Resource } from './Resource';
 
 
+const defaultKeys: KeysFn = value => {
+  if ( Array.isArray( value ) ) return value.map( String );
+
+  if ( value && typeof value === 'object' && 'items' in value && value.items && typeof value.items === 'object' )
+    return Object.keys( value.items as object );
+
+  return null;
+};
+
+
 export class IndexableResource< D, R > extends Resource< D > {
   private readonly factory: IndexFn< R >;
   private readonly keys: KeysFn;
