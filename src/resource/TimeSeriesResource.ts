@@ -118,6 +118,33 @@ export class TimeSeriesResource< D extends readonly unknown[], R extends { date:
 
       values ( callback: ( point: T ) => number ) { return points.map( callback ) },
       column < K extends keyof T > ( key: K ) { return points.map( p => p[ key ] ) },
+
+      aggregate ( period: AggregatePeriod | ( ( point: T ) => string ) ) {
+        const groups = new Map< string, T[] >();
+
+        for ( const point of points ) {
+          const key = typeof period === 'function' ? period( point ) : self.period( point.date, period );
+          ( groups.get( key ) ?? groups.set( key, [] ).get( key )! ).push( point );
+        }
+
+        return c( [ ...groups.entries() ].map( ( [ label, group ] ) => self.aggregate( group, label ) ) );
+      },
+
+      buckets ( count: number ) {
+        if ( count >= points.length ) return c( points.map( ( p, i ) =>
+          self.aggregate( [ p ], `${ i + 1 }/${ points.length }` )
+        ) );
+
+        const size = points.length / count;
+        const result: AggregatePoint< T >[] = [];
+
+        for ( let i = 0; i < count; i++ ) {
+          const start = Math.floor( i * size ), end = Math.floor( ( i + 1 ) * size );
+          result.push( self.aggregate( points.slice( start, end ), `${ i + 1 }/${ count }` ) );
+        }
+
+        return c( result );
+      },
     } );
   }
 
