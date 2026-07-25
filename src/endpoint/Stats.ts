@@ -5,6 +5,7 @@ import type {
   StatsGroup, StatsHistory, WealthStats
 } from '../types/endpoint';
 import { Endpoint } from './Endpoint';
+import { profileProvider } from './Profile';
 
 
 export class Stats extends Endpoint implements IStats {
@@ -33,7 +34,7 @@ export class Stats extends Endpoint implements IStats {
   }
 
   public get scatter () : Scatter {
-    return ( this.endpoints.profile as any ).use.collect( 'v2/stats/scatter.json' );
+    return profileProvider( this.endpoints.profile ).collect( 'v2/stats/scatter.json' );
   }
 
   public get wealth () : WealthStats {

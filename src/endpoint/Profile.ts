@@ -7,7 +7,20 @@ import type { FindFn, SearchFn } from '../types/resource';
 import { Endpoint } from './Endpoint';
 
 
-export class Profile extends Endpoint implements IProfile {
+interface ProfileProvider {
+  readonly use: {
+    entity: Profile[ 'entity' ];
+    collect: Profile[ 'collect' ];
+    point: Profile[ 'point' ];
+  };
+}
+
+
+export const profileProvider = ( p: IProfile ) : ProfileProvider[ 'use' ] =>
+  ( p as IProfile & ProfileProvider ).use;
+
+
+export class Profile extends Endpoint implements IProfile, ProfileProvider {
   protected entity < I extends { uri: string } > ( item: I ) : ProfileEntity< I > {
     let meta: ProfileMeta, data: ProfileData, history: ProfileHistory;
     const self = this;
