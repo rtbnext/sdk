@@ -1,6 +1,13 @@
 import { HttpClient } from './core/HttpClient';
 import { ResourceLoader } from './core/ResourceLoader';
+import { Filter } from './endpoint/Filter';
+import { List } from './endpoint/List';
+import { Mover } from './endpoint/Mover';
+import { Profile } from './endpoint/Profile';
+import { Stats } from './endpoint/Stats';
+import { System } from './endpoint/System';
 import type { RTBNextOptions } from './types/core';
+import type { Endpoints } from './types/endpoint';
 
 
 const DEFAULT_OPTIONS = {
@@ -15,6 +22,14 @@ const DEFAULT_OPTIONS = {
 export class RTBNext {
   public readonly httpClient: HttpClient;
   public readonly resourceLoader: ResourceLoader;
+  public readonly endpoints: Endpoints;
+
+  public readonly profile: Profile;
+  public readonly list: List;
+  public readonly mover: Mover;
+  public readonly filter: Filter;
+  public readonly stats: Stats;
+  public readonly system: System;
 
   constructor ( options: RTBNextOptions ) {
     this.httpClient = new HttpClient( {
