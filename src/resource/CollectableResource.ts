@@ -6,11 +6,13 @@ import { Resource } from './Resource';
 import { sliceMethods } from './helpers';
 
 
+/** Default URI lookup implementation for collectable resources. */
 const defaultFind: FindFn< any > = ( items, uriLike ) => {
   const uri = sanitize( uriLike );
   return items.find( i => i.uri === uri ) ?? null;
 }
 
+/** Default search implementation for collectable resources. */
 const defaultSearch: SearchFn< any > = ( item, query, terms ) => {
   const name = item.searchName ?? sanitize( item.name ?? '' ), text = item.text ?? '';
 
@@ -21,11 +23,31 @@ const defaultSearch: SearchFn< any > = ( item, query, terms ) => {
 };
 
 
+/**
+ * A resource wrapper for collection-oriented endpoints.
+ * 
+ * This class enables collecting items, searching, filtering, and paging.
+ * 
+ * @template D - The raw data type of the resource, which must include an `items` array.
+ * @template I - The type of individual items in the collection, which must include a `uri` string.
+ * @template E - The entity type that wraps individual items, extending the base `Entity` interface.
+ */
 export class CollectableResource< D extends { items: I[] }, I extends { uri: string }, E extends Entity< I > > extends Resource< D > {
+  /** Converts raw item payloads into collection entity instances. */
   private readonly entity: EntityFn< I, E >;
+  /** Custom item lookup function by URI-like string. */
   private readonly find: FindFn< I >;
+  /** Custom search predicate used by the collection search implementation. */
   private readonly search: SearchFn< I >;
 
+  /**
+   * Creates a new instance of `CollectableResource`.
+   * 
+   * @param path - The resource path relative to the API base URL.
+   * @param loader - The resource loader responsible for fetching and caching the resource.
+   * @param parser - The parser function that converts raw HTTP responses into the expected data type.
+   * @param options - Configuration options for entity conversion, lookup, and search behavior.
+   */
   constructor ( path: string, loader: ResourceLoader, parser: ParserFn< D >, options: CollectOptions< I, E > ) {
     super( path, loader, parser );
 
@@ -34,6 +56,13 @@ export class CollectableResource< D extends { items: I[] }, I extends { uri: str
     this.search = options.search ?? defaultSearch;
   }
 
+  /**
+   * Builds a collection object from the parsed entity list.
+   * 
+   * @param items - The entity items to include in the collection.
+   * @param total - The total number of available items.
+   * @returns A frozen collection instance.
+   */
   private collectItems ( items: E[], total: number = items.length ) : Collection< I > {
     const s = this.search, f = this.find;
     const c = ( items: E[], t: number = total ) => this.collectItems( items, t );
@@ -125,6 +154,11 @@ export class CollectableResource< D extends { items: I[] }, I extends { uri: str
     } );
   }
 
+  /**
+   * Returns the parsed collection as a collection object.
+   * 
+   * @returns A resolved collection instance.
+   */
   public collection () : Promise< Collection< I > > {
     return this.transform( data => this.collectItems(
       data.items.map( i => this.entity( i ) )
