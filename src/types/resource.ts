@@ -1,56 +1,93 @@
 // --- collectable resource ---
 
+/** A normalized entity type for collection items. */
 export type Entity< I extends { uri: string }, T = unknown > = Readonly< I & { uri: string } & T >;
 
+/** A factory function that creates an entity from raw data. */
 export type EntityFn< I extends { uri: string }, E extends Entity< I > > = ( data: I ) => E;
 
+/** A function that finds an item by URI-like string. */
 export type FindFn< I extends { uri: string } > = ( items: I[], uriLike: string ) => I | null;
 
+/** A function that determines whether an item matches search terms. */
 export type SearchFn< I extends { uri: string } > = ( item: Entity< I >, query: string, terms: string[] ) => boolean;
 
+/** Options used when creating a collection resource from raw items. */
 export type CollectOptions< I extends { uri: string }, E extends Entity< I > > = {
+  /** Maps raw item data to an entity instance. */
   entity: EntityFn< I, E >;
+  /** Optional custom URI lookup function. */
   find?: FindFn< I >;
+  /** Optional search predicate for item queries. */
   search?: SearchFn< I >;
 };
 
+/** A collection of entities that can be iterated and queried. */
 export interface Collection< I extends { uri: string } > extends Iterable< I > {
+  /** The collection items as entities. */
   readonly items: Entity< I >[];
+  /** The total number of items across all pages. */
   readonly total: number;
+  /** The number of items in the current page. */
   readonly count: number;
+  /** The current cursor position in the collection. */
   position: number;
 
+  /** The currently selected item, if any. */
   readonly current: Entity< I > | null;
+  /** The first item in the collection. */
   readonly first: Entity< I > | null;
+  /** The last item in the collection. */
   readonly last: Entity< I > | null;
 
+  /** Whether the collection has a next item. */
   readonly hasNext: boolean;
+  /** Whether the collection has a previous item. */
   readonly hasPrev: boolean;
 
+  /** The next item in the collection. */
   readonly next: Entity< I > | null;
+  /** The previous item in the collection. */
   readonly prev: Entity< I > | null;
 
+  /** Get the item at a specific index. */
   at ( index: number ) : Entity< I > | null;
+  /** Get an item by its URI. */
   get ( uri: string ) : Entity< I > | null;
+  /** Filter the collection using a predicate. */
   filter ( predicate: ( item: Entity< I > ) => boolean ) : Collection< I >;
-  find ( uriLike: string ) : Entity< I > | null;
 
+  /** Find an item by URI-like text. */
+  find ( uriLike: string ) : Entity< I > | null;
+  /** Search the collection by query text. */
   search ( query: string ) : Collection< I >;
 
+  /** Return collection items present in both collections. */
   intersect ( other: Collection< I > ) : Collection< I >;
+  /** Return collection items not present in the other collection. */
   exclude ( other: Collection< I > ) : Collection< I >;
+  /** Return collection items present in either collection. */
   union ( other: Collection< I > ) : Collection< I >;
 
+  /** Group collection items by a callback result. */
   groupBy < K > ( callback: ( item: Entity< I > ) => K ) : Map< K, Collection< I > >;
+  /** Order collection items by a key and direction. */
   orderBy ( key: keyof I, dir?: 'asc' | 'desc' ) : Collection< I >;
+  /** Sort collection items with a custom comparison function. */
   sort ( compare: ( a: Entity< I >, b: Entity< I > ) => number ) : Collection< I >;
 
+  /** Convert the collection to an array of entities. */
   toArray () : Entity< I >[];
+  /** Map each entity in the collection to a new value. */
   map < R > ( callback: ( item: Entity< I >, index: number ) => R ) : R[];
 
+  /** Take the first count items from the collection. */
   take ( count: number ) : Collection< I >;
+  /** Skip the first count items in the collection. */
   skip ( count: number ) : Collection< I >;
+  /** Slice a subset of the collection by start and end indexes. */
   slice ( start?: number, end?: number ) : Collection< I >;
+  /** Return a specific page of the collection. */
   page ( page: number, perPage?: number ) : Collection< I >;
 }
 
