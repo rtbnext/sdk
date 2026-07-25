@@ -5,14 +5,38 @@ import { Resource } from './Resource';
 import { rangeMethods, sliceMethods, yearMonthMethods } from './helpers';
 
 
+/**
+ * A resource wrapper for time-series endpoints.
+ * 
+ * This class exposes series data, aggregation, and date-based grouping.
+ * 
+ * @template D - The raw data type of the resource, which must be an array of rows.
+ * @template R - The type of individual time-series points returned by the factory function.
+ */
 export class TimeSeriesResource< D extends readonly unknown[], R extends { date: string } > extends Resource< D > {
+  /** Converts raw rows into typed time-series points. */
   private readonly factory: PointFn< D, R >;
 
+  /**
+   * Creates a new instance of `TimeSeriesResource`.
+   * 
+   * @param path - The resource path relative to the API base URL.
+   * @param loader - The resource loader responsible for fetching and caching the resource.
+   * @param parser - The parser function that converts raw HTTP responses into the expected data type.
+   * @param options - Configuration options for point conversion and time-series behavior.
+   */
   constructor ( path: string, loader: ResourceLoader, parser: ParserFn< D >, options: TimeSeriesOptions< D, R > ) {
     super( path, loader, parser );
     this.factory = options.point;
   }
 
+  /**
+   * Converts a date string into the requested aggregation period key.
+   * 
+   * @param date - The input date string.
+   * @param period - The aggregation period.
+   * @returns The aggregate period key.
+   */
   private period ( date: string, period: AggregatePeriod ) : string {
     const [ y, m, d ] = date.split( '-' ).map( Number );
 
@@ -27,6 +51,13 @@ export class TimeSeriesResource< D extends readonly unknown[], R extends { date:
     throw new Error( `Invalid aggregate period: ${ period }` );
   }
 
+  /**
+   * Aggregates a group of points into a single summary point.
+   * 
+   * @param points - The points to aggregate.
+   * @param label - Optional label for the aggregate point.
+   * @returns The aggregated point.
+   */
   private aggregate < T extends { date: string } > ( points: T[], label?: string ) : AggregatePoint< T > {
     const sorted = [ ...points ].sort( ( a, b ) => a.date.localeCompare( b.date ) );
     const keys = Object.keys( sorted[ 0 ] );
@@ -55,6 +86,13 @@ export class TimeSeriesResource< D extends readonly unknown[], R extends { date:
     return result;
   }
 
+  /**
+   * Builds a time-series object from raw points.
+   * 
+   * @param points - The point records to wrap.
+   * @param total - The total number of points.
+   * @returns A frozen time-series instance.
+   */
   private createSeries < T extends { date: string } > ( points: T[], total: number = points.length ) : TimeSeries< T > {
     const self = this;
 
@@ -134,6 +172,11 @@ export class TimeSeriesResource< D extends readonly unknown[], R extends { date:
     } );
   }
 
+  /**
+   * Returns the parsed time-series data as a typed series.
+   * 
+   * @returns A resolved time-series instance.
+   */
   public series () : Promise< TimeSeries< R > > {
     return this.transform( data => this.createSeries(
       [ ...data ].reverse().map( row => this.factory( row ) )
