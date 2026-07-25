@@ -147,7 +147,7 @@ export class TimeSeriesResource< D extends readonly unknown[], R extends { date:
     } );
   }
 
-  public get () : Promise< TimeSeries< R > > {
+  public series () : Promise< TimeSeries< R > > {
     return this.transform( data => this.createSeries(
       [ ...data ].reverse().map( row => this.factory( row ) )
     ) );
