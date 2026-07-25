@@ -90,6 +90,19 @@ export class TimeSeriesResource< D extends readonly unknown[], R extends { date:
       take ( count: number ) { return c( points.slice( 0, count ) ) },
       skip ( count: number ) { return c( points.slice( count ) ) },
       slice ( start?: number, end?: number ) { return c( points.slice( start, end ) ) },
+
+      min ( callback?: ( point: T ) => number ) { return Math.min( ...n( callback ) ) },
+      max ( callback?: ( point: T ) => number ) { return Math.max( ...n( callback ) ) },
+
+      avg ( callback?: ( point: T ) => number ) {
+        const values = n( callback );
+        return values.reduce( ( a, b ) => a + b, 0 ) / values.length;
+      },
+
+      median ( callback?: ( point: T ) => number ) {
+        const values = n( callback ).sort( ( a, b ) => a - b ), mid = Math.floor( values.length / 2 );
+        return values.length % 2 ? values[ mid ] : ( values[ mid - 1 ] + values[ mid ] ) / 2;
+      },
     } );
   }
 
