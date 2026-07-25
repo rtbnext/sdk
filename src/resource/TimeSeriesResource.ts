@@ -93,6 +93,7 @@ export class TimeSeriesResource< D extends readonly unknown[], R extends { date:
 
       min ( callback?: ( point: T ) => number ) { return Math.min( ...n( callback ) ) },
       max ( callback?: ( point: T ) => number ) { return Math.max( ...n( callback ) ) },
+      sum ( callback?: ( point: T ) => number ) { return n( callback ).reduce( ( a, b ) => a + b, 0 ) },
 
       avg ( callback?: ( point: T ) => number ) {
         const values = n( callback );

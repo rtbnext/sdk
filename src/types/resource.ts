@@ -57,6 +57,7 @@ export interface TimeSeries< R extends { date: string } > extends Iterable< R > 
 
   min ( callback?: ( point: R ) => number ) : number;
   max ( callback?: ( point: R ) => number ) : number;
+  sum ( callback?: ( point: R ) => number ) : number;
   avg ( callback?: ( point: R ) => number ) : number;
   median ( callback?: ( point: R ) => number ) : number;
 
