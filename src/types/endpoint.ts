@@ -1,6 +1,9 @@
 import type { TIndustry } from '@rtbnext/schema/src/base/const';
+import type { TSnapshotIndex } from '@rtbnext/schema/src/base/generic';
+import type { TMover } from '@rtbnext/schema/src/model/mover';
 import type { TDBStats, TGlobalStats, THistory, TProfileStats, TWealthStats } from '@rtbnext/schema/src/model/stats';
 import type { TStatus } from '@rtbnext/schema/src/model/status';
+import type { DateableResource } from '../resource/DatedResource';
 import type { Resource } from '../resource/Resource';
 import type { TimeSeriesResource } from '../resource/TimeSeriesResource';
 
@@ -15,7 +18,13 @@ export interface IList {}
 
 // --- mover ---
 
-export interface IMover {}
+export type MoverSnapshot = Resource< TMover >;
+export type MoverIndex = DateableResource< TSnapshotIndex, MoverSnapshot >;
+
+export interface IMover {
+  snapshot ( date: string ) : MoverSnapshot;
+  readonly index: MoverIndex;
+}
 
 // --- filter ---
 
