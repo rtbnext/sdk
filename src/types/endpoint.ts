@@ -62,7 +62,11 @@ export type ListSnapshot< T extends TListItem & { uri: string } > = CollectableR
 export type ListDateIndex< T extends TListItem & { uri: string } > = DateableResource< TSnapshotIndex, ListSnapshot< T > >;
 export type ListIndex = CollectableResource< TListIndex, TListIndexItem, ListEntity< any > >;
 
-export interface IList {}
+export interface IList {
+  snapshot < T extends TListItem & { uri: string } > ( uri: string, date: string ) : ListSnapshot< T >;
+  get < T extends TListItem & { uri: string } > ( uri: string ) : ListDateIndex< T >;
+  readonly index: ListIndex;
+}
 
 // --- mover ---
 
