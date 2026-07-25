@@ -18,6 +18,10 @@ export class Resource< D > {
     protected readonly parser: ParserFn< D >
   ) {}
 
+  protected transform < R > ( fn: ( data: D ) => Promise< R > | R ) : Promise< R > {
+    return this.data().then( fn );
+  }
+
   protected emit ( ...events: string[] ) : void {
     for ( const event of events ) this.hooks.get( event )?.forEach( handler => handler( this ) );
   }
