@@ -6,7 +6,31 @@ export interface DateOptions< R > {
   date: DateFn< R >;
 }
 
-export interface Dates< R > extends Iterable< R > {}
+export interface Dates< R > extends Iterable< R > {
+  readonly dates: string[];
+  readonly total: number;
+  readonly count: number;
+
+  readonly first: R | null;
+  readonly last: R | null;
+
+  find ( date: string ) : R | null;
+  year ( year: number ) : Dates< R >;
+  month ( year: number, month: number ) : Dates< R >;
+
+  before ( date: string ) : Dates< R >;
+  after ( date: string ) : Dates< R >;
+  since ( date: string ) : Dates< R >;
+  until ( date: string ) : Dates< R >;
+  between ( from: string, to: string ) : Dates< R >;
+
+  readonly toArray: R[];
+  map < T > ( callback: ( item: R, index: number ) => T ) : T[];
+
+  take ( count: number ) : Dates< R >;
+  skip ( count: number ) : Dates< R >;
+  slice ( start?: number, end?: number ) : Dates< R >;
+}
 
 // --- time series resource ---
 
