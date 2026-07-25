@@ -132,7 +132,8 @@ export interface TimeSeries< R extends { date: string } > extends Iterable< R > 
 
 // --- options ---
 
-export type JsonOptions< D > =
+export type JsonOptions< R, D > =
+  | IndexOptions< R >
   | DateOptions< D >;
 
 export type CsvOptions< D extends readonly unknown[], R extends { date: string } > =

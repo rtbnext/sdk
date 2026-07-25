@@ -3,10 +3,11 @@ import { CsvParser } from '../parser/CsvParser';
 import { JsonParser } from '../parser/JsonParser';
 import { TextParser } from '../parser/TextParser';
 import { DateableResource } from '../resource/DatedResource';
+import { IndexableResource } from '../resource/IndexableResource';
 import { Resource } from '../resource/Resource';
 import { TimeSeriesResource } from '../resource/TimeSeriesResource';
 import type { Endpoints } from '../types/endpoint';
-import type { CsvOptions, DateOptions, JsonOptions, TimeSeriesOptions } from '../types/resource';
+import type { CsvOptions, DateOptions, IndexOptions, JsonOptions, TimeSeriesOptions } from '../types/resource';
 
 
 export abstract class Endpoint {
@@ -20,12 +21,14 @@ export abstract class Endpoint {
   }
 
   protected json < D > ( path: string ) : Resource< D >;
+  protected json < D, R > ( path: string, options: IndexOptions< R > ) : IndexableResource< D, R >;
   protected json < D extends { dates: string[] }, R > ( path: string, options: DateOptions< R > ) : DateableResource< D, R >;
 
-  protected json ( path: string, options?: JsonOptions< any > ) {
+  protected json ( path: string, options?: JsonOptions< any, any > ) {
     const parser = JsonParser.parse;
 
     if ( ! options ) return new Resource( path, this.loader, parser );
+    if ( 'index' in options ) return new IndexableResource( path, this.loader, parser, options );
     if ( 'date' in options ) return new DateableResource( path, this.loader, parser, options );
 
     throw new Error( 'Invalid resource options' );
