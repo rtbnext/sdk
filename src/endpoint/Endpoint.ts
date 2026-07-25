@@ -1,1 +1,10 @@
-export abstract class Endpoint {}
+import type { ResourceLoader } from '../core/ResourceLoader';
+import type { Endpoints } from '../types/endpoint';
+
+
+export abstract class Endpoint {
+  constructor (
+    protected readonly loader: ResourceLoader,
+    protected readonly endpoints: Endpoints
+  ) {}
+}
