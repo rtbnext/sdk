@@ -1,6 +1,7 @@
-import { ResourceLoader } from '../core/ResourceLoader';
-import { ParserFn } from '../types/core';
+import type { ResourceLoader } from '../core/ResourceLoader';
+import type { ParserFn } from '../types/core';
 import type { Collection, CollectOptions, Entity, EntityFn, SearchFn } from '../types/resource';
+import { sanitize } from '../utils';
 import { Resource } from './Resource';
 
 
@@ -38,10 +39,29 @@ export class CollectableResource< D extends { items: I[] }, I extends { uri: str
 
       get next () { return items[ ++idx ] ?? null },
       get prev () { return items[ --idx ] ?? null },
+
+      at ( index: number ) { return items[ index ] ?? null },
+      get ( uri: string ) { return items.find( i => i.uri === uri ) ?? null },
+
+      find ( uriLike: string ) {
+        const uri = sanitize( uriLike );
+        return items.find( i => i.uri === uri || (
+          'aliases' in i && Array.isArray( i.aliases ) && i.aliases.includes( uri )
+        ) ) ?? null;
+      },
+
+      filter ( predicate: ( item: E ) => boolean ) {
+        return c( items.filter( predicate ) );
+      },
+
+      search ( query: string ) {
+        const terms = sanitize( query, ' ' ).split( ' ' );
+        return c( items.filter( i => s( i, query, terms ) ) );
+      },
     } );
   }
 
-  public get () : Promise< Collection< I > > {
+  public collection () : Promise< Collection< I > > {
     return this.transform( data => this.collectItems(
       data.items.map( i => this.entity( i ) )
     ) );
