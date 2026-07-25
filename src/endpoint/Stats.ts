@@ -1,8 +1,8 @@
-import type { DBStats, GlobalStats, ProfileStats, WealthStats } from '../types/endpoint';
+import type { DBStats, GlobalStats, IStats, ProfileStats, WealthStats } from '../types/endpoint';
 import { Endpoint } from './Endpoint';
 
 
-export class Stats extends Endpoint {
+export class Stats extends Endpoint implements IStats {
   public get db () : DBStats {
     return this.json( 'v2/stats/db.json' );
   }
