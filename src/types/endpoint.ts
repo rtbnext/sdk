@@ -1,5 +1,6 @@
 import type { TIndustry } from '@rtbnext/schema/src/base/const';
 import type { TSnapshotIndex } from '@rtbnext/schema/src/base/generic';
+import type { TFilter, TFilterItem } from '@rtbnext/schema/src/model/filter';
 import type { TMover } from '@rtbnext/schema/src/model/mover';
 import type { TProfileData, TProfileHistory, TProfileIndex, TProfileIndexItem, TProfileMetaData } from '@rtbnext/schema/src/model/profile';
 import type { TSearchIndex, TSearchIndexItem } from '@rtbnext/schema/src/model/search';
@@ -62,6 +63,9 @@ export interface IMover {
 }
 
 // --- filter ---
+
+export type FilterCollection = CollectableResource< TFilter, TFilterItem, ProfileEntity< TFilterItem > >;
+export type FilterIndex = IndexableResource< TFilter, FilterCollection >;
 
 export interface IFilter {}
 
