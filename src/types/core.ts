@@ -119,6 +119,11 @@ export interface CacheOptions {
   mode?: CacheMode;
 }
 
+// --- parser ---
+
+/** A function that parses an HTTP response into a specific data type. */
+export type ParserFn< D > = ( res: HttpResponse ) => D;
+
 // --- RTBNext options ---
 
 /** Options for configuring the RTBNext SDK. */
