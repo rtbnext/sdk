@@ -68,7 +68,7 @@ export type ProfileIndex = ProfileCollection< TProfileIndex, TProfileIndexItem >
 /** A search index of profiles. */
 export type SearchIndex = ProfileCollection< TSearchIndex, TSearchIndexItem >;
 
-/** The profile endpoint surface. */
+/** The profile endpoint interface. */
 export interface IProfile {
   /** Retrieve profile metadata by URI. */
   meta ( uri: string ) : ProfileMeta;
@@ -86,24 +86,41 @@ export interface IProfile {
 
 // --- list ---
 
+/** A list entity that includes date-indexed snapshots. */
 export type ListEntity< T extends TListItem & { uri: string } > = TListIndexItem & { dates: ListDateIndex< T > };
+
+/** A snapshot collection for list data. */
 export type ListSnapshot< T extends TListItem & { uri: string } > = CollectableResource< TListSnapshot< T >, T, ProfileEntity< T > >;
+
+/** A date-indexed list of snapshots. */
 export type ListDateIndex< T extends TListItem & { uri: string } > = DateableResource< TSnapshotIndex, ListSnapshot< T > >;
+
+/** The list index resource. */
 export type ListIndex = CollectableResource< TListIndex, TListIndexItem, ListEntity< any > >;
 
+/** The list endpoint interface. */
 export interface IList {
+  /** Retrieve a list snapshot for a URI and date. */
   snapshot < T extends TListItem & { uri: string } > ( uri: string, date: string ) : ListSnapshot< T >;
+  /** Retrieve a date-indexed list resource for a URI. */
   get < T extends TListItem & { uri: string } > ( uri: string ) : ListDateIndex< T >;
+  /** The list index resource. */
   readonly index: ListIndex;
 }
 
 // --- mover ---
 
+/** A single mover snapshot resource. */
 export type MoverSnapshot = Resource< TMover >;
+
+/** A date-indexed mover resource. */
 export type MoverIndex = DateableResource< TSnapshotIndex, MoverSnapshot >;
 
+/** The mover endpoint interface. */
 export interface IMover {
+  /** Retrieve a mover snapshot for a given date. */
   snapshot ( date: string ) : MoverSnapshot;
+  /** The mover index resource. */
   readonly index: MoverIndex;
 }
 
