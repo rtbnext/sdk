@@ -8,11 +8,18 @@ import type { System } from '../endpoint/System';
 
 // --- endpoints ---
 
+/** Endpoints available in the RTBNext SDK. */
 export interface Endpoints {
+  /** The Profile endpoint. */
   profile: Profile;
+  /** The List endpoint. */
   list: List;
+  /** The Mover endpoint. */
   mover: Mover;
+  /** The Filter endpoint. */
   filter: Filter;
+  /** The Stats endpoint. */
   stats: Stats;
+  /** The System endpoint. */
   system: System;
 }

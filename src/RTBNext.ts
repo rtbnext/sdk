@@ -10,6 +10,7 @@ import type { RTBNextOptions } from './types/core';
 import type { Endpoints } from './types/endpoint';
 
 
+/** Default configuration options for the RTBNext SDK. */
 const DEFAULT_OPTIONS = {
   sdkVersion: '1.0.0',
   baseUrl: 'https://api.rtbnext.de',
@@ -19,18 +20,38 @@ const DEFAULT_OPTIONS = {
 } as const;
 
 
+/**
+ * The primary SDK entry point for interacting with the RTBNext API.
+ * 
+ * This class configures the HTTP client, cache loader, and all available
+ * endpoint clients so they can be used from a single SDK instance.
+ */
 export class RTBNext {
+  /** The HTTP client used for all API requests. */
   public readonly httpClient: HttpClient;
+  /** The resource loader used for caching and fetching resources. */
   public readonly resourceLoader: ResourceLoader;
+  /** The collection of endpoint clients available in the SDK. */
   public readonly endpoints: Endpoints;
 
+  /** The Profile endpoint. */
   public readonly profile: Profile;
+  /** The List endpoint. */
   public readonly list: List;
+  /** The Mover endpoint. */
   public readonly mover: Mover;
+  /** The Filter endpoint. */
   public readonly filter: Filter;
+  /** The Stats endpoint. */
   public readonly stats: Stats;
+  /** The System endpoint. */
   public readonly system: System;
 
+  /**
+   * Creates a new RTBNext SDK instance.
+   * 
+   * @param options - Configuration options for the SDK.
+   */
   constructor ( options: RTBNextOptions ) {
     this.httpClient = new HttpClient( {
       baseUrl: options.baseUrl ?? DEFAULT_OPTIONS.baseUrl,
