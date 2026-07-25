@@ -1,4 +1,4 @@
-import type { CacheMode, HttpResponse, RequestOptions, ResourceState } from '../types/core';
+import type { Cache, CacheMode, HttpResponse, RequestOptions, ResourceState } from '../types/core';
 import type { HttpClient } from './HttpClient';
 
 
@@ -28,5 +28,13 @@ export class ResourceLoader {
 
     const res = await this.httpClient.request( path, { ...options, headers } );
     return this.createState( res, prev );
+  }
+
+  public async refresh ( path: string, options?: RequestOptions ) : Promise< ResourceState > {
+    const cached = await this.cache.get( path );
+    const state = await this.fetch( path, cached ?? undefined, options );
+    await this.cache.set( path, state );
+
+    return state;
   }
 }
