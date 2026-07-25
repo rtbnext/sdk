@@ -1,7 +1,8 @@
 import type { TIndustry } from '@rtbnext/schema/src/base/const';
 import type { TSnapshotIndex } from '@rtbnext/schema/src/base/generic';
 import type { TMover } from '@rtbnext/schema/src/model/mover';
-import type { TProfileData, TProfileHistory, TProfileMetaData } from '@rtbnext/schema/src/model/profile';
+import type { TProfileData, TProfileHistory, TProfileIndex, TProfileIndexItem, TProfileMetaData } from '@rtbnext/schema/src/model/profile';
+import type { TSearchIndex, TSearchIndexItem } from '@rtbnext/schema/src/model/search';
 import type { TDBStats, TGlobalStats, THistory, TProfileStats, TWealthStats } from '@rtbnext/schema/src/model/stats';
 import type { TStatus } from '@rtbnext/schema/src/model/status';
 import type { CollectableResource } from '../resource/CollectableResource';
@@ -33,8 +34,17 @@ export interface ProfileResources {
 
 export type ProfileEntity< I extends { uri: string } > = Entity< I, ProfileResources >;
 export type ProfileCollection< D extends { items: I[] }, I extends { uri: string } > = CollectableResource< D, I, ProfileEntity< I > >;
+export type ProfileIndex = ProfileCollection< TProfileIndex, TProfileIndexItem >;
+export type SearchIndex = ProfileCollection< TSearchIndex, TSearchIndexItem >;
 
-export interface IProfile {}
+export interface IProfile {
+  meta ( uri: string ) : ProfileMeta;
+  data ( uri: string ) : ProfileData;
+  history ( uri: string ) : ProfileHistory;
+  get ( uri: string ) : ProfileEntity< { uri: string } >;
+  readonly index: ProfileIndex;
+  readonly searchIndex: SearchIndex;
+}
 
 // --- list ---
 
