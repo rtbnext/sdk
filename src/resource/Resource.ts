@@ -22,6 +22,8 @@ export class Resource< D > {
   protected parsed = false;
   /** The parsed resource value returned by `data()`. */
   protected value?: D;
+  /** The transformed resource value returned by `transform()`. */
+  protected transformed?: any | Promise< any >;
 
   /**
    * Creates a new resource wrapper.
@@ -38,7 +40,7 @@ export class Resource< D > {
 
   /** Resets parsed resource state so the next call to `data()` re-parses. */
   private reset () : void {
-    this.parsed = false, this.value = undefined;
+    this.parsed = false, this.value = undefined, this.transformed = undefined;
   }
 
   /**
@@ -47,8 +49,7 @@ export class Resource< D > {
    * @returns The parsed resource value.
    */
   private parse () : D {
-    this.value = this.parser( this.state!.response );
-    this.parsed = true;
+    this.value = this.parser( this.state!.response ), this.parsed = true;
     this.emit( 'parse' );
 
     return this.value!;
@@ -61,7 +62,10 @@ export class Resource< D > {
    * @returns The transformed result.
    */
   protected transform < R > ( fn: ( data: D ) => Promise< R > | R ) : Promise< R > {
-    return this.data().then( fn );
+    return Promise.resolve( this.transformed ??= Promise.resolve( this.data() )
+      .then( fn ).then( v => ( this.transformed = v ) )
+      .catch( e => ( this.transformed = undefined, Promise.reject( e ) ) )
+    );
   }
 
   /**
@@ -139,7 +143,6 @@ export class Resource< D > {
    * @returns The parsed resource value.
    */
   public async data () : Promise< D > {
-    await this.load();
-    return this.parsed ? this.value! : this.parse();
+    return this.load().then( () => this.parsed ? this.value! : this.parse() );
   }
 }
