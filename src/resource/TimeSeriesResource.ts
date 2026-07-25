@@ -104,6 +104,20 @@ export class TimeSeriesResource< D extends readonly unknown[], R extends { date:
         const values = n( callback ).sort( ( a, b ) => a - b ), mid = Math.floor( values.length / 2 );
         return values.length % 2 ? values[ mid ] : ( values[ mid - 1 ] + values[ mid ] ) / 2;
       },
+
+      get labels () { return points.map( d ) },
+      get columns () {
+        const result = {} as Record< keyof T, unknown[] >;
+
+        for ( const point of points )
+          for ( const [ key, value ] of Object.entries( point as object ) )
+            ( result[ key as keyof T ] ??= [] ).push( value );
+
+        return result;
+      },
+
+      values ( callback: ( point: T ) => number ) { return points.map( callback ) },
+      column < K extends keyof T > ( key: K ) { return points.map( p => p[ key ] ) },
     } );
   }
 

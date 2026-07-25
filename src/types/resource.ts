@@ -63,6 +63,7 @@ export interface TimeSeries< R extends { date: string } > extends Iterable< R > 
 
   readonly labels: string[];
   readonly columns: Record< keyof R, unknown[] >;
+
   values ( callback: ( point: R ) => number ) : number[];
   column < K extends keyof R > ( key: K ) : R[ K ][];
 
