@@ -4,12 +4,15 @@ export type Entity< I, T = unknown > = Readonly< I & { uri: string } & T >;
 
 export type EntityFn< I extends { uri: string }, E extends Entity< I > > = ( data: I ) => E;
 
-export type CollectOptions< I extends { uri: string }, E extends Entity< I > > = {
-  entity: EntityFn< I, E >;
-  search?: SearchFn< I >;
-};
+export type FindFn< I extends { uri: string } > = ( items: I[], uriLike: string ) => I | null;
 
 export type SearchFn< I > = ( item: Entity< I >, query: string, terms: string[] ) => boolean;
+
+export type CollectOptions< I extends { uri: string }, E extends Entity< I > > = {
+  entity: EntityFn< I, E >;
+  find?: FindFn< I >;
+  search?: SearchFn< I >;
+};
 
 export interface Collection< I extends { uri: string } > extends Iterable< I > {
   readonly items: Entity< I >[];
@@ -29,8 +32,9 @@ export interface Collection< I extends { uri: string } > extends Iterable< I > {
 
   at ( index: number ) : Entity< I > | null;
   get ( uri: string ) : Entity< I > | null;
-  find ( uriLike: string ) : Entity< I > | null;
   filter ( predicate: ( item: Entity< I > ) => boolean ) : Collection< I >;
+  find ( uriLike: string ) : Entity< I > | null;
+
   search ( query: string ) : Collection< I >;
 
   intersect ( other: Collection< I > ) : Collection< I >;
