@@ -30,4 +30,8 @@ export class Profile extends Endpoint implements IProfile {
       } )
     } );
   }
+
+  public get ( uri: string ) : ProfileEntity< { uri: string } > {
+    return this.entity( { uri } );
+  }
 }
