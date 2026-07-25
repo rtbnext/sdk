@@ -75,6 +75,14 @@ export class TimeSeriesResource< D extends readonly unknown[], R extends { date:
         const prefix = `${ year }-${ String( month ).padStart( 2, '0' ) }-`;
         return c( points.filter( p => d( p ).startsWith( prefix ) ) );
       },
+
+      before ( date: string ) { return c( points.filter( p => d( p ) < date ) ) },
+      after ( date: string ) { return c( points.filter( p => d( p ) > date ) ) },
+      since ( date: string ) { return c( points.filter( p => d( p ) >= date ) ) },
+      until ( date: string ) { return c( points.filter( p => d( p ) <= date ) ) },
+      between ( from: string, to: string ) { return c( points.filter( p => {
+        const date = d( p ); return date >= from && date <= to;
+      } ) ) },
     } );
   }
 
