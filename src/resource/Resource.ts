@@ -48,4 +48,10 @@ export class Resource< D > {
 
     return this.loading;
   }
+
+  public async refresh ( options?: RequestOptions ) : Promise< void > {
+    this.state = await this.loader.refresh( this.path, options );
+    this.loaded = true, this.parsed = false, this.value = undefined;
+    this.emit( 'refresh', 'update' );
+  }
 }
