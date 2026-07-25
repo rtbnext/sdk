@@ -1,12 +1,12 @@
 // --- collectable resource ---
 
-export type Entity< I, T = unknown > = Readonly< I & { uri: string } & T >;
+export type Entity< I extends { uri: string }, T = unknown > = Readonly< I & { uri: string } & T >;
 
 export type EntityFn< I extends { uri: string }, E extends Entity< I > > = ( data: I ) => E;
 
 export type FindFn< I extends { uri: string } > = ( items: I[], uriLike: string ) => I | null;
 
-export type SearchFn< I > = ( item: Entity< I >, query: string, terms: string[] ) => boolean;
+export type SearchFn< I extends { uri: string } > = ( item: Entity< I >, query: string, terms: string[] ) => boolean;
 
 export type CollectOptions< I extends { uri: string }, E extends Entity< I > > = {
   entity: EntityFn< I, E >;
