@@ -1,3 +1,46 @@
+// --- collectable resource ---
+
+export type Entity< I, T = unknown > = Readonly< I & { uri: string } & T >;
+
+export interface Collection< I extends { uri: string } > extends Iterable< I > {
+  readonly items: Entity< I >[];
+  readonly total: number;
+  readonly count: number;
+  position: number;
+
+  readonly current: Entity< I > | null;
+  readonly first: Entity< I > | null;
+  readonly last: Entity< I > | null;
+
+  readonly hasNext: boolean;
+  readonly hasPrev: boolean;
+
+  readonly next: Entity< I > | null;
+  readonly prev: Entity< I > | null;
+
+  at ( index: number ) : Entity< I > | null;
+  get ( uri: string ) : Entity< I > | null;
+  find ( uriLike: string ) : Entity< I > | null;
+  filter ( predicate: ( item: Entity< I > ) => boolean ) : Collection< I >;
+  search ( query: string ) : Collection< I >;
+
+  intersect ( other: Collection< I > ) : Collection< I >;
+  exclude ( other: Collection< I > ) : Collection< I >;
+  union ( other: Collection< I > ) : Collection< I >;
+
+  groupBy < K > ( callback: ( item: Entity< I > ) => K ) : Map< K, Collection< I > >;
+  orderBy ( key: keyof I, dir?: 'asc' | 'desc' ) : Collection< I >;
+  sort ( compare: ( a: Entity< I >, b: Entity< I > ) => number ) : Collection< I >;
+
+  toArray () : Entity< I >[];
+  map < R > ( callback: ( item: Entity< I >, index: number ) => R ) : R[];
+
+  take ( count: number ) : Collection< I >;
+  skip ( count: number ) : Collection< I >;
+  slice ( start?: number, end?: number ) : Collection< I >;
+  page ( page: number, perPage?: number ) : Collection< I >;
+}
+
 // --- indexable resource ---
 
 export type IndexFn< R > = ( path: readonly string[] ) => R;
