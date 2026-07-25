@@ -184,81 +184,128 @@ export interface Dates< R > extends Iterable< R > {
 
 // --- time series resource ---
 
+/** Maps a raw time-series row to a point object. */
 export type PointFn< D extends readonly unknown[], R extends { date: string } > = ( row: D[ number ] ) => R;
 
+/** Options for time-series resource creation. */
 export interface TimeSeriesOptions< D extends readonly unknown[], R extends { date: string } > {
+  /** Converts a raw row into a time-series point. */
   point: PointFn< D, R >;
 }
 
+/** Supported aggregation periods for time-series data. */
 export type AggregatePeriod = 'week' | 'month' | 'quarter' | 'year';
 
+/** Aggregated numeric summary values. */
 export interface AggregateValue {
+  /** The first numeric value in the range. */
   first: number;
+  /** The last numeric value in the range. */
   last: number;
+  /** The minimum numeric value in the range. */
   min: number;
+  /** The maximum numeric value in the range. */
   max: number;
+  /** The average numeric value in the range. */
   avg: number;
+  /** The total sum of numeric values in the range. */
   sum: number;
 }
 
+/** An aggregated point derived from a time-series record. */
 export type AggregatePoint< R extends { date: string } > = {
   [ K in keyof Omit< R, 'date' > ]: R[ K ] extends number ? AggregateValue : R[ K ];
 } & {
+  /** The point's date. */
   date: string;
+  /** The human-readable label for the aggregation. */
   label: string;
+  /** The date range covered by this aggregate point. */
   range: {
     from: string;
     to: string;
   };
 };
 
+/** A time-series collection of dated resource points. */
 export interface TimeSeries< R extends { date: string } > extends Iterable< R > {
+  /** Time-series points. */
   readonly points: R[];
+  /** Total number of points. */
   readonly total: number;
+  /** The number of points in the current view. */
   readonly count: number;
 
+  /** The first point in the series. */
   readonly first: R | null;
+  /** The last point in the series. */
   readonly last: R | null;
 
+  /** Find a point by date. */
   find ( date: string ) : R | null;
+  /** Get points for an entire year. */
   year ( year: number ) : TimeSeries< R >;
+  /** Get points for a specific month. */
   month ( year: number, month: number ) : TimeSeries< R >;
 
+  /** Get points before a given date. */
   before ( date: string ) : TimeSeries< R >;
+  /** Get points after a given date. */
   after ( date: string ) : TimeSeries< R >;
+  /** Get points since a given date. */
   since ( date: string ) : TimeSeries< R >;
+  /** Get points until a given date. */
   until ( date: string ) : TimeSeries< R >;
+  /** Get points between two dates. */
   between ( from: string, to: string ) : TimeSeries< R >;
 
+  /** Convert the series to an array of points. */
   toArray () : R[];
+  /** Map each point in the series. */
   map < T > ( callback: ( item: R, index: number ) => T ) : T[];
 
+  /** Take the first count points. */
   take ( count: number ) : TimeSeries< R >;
+  /** Skip the first count points. */
   skip ( count: number ) : TimeSeries< R >;
+  /** Slice a subset of points by index range. */
   slice ( start?: number, end?: number ) : TimeSeries< R >;
 
+  /** Get the minimum numeric value over the series. */
   min ( callback?: ( point: R ) => number ) : number;
+  /** Get the maximum numeric value over the series. */
   max ( callback?: ( point: R ) => number ) : number;
+  /** Get the sum of numeric values over the series. */
   sum ( callback?: ( point: R ) => number ) : number;
+  /** Get the average of numeric values over the series. */
   avg ( callback?: ( point: R ) => number ) : number;
+  /** Get the median of numeric values over the series. */
   median ( callback?: ( point: R ) => number ) : number;
 
+  /** All label keys (dates) from the series. */
   readonly labels: string[];
+  /** Columnar representation keyed by field. */
   readonly columns: Record< keyof R, unknown[] >;
 
+  /** Convert each point to a numeric series. */
   values ( callback: ( point: R ) => number ) : number[];
+  /** Get a column of values for the given field. */
   column < K extends keyof R > ( key: K ) : R[ K ][];
 
+  /** Aggregate the series using a period or callback. */
   aggregate ( period: AggregatePeriod | ( ( point: R ) => string ) ) : TimeSeries< AggregatePoint< R > >;
+  /** Bucket series points into aggregated groups. */
   buckets ( count: number ) : TimeSeries< AggregatePoint< R > >;
 }
 
 // --- options ---
 
+/** Union of supported JSON resource option types. */
 export type JsonOptions< I extends { uri: string }, E extends Entity< I >, R, D > =
   | CollectOptions< I, E >
   | IndexOptions< R >
   | DateOptions< D >;
 
+/** Union of supported CSV resource option types. */
 export type CsvOptions< D extends readonly unknown[], R extends { date: string } > =
   | TimeSeriesOptions< D, R >;
