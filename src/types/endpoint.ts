@@ -1,6 +1,7 @@
-import type { TDBStats, TGlobalStats, TProfileStats, TWealthStats } from '@rtbnext/schema/src/model/stats';
+import type { TDBStats, TGlobalStats, THistory, TProfileStats, TWealthStats } from '@rtbnext/schema/src/model/stats';
 import type { TStatus } from '@rtbnext/schema/src/model/status';
 import type { Resource } from '../resource/Resource';
+import type { TimeSeriesResource } from '../resource/TimeSeriesResource';
 
 
 // --- profile ---
@@ -21,16 +22,28 @@ export interface IFilter {}
 
 // --- stats ---
 
+export type HistoryPoint = {
+  date: string;
+  count: number;
+  total: number;
+  woman: number;
+  quota: number;
+  change: number;
+  changePct: number;
+};
+
 export type DBStats = Resource< TDBStats >;
 export type GlobalStats = Resource< TGlobalStats >;
 export type ProfileStats = Resource< TProfileStats >;
 export type WealthStats = Resource< TWealthStats >;
+export type StatsHistory = TimeSeriesResource< THistory, HistoryPoint >;
 
 export interface IStats {
   readonly db: DBStats;
   readonly global: GlobalStats;
   readonly profile: ProfileStats;
   readonly wealth: WealthStats;
+  readonly history: StatsHistory;
 }
 
 // --- system ---
