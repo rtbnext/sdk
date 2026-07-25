@@ -1,3 +1,4 @@
+import type { TIndustry } from '@rtbnext/schema/src/base/const';
 import type { TDBStats, TGlobalStats, THistory, TProfileStats, TWealthStats } from '@rtbnext/schema/src/model/stats';
 import type { TStatus } from '@rtbnext/schema/src/model/status';
 import type { Resource } from '../resource/Resource';
@@ -44,6 +45,8 @@ export interface IStats {
   readonly profile: ProfileStats;
   readonly wealth: WealthStats;
   readonly history: StatsHistory;
+  industry ( industry: TIndustry ) : StatsHistory;
+  citizenship ( isoCode: string ) : StatsHistory;
 }
 
 // --- system ---
