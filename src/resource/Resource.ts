@@ -54,4 +54,16 @@ export class Resource< D > {
     this.loaded = true, this.parsed = false, this.value = undefined;
     this.emit( 'refresh', 'update' );
   }
+
+  public async data () : Promise< D > {
+    await this.load();
+
+    if ( ! this.parsed ) {
+      this.value = this.parser( this.state!.response );
+      this.parsed = true;
+      this.emit( 'parse' );
+    }
+
+    return this.value!;
+  }
 }
