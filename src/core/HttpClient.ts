@@ -52,4 +52,17 @@ export class HttpClient {
       throw new Error( 'Fetch failed' );
     }
   }
+
+  public async request ( path: string, options?: RequestOptions ) : Promise< HttpResponse > {
+    const url = new URL( path, this.options.baseUrl ), key = url.href;
+
+    const existing = this.pending.get( key );
+    if ( existing ) return existing;
+
+    const request = this.execute( url, options );
+    this.pending.set( key, request );
+
+    try { return await request }
+    finally { this.pending.delete( key ) }
+  }
 }
