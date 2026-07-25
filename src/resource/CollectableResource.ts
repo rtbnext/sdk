@@ -22,7 +22,23 @@ export class CollectableResource< D extends { items: I[] }, I extends { uri: str
     const c = ( items: E[], t: number = total ) => this.collectItems( items, t );
     let idx = -1;
 
-    return Object.freeze( {} );
+    return Object.freeze( {
+      *[ Symbol.iterator ]() { yield* items },
+      items, total, count: items.length,
+
+      get position () { return idx },
+      set position ( index: number ) { idx = index },
+
+      get current () { return items[ idx ] ?? null },
+      get first () { return items[ 0 ] ?? null },
+      get last () { return items.at( -1 ) ?? null },
+
+      get hasNext () { return idx + 1 < items.length },
+      get hasPrev () { return idx > 0 },
+
+      get next () { return items[ ++idx ] ?? null },
+      get prev () { return items[ --idx ] ?? null },
+    } );
   }
 
   public get () : Promise< Collection< I > > {
