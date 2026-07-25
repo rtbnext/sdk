@@ -53,4 +53,16 @@ export class ResourceLoader {
 
     return state;
   }
+
+  public get size () : number {
+    return this.cache.size;
+  }
+
+  public async delete ( path: string ) : Promise< void > {
+    await this.cache.delete( path );
+  }
+
+  public async clear () : Promise< void > {
+    await this.cache.clear();
+  }
 }
