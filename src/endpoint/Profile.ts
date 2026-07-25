@@ -1,5 +1,8 @@
 import type { TProfileHistoryItem } from '@rtbnext/schema/src/model/profile';
-import type { IProfile, ProfileCollection, ProfileData, ProfileEntity, ProfileHistory, ProfileMeta } from '../types/endpoint';
+import type {
+  IProfile, ProfileCollection, ProfileData, ProfileEntity,
+  ProfileHistory, ProfileIndex, ProfileMeta, SearchIndex
+} from '../types/endpoint';
 import type { FindFn, SearchFn } from '../types/resource';
 import { Endpoint } from './Endpoint';
 
@@ -40,5 +43,13 @@ export class Profile extends Endpoint implements IProfile {
 
   public get ( uri: string ) : ProfileEntity< { uri: string } > {
     return this.entity( { uri } );
+  }
+
+  public get index () : ProfileIndex {
+    return this.collect( 'v2/profile/index.json' );
+  }
+
+  public get searchIndex () : SearchIndex {
+    return this.collect( 'v2/profile/search.json' );
   }
 }
