@@ -1,4 +1,4 @@
-import type { HttpClientOptions, HttpResponse } from '../types/core';
+import type { HttpClientOptions, HttpResponse, RequestOptions } from '../types/core';
 import { RateLimiter } from './RateLimiter';
 
 
@@ -29,4 +29,11 @@ export class HttpClient {
 
     return headers;
   };
+
+  private requestInit ( options?: RequestOptions ) : RequestInit {
+    const headers = new Headers( this.headers );
+    options?.headers?.forEach( ( v, k ) => headers.set( k, v ) );
+
+    return { signal: AbortSignal.timeout( options?.timeout ?? this.options.timeout ), headers };
+  }
 }
