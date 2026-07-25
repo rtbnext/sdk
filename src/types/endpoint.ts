@@ -3,7 +3,7 @@ import type { TSnapshotIndex } from '@rtbnext/schema/src/base/generic';
 import type { TMover } from '@rtbnext/schema/src/model/mover';
 import type { TDBStats, TGlobalStats, THistory, TProfileStats, TWealthStats } from '@rtbnext/schema/src/model/stats';
 import type { TStatus } from '@rtbnext/schema/src/model/status';
-import type { DateableResource } from '../resource/DatedResource';
+import type { DateableResource } from '../resource/DateableResource';
 import type { Resource } from '../resource/Resource';
 import type { TimeSeriesResource } from '../resource/TimeSeriesResource';
 

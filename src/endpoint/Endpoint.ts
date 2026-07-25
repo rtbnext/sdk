@@ -3,7 +3,7 @@ import { CsvParser } from '../parser/CsvParser';
 import { JsonParser } from '../parser/JsonParser';
 import { TextParser } from '../parser/TextParser';
 import { CollectableResource } from '../resource/CollectableResource';
-import { DateableResource } from '../resource/DatedResource';
+import { DateableResource } from '../resource/DateableResource';
 import { IndexableResource } from '../resource/IndexableResource';
 import { Resource } from '../resource/Resource';
 import { TimeSeriesResource } from '../resource/TimeSeriesResource';
