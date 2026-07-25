@@ -1,4 +1,6 @@
-import type { Cache, CacheMode, HttpResponse, RequestOptions, ResourceState } from '../types/core';
+import { EmptyCache } from '../cache/EmptyCache';
+import { MemoryCache } from '../cache/MemoryCache';
+import type { Cache, CacheMode, CacheOptions, HttpResponse, RequestOptions, ResourceState } from '../types/core';
 import type { HttpClient } from './HttpClient';
 
 
@@ -64,5 +66,12 @@ export class ResourceLoader {
 
   public async clear () : Promise< void > {
     await this.cache.clear();
+  }
+
+  public static getInstance ( client: HttpClient, options: CacheOptions = {} ) : ResourceLoader {
+    const { type = 'memory', mode = 'ttl' } = options;
+    const cache = type === 'memory' ? new MemoryCache() : type === false ? new EmptyCache() : type;
+
+    return new ResourceLoader( cache, client, mode );
   }
 }
