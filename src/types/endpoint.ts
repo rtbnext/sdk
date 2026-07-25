@@ -1,10 +1,17 @@
 import type { TAgeGroup, TGender, TIndustry, TMaritalStatus } from '@rtbnext/schema/src/base/const';
 import type { TSnapshotIndex } from '@rtbnext/schema/src/base/generic';
 import type { TFilter, TFilterItem } from '@rtbnext/schema/src/model/filter';
+import type { TListIndex, TListIndexItem, TListItem, TListSnapshot } from '@rtbnext/schema/src/model/list';
 import type { TMover } from '@rtbnext/schema/src/model/mover';
-import type { TProfileData, TProfileHistory, TProfileIndex, TProfileIndexItem, TProfileMetaData } from '@rtbnext/schema/src/model/profile';
+import type {
+  TProfileData, TProfileHistory, TProfileIndex, TProfileIndexItem,
+  TProfileMetaData
+} from '@rtbnext/schema/src/model/profile';
 import type { TSearchIndex, TSearchIndexItem } from '@rtbnext/schema/src/model/search';
-import type { TDBStats, TGlobalStats, THistory, TProfileStats, TScatter, TScatterItem, TStatsGroup, TWealthStats } from '@rtbnext/schema/src/model/stats';
+import type {
+  TDBStats, TGlobalStats, THistory, TProfileStats, TScatter,
+  TScatterItem, TStatsGroup, TWealthStats
+} from '@rtbnext/schema/src/model/stats';
 import type { TStatus } from '@rtbnext/schema/src/model/status';
 import type { CollectableResource } from '../resource/CollectableResource';
 import type { DateableResource } from '../resource/DateableResource';
@@ -49,6 +56,11 @@ export interface IProfile {
 }
 
 // --- list ---
+
+export type ListEntity< T extends TListItem & { uri: string } > = TListIndexItem & { dates: ListDateIndex< T > };
+export type ListSnapshot< T extends TListItem & { uri: string } > = CollectableResource< TListSnapshot< T >, T, ProfileEntity< T > >;
+export type ListDateIndex< T extends TListItem & { uri: string } > = DateableResource< TSnapshotIndex, ListSnapshot< T > >;
+export type ListIndex = CollectableResource< TListIndex, TListIndexItem, ListEntity< any > >;
 
 export interface IList {}
 
