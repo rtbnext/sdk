@@ -107,6 +107,9 @@ export interface IndexOptions< R > {
   keys?: KeysFn;
 }
 
+/** A record of nested resources accessible by index paths. */
+export type ResourceTree = Readonly< Record< string, unknown > >;
+
 /** The set of object keys usable for index traversal. */
 export type IndexKeys< T > = Exclude< keyof T, '$metadata' >;
 
