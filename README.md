@@ -77,3 +77,13 @@ client.profile.get( 'bill-gates' )
     console.log( history.first )
   );
 ```
+
+### Cache behavior
+
+The SDK supports different cache modes:
+
+- `ttl` — uses HTTP cache lifetime information
+- `revalidate` — performs conditional HTTP requests using validators such as `ETag` and `Last-Modified`
+- `session` — keeps resources during the SDK lifetime
+
+Caching behavior follows HTTP semantics and does not bypass server-side cache validation.
