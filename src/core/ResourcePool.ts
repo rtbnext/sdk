@@ -2,11 +2,11 @@ import type { Resource } from '../resource/Resource';
 
 
 export class ResourcePool {
-  private readonly resources = new Map< string, Resource< any > >();
+  private readonly resources = new Map< string, unknown >();
 
-  public get< D > ( path: string, factory: () => Resource< D > ) : Resource< D > {
+  public get < R extends Resource< any > > ( path: string, factory: () => R ) : R {
     const existing = this.resources.get( path );
-    if ( existing ) return existing;
+    if ( existing ) return existing as R;
 
     const resource = factory();
     this.resources.set( path, resource );
