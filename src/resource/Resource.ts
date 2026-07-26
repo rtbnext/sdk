@@ -103,6 +103,11 @@ export class Resource< D > {
     return this;
   }
 
+  /** Returns whether the resource is currently valid based on the loader's cache mode. */
+  public get valid () : boolean {
+    return ! this.loaded || ! this.state || this.loader.valid( this.state );
+  }
+
   /**
    * Loads the resource if it has not already been loaded.
    * 

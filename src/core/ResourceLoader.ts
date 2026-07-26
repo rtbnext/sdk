@@ -86,6 +86,16 @@ export class ResourceLoader {
   }
 
   /**
+   * Checks if a cached resource is valid based on the current cache mode and expiration.
+   * 
+   * @param state - The resource state to validate.
+   * @returns True if the resource is valid, otherwise false.
+   */
+  public valid ( state?: ResourceState ) : boolean {
+    return !! state && ( this.mode === 'session' || ( this.mode === 'ttl' && ! this.isExpired( state ) ) );
+  }
+
+  /**
    * Loads a resource, using cache when valid or fetching from the network as needed.
    * 
    * @param path - The resource path or URL to load.
