@@ -56,12 +56,12 @@ export abstract class Endpoint {
    * @param options - Optional resource options for collection, indexing, or dates.
    */
   protected json ( path: string, options?: JsonOptions< any, any, any, any > ) {
-    const parser = JsonParser.parse;
+    const args = [ path, this.loader, JsonParser.parse ] as const;
 
-    if ( ! options ) return new Resource( path, this.loader, parser );
-    if ( 'entity' in options ) return new CollectableResource( path, this.loader, parser, options );
-    if ( 'date' in options ) return new DateableResource( path, this.loader, parser, options );
-    if ( 'index' in options ) return new IndexableResource( path, this.loader, parser, options );
+    if ( ! options ) return this.pool.get( path, () => new Resource( ...args ) );
+    if ( 'entity' in options ) return this.pool.get( path, () => new CollectableResource( ...args, options ) );
+    if ( 'date' in options ) return this.pool.get( path, () => new DateableResource( ...args, options ) );
+    if ( 'index' in options ) return this.pool.get( path, () => new IndexableResource( ...args, options ) );
 
     throw new Error( 'Invalid resource options' );
   }
@@ -78,10 +78,10 @@ export abstract class Endpoint {
    * @param options - Optional time-series options.
    */
   protected csv ( path: string, options?: CsvOptions< any, any > ) {
-    const parser = CsvParser.parse;
+    const args = [ path, this.loader, CsvParser.parse ] as const;
 
-    if ( ! options ) return new Resource( path, this.loader, parser );
-    if ( 'point' in options ) return new TimeSeriesResource( path, this.loader, parser, options );
+    if ( ! options ) return this.pool.get( path, () => new Resource( ...args ) );
+    if ( 'point' in options ) return this.pool.get( path, () => new TimeSeriesResource( ...args, options ) );
 
     throw new Error( 'Invalid resource options' );
   }
