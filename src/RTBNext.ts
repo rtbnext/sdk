@@ -55,8 +55,12 @@ export class RTBNext {
    * Creates a new RTBNext SDK instance.
    * 
    * @param options - Configuration options for the SDK.
+   * @throws Error if the client identity is not provided in the options.
    */
   constructor ( options: RTBNextOptions ) {
+    if ( ! options?.client?.name || ! options?.client?.version )
+      throw new Error( 'Client identity is required for RTBNext SDK initialization.' );
+
     this.httpClient = new HttpClient( {
       baseUrl: options.baseUrl ?? DEFAULT_OPTIONS.baseUrl,
       sdkVersion: DEFAULT_OPTIONS.sdkVersion,
