@@ -2,22 +2,19 @@ import type { RateLimiterOptions } from '../types/core';
 
 
 /**
- * RateLimiter class to limit the number of requests per time interval.
+ * Token-based rate limiter for controlling request throughput.
  * 
- * It supports two modes:
- *  - burst
- *  - spread
- * 
- * In burst mode, requests are processed as quickly as possible until the limit is reached.
- * In spread mode, requests are processed at a steady rate over the specified time interval.
+ * Supports two limiting strategies:
+ *  - burst: allows short request bursts up to the configured limit
+ *  - spread: distributes requests evenly over the configured interval
  */
 export class RateLimiter {
   /** The interval in milliseconds between each token refill. */
   private readonly refillInterval: number;
   /** Queue of pending requests waiting for tokens. */
   private readonly queue: ( () => void )[] = [];
-  /** Timer for managing the spread mode. */
-  private spreadTimer: NodeJS.Timeout | null = null;
+  /** Active timer used to replenish tokens. */
+  private timer: NodeJS.Timeout | null = null;
   /** The current number of available tokens. */
   private tokens: number;
 
@@ -50,8 +47,10 @@ export class RateLimiter {
     return new Promise( resolve => {
       this.queue.push( resolve );
 
-      if ( ! this.spreadTimer ) this.spreadTimer = setTimeout( () => {
-        this.tokens = this.options.maxRequests, this.spreadTimer = null;
+      if ( ! this.timer ) this.timer = setTimeout( () => {
+        this.tokens = this.options.maxRequests;
+        this.timer = null;
+
         this.processQueue();
       }, this.options.perMs );
     } );
@@ -68,15 +67,15 @@ export class RateLimiter {
     if ( this.tokens > 0 ) {
       this.tokens--;
 
-      if ( ! this.spreadTimer ) this.spreadTimer = setInterval( () => {
+      if ( ! this.timer ) this.timer = setInterval( () => {
         if ( this.tokens < this.options.maxRequests ) {
           this.tokens++;
           this.processQueue();
         }
 
         if ( this.tokens === this.options.maxRequests && ! this.queue.length ) {
-          this.spreadTimer && clearInterval( this.spreadTimer );
-          this.spreadTimer = null;
+          this.timer && clearInterval( this.timer );
+          this.timer = null;
         }
       }, this.refillInterval );
 
