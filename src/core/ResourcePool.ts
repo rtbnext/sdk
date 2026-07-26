@@ -12,4 +12,12 @@ export class ResourcePool {
     this.resources.set( path, resource );
     return resource;
   }
+
+  public get size () : number {
+    return this.resources.size;
+  }
+
+  public clear () : void {
+    this.resources.clear();
+  }
 }
