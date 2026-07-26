@@ -62,8 +62,8 @@ export class Resource< D > {
    * @returns The transformed result.
    */
   protected transform < R > ( fn: ( data: D ) => Promise< R > | R ) : Promise< R > {
-    return Promise.resolve( this.transformed ??= Promise.resolve( this.data() )
-      .then( fn ).then( v => ( this.transformed = v ) )
+    return Promise.resolve( this.transformed ??= Promise.resolve( this.data() ).then( fn )
+      .then( v => ( this.transformed = v, this.emit( 'transform' ) ) )
       .catch( e => ( this.transformed = undefined, Promise.reject( e ) ) )
     );
   }
@@ -100,7 +100,6 @@ export class Resource< D > {
    */
   public off ( event: string, handler: ( self: this ) => void ) : this {
     this.hooks.get( event )?.delete( handler );
-
     return this;
   }
 
