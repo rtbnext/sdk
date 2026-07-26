@@ -66,3 +66,14 @@ client.profile.index.collection()
   )
   .then( console.log );
 ```
+
+### Time series
+
+Historical data can be accessed through typed time-series resources.
+
+```ts
+client.profile.get( 'bill-gates' )
+  .history.series().then( history =>
+    console.log( history.first )
+  );
+```
