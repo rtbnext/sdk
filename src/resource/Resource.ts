@@ -63,7 +63,7 @@ export class Resource< D > {
    */
   protected transform < R > ( fn: ( data: D ) => Promise< R > | R ) : Promise< R > {
     return Promise.resolve( this.transformed ??= Promise.resolve( this.data() ).then( fn )
-      .then( v => ( this.transformed = v ) )
+      .then( v => ( this.transformed = v, this.emit( 'transform' ), v ) )
       .catch( e => ( this.transformed = undefined, Promise.reject( e ) ) )
     );
   }
