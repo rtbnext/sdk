@@ -35,7 +35,7 @@ export class HttpClient {
   private createHeaders () : Headers {
     const { client: { name, version, contact, email }, sdkVersion: v } = this.options;
 
-    if ( ! name.trim() ) throw new Error( 'Client name is required.' );
+    if ( ! String( name ).trim() ) throw new Error( 'Client name is required.' );
     if ( ! version.trim() ) throw new Error( 'Client version is required.' );
 
     const headers = new Headers();
