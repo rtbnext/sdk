@@ -77,6 +77,8 @@ export interface Collection< I extends { uri: string } > extends Iterable< I > {
 
   /** Convert the collection to an array of entities. */
   toArray () : Entity< I >[];
+  /** Iterate over each entity in the collection. */
+  forEach ( callback: ( item: Entity< I >, index: number ) => void ) : void;
   /** Map each entity in the collection to a new value. */
   map < R > ( callback: ( item: Entity< I >, index: number ) => R ) : R[];
 

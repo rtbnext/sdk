@@ -143,6 +143,7 @@ export class CollectableResource< D extends { items: I[] }, I extends { uri: str
       },
 
       toArray () { return [ ...items ] },
+      forEach ( callback: ( item: E, index: number ) => void ) { items.forEach( callback ) },
       map < R > ( callback: ( item: E, index: number ) => R ) { return items.map( callback ) },
 
       ...sliceMethods( items, c ),
