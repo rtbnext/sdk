@@ -21,10 +21,11 @@ const DEFAULT_OPTIONS = {
 
 
 /**
- * The primary SDK entry point for interacting with the RTBNext API.
+ * Main entry point of the RTBNext SDK.
  * 
- * This class configures the HTTP client, cache loader, and all available
- * endpoint clients so they can be used from a single SDK instance.
+ * Provides access to all RTBNext API endpoints through a single client
+ * instance while internally managing HTTP communication, resource loading,
+ * caching, and endpoint initialization.
  */
 export class RTBNext {
   /** The HTTP client used for all API requests. */
