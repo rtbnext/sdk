@@ -150,6 +150,10 @@ export class CollectableResource< D extends { items: I[] }, I extends { uri: str
       page ( page: number, perPage: number = 10 ) {
         const start = ( page - 1 ) * perPage, end = start + perPage;
         return c( items.slice( start, end ) );
+      },
+
+      *pages ( perPage: number = 10 ) {
+        for ( let i = 0; i < items.length; i += perPage ) yield c( items.slice( i, i + perPage ) );
       }
     } );
   }

@@ -56,7 +56,6 @@ export interface Collection< I extends { uri: string } > extends Iterable< I > {
   get ( uri: string ) : Entity< I > | null;
   /** Filter the collection using a predicate. */
   filter ( predicate: ( item: Entity< I > ) => boolean ) : Collection< I >;
-
   /** Find an item by URI-like text. */
   find ( uriLike: string ) : Entity< I > | null;
   /** Search the collection by query text. */
@@ -89,6 +88,8 @@ export interface Collection< I extends { uri: string } > extends Iterable< I > {
   slice ( start?: number, end?: number ) : Collection< I >;
   /** Return a specific page of the collection. */
   page ( page: number, perPage?: number ) : Collection< I >;
+  /** Iterate over the collection in pages of a given size. */
+  pages ( perPage?: number ) : Generator< Collection< I > >;
 }
 
 // --- indexable resource ---
