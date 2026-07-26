@@ -3,7 +3,7 @@ import { RateLimiter } from './RateLimiter';
 
 
 /**
- * A simple HTTP client with rate limiting and request deduplication.
+ * HTTP client with built-in rate limiting and request deduplication.
  * 
  * This client is designed to handle HTTP requests with built-in rate limiting and
  * deduplication of concurrent requests to the same URL.
@@ -42,7 +42,7 @@ export class HttpClient {
     const info = [ contact, email ].filter( Boolean ).join( '; ' );
     const agent = `${ name }/${ version }${ info ? ` (${ info })` : '' } @rtbnext/sdk/${ v }`;
 
-    headers.set( 'User-Agent', `${ agent } @rtbnext/sdk/${ v }` );
+    headers.set( 'User-Agent', agent );
     headers.set( 'X-Client-Name', name );
     headers.set( 'X-Client-Version', version );
     contact && headers.set( 'X-Client-Contact', contact );
