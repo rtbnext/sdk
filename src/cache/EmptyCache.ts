@@ -2,10 +2,10 @@ import type { Cache } from '../types/core';
 
 
 /**
- * A cache implementation that does not store any data.
+ * Cache implementation that never stores any data.
  * 
- * All `get` operations return `null`, and all `set`, `delete`, and `clear` operations are no-ops.
- * This can be used when caching is not desired or when a cache implementation is not available.
+ * All read operations return `null`, while write operations are ignored.
+ * Used for disabling caching without changing the SDK's cache interface.
  */
 export class EmptyCache implements Cache {
   public get size () : number { return 0 }

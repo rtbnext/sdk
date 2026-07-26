@@ -2,19 +2,19 @@ import type { Cache, ResourceState } from '../types/core';
 
 
 /**
- * Basic in-memory cache implementation that stores resources in a Map.
+ * Simple in-memory cache backed by a Map.
  * 
- * This cache is suitable for short-lived applications or scenarios where persistence
- * is not required. Note that this cache does not implement any eviction policy, so it
- * may grow indefinitely if not managed properly.
+ * Suitable for short-lived applications where persistence is not required.
+ * No eviction strategy is implemented, so cached entries remain until they
+ * are explicitly removed or the cache is cleared.
  */
 export class MemoryCache implements Cache {
   /** Internal Map to store cached resources. */
-  private readonly cache = new Map< string, ResourceState >();
+  private readonly store = new Map< string, ResourceState >();
 
   /** Returns the number of items currently stored in the cache. */
   public get size () : number {
-    return this.cache.size
+    return this.store.size
   }
 
   /**
@@ -23,7 +23,7 @@ export class MemoryCache implements Cache {
    * @param key - The key associated with the cached resource.
    */
   public async get ( key: string ) : Promise< ResourceState | null > {
-    return this.cache.get( key ) ?? null;
+    return this.store.get( key ) ?? null;
   }
 
   /**
@@ -34,7 +34,7 @@ export class MemoryCache implements Cache {
    * @param value - The `ResourceState` to store in the cache.
    */
   public async set ( key: string, value: ResourceState ) : Promise< void > {
-    this.cache.set( key, value );
+    this.store.set( key, value );
   }
 
   /**
@@ -43,11 +43,11 @@ export class MemoryCache implements Cache {
    * @param key - The key associated with the cached resource to delete.
    */
   public async delete ( key: string ) : Promise< void > {
-    this.cache.delete( key );
+    this.store.delete( key );
   }
 
   /** Clears all resource states from the cache. */
   public async clear () : Promise< void > {
-    this.cache.clear();
+    this.store.clear();
   }
 }
