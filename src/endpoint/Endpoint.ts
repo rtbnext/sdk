@@ -1,4 +1,5 @@
 import type { ResourceLoader } from '../core/ResourceLoader';
+import type { ResourcePool } from '../core/ResourcePool';
 import { CsvParser } from '../parser/CsvParser';
 import { JsonParser } from '../parser/JsonParser';
 import { TextParser } from '../parser/TextParser';
@@ -24,10 +25,12 @@ export abstract class Endpoint {
   /**
    * @param loader - The shared resource loader instance.
    * @param endpoints - The root endpoint registry for cross-endpoint references.
+   * @param pool - The shared resource pool for caching and reusing resources.
    */
   constructor (
     protected readonly loader: ResourceLoader,
-    protected readonly endpoints: Endpoints
+    protected readonly endpoints: Endpoints,
+    protected readonly pool: ResourcePool
   ) {}
 
   /**
