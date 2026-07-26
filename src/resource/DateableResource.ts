@@ -56,6 +56,10 @@ export class DateableResource< D extends { dates: string[] }, R > extends Resour
         return dates.map( ( d, i ) => callback( self.factory( d ), i ) );
       },
 
+      forEach ( callback: ( item: R, index: number ) => void ) {
+        dates.forEach( ( d, i ) => callback( self.factory( d ), i ) );
+      },
+
       ...sliceMethods( dates, c ),
       ...yearMonthMethods( dates, c, d => d ),
       ...rangeMethods( dates, c, d => d )

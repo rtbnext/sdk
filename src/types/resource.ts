@@ -77,10 +77,10 @@ export interface Collection< I extends { uri: string } > extends Iterable< I > {
 
   /** Convert the collection to an array of entities. */
   toArray () : Entity< I >[];
-  /** Iterate over each entity in the collection. */
-  forEach ( callback: ( item: Entity< I >, index: number ) => void ) : void;
   /** Map each entity in the collection to a new value. */
   map < R > ( callback: ( item: Entity< I >, index: number ) => R ) : R[];
+  /** Iterate over each entity in the collection. */
+  forEach ( callback: ( item: Entity< I >, index: number ) => void ) : void;
 
   /** Take the first count items from the collection. */
   take ( count: number ) : Collection< I >;
@@ -179,6 +179,8 @@ export interface Dates< R > extends Iterable< R > {
   toArray () : R[];
   /** Map each dated resource to a new value. */
   map < T > ( callback: ( item: R, index: number ) => T ) : T[];
+  /** Iterate over each dated resource. */
+  forEach ( callback: ( item: R, index: number ) => void ) : void;
 
   /** Take the first count date entries. */
   take ( count: number ) : Dates< R >;
