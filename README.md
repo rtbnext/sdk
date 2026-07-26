@@ -82,15 +82,27 @@ client.profile.get( 'bill-gates' )
   );
 ```
 
-### Cache behavior
+## Cache behavior
 
-The SDK supports different cache modes:
+The SDK includes a configurable resource cache layer that follows HTTP cache semantics. Resources are cached according to the selected cache mode and server-provided cache headers.
 
-- `ttl` — uses HTTP cache lifetime information
-- `revalidate` — performs conditional HTTP requests using validators such as `ETag` and `Last-Modified`
-- `session` — keeps resources during the SDK lifetime
+Supported cache modes:
 
-Caching behavior follows HTTP semantics and does not bypass server-side cache validation.
+- `ttl` — uses the server-defined cache lifetime (`Cache-Control`)
+- `revalidate` — performs conditional requests using validators such as `ETag` and `Last-Modified`
+- `session` — keeps resources during the lifetime of the SDK instance
+
+The SDK does **not bypass HTTP cache** validation. Expired resources are refreshed according to the configured mode to prevent serving outdated data indefinitely.
+
+A custom cache implementation can be provided by implementing the `Cache` interface. This allows applications to integrate their own storage solutions, such as persistent databases, filesystem caches, browser storage, or distributed cache systems.
+
+The cache interface requires the following operations:
+
+- retrieve a cached resource state
+- store a resource state
+- delete a resource
+- clear the cache
+- report the current cache size
 
 ## Requirements
 
