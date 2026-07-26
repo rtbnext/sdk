@@ -87,3 +87,14 @@ The SDK supports different cache modes:
 - `session` — keeps resources during the SDK lifetime
 
 Caching behavior follows HTTP semantics and does not bypass server-side cache validation.
+
+## Requirements
+
+- Node.js 18+
+- Fetch API support
+
+## License
+
+**Copyright © 2026 RTBNext**  
+Created and maintained by [Paul Köhler](https://komed3.de) (komed3).  
+Licensed under the [MIT License](./LICENSE).
