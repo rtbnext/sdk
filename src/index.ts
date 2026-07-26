@@ -3,18 +3,14 @@
  * 
  * Official JavaScript/TypeScript SDK for the RTBNext API.
  * 
- * This package generates a fully typed SDK for the RTBNext API, including all endpoints,
- * resources, and data structures. It provides a convenient interface for making API requests,
- * handling responses, and managing resource state with caching and lazy loading.
+ * Provides fully typed access to all RTBNext API endpoints, resources, and
+ * data models. The SDK offers lazy loading, transparent caching, automatic
+ * revalidation, and a resource-oriented API for working with lists, profiles,
+ * filters, statistics, and time series data.
  * 
- * The SDK is designed to be used in both Node.js and browser environments, and supports
- * modern JavaScript features such as async/await, Promises, and ES modules. It also
- * includes built-in support for caching, revalidation, and conditional requests to optimize
- * network usage.
- * 
- * Endpoints get enriched with collections, indexes and time series data for easy access
- * to the underlying data. It allows for a fast, efficient, and type-safe way to interact
- * with the RTBNext API reducing boilerplate code and improving developer productivity.
+ * Designed for both Node.js and modern browsers, it leverages native
+ * `fetch()`, Promises, async/await, and ES modules while providing a concise,
+ * type-safe developer experience with minimal boilerplate.
  * 
  * @author Paul Köhler (komed3)
  * @license MIT
@@ -37,7 +33,7 @@ export type * from './types/resource';
  * @param options - RTBNext SDK configuration options.
  * @returns A configured RTBNext SDK instance.
  */
-const rtbnext = ( options: RTBNextOptions ) => new RTBNext( options );
+const rtbnext = ( options: RTBNextOptions ) : RTBNext => new RTBNext( options );
 
 // --- define export ---
 
