@@ -16,3 +16,10 @@ client.stats.global.data().then( stats => {
   console.log( 'Total wealth:', stats.total );
   console.log( 'Woman quota:', stats.quota );
 } );
+
+// --- work with profile scatter data ---
+
+client.stats.scatter.collection().then( scatter => {
+  console.log( 'Scatter points:', scatter.count );
+  scatter.take( 10 ).forEach( point => console.log( point.name, point.networth, point.age ) );
+} );
