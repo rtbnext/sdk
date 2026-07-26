@@ -92,10 +92,7 @@ export class ResourceLoader {
    * @returns True if the resource is valid, otherwise false.
    */
   public valid ( state?: ResourceState ) : boolean {
-    if ( ! state ) return false;
-    if ( this.mode === 'session' ) return true;
-
-    return ! this.isExpired( state );
+    return !! state && ( this.mode === 'session' || ( this.mode === 'ttl' && ! this.isExpired( state ) ) );
   }
 
   /**
