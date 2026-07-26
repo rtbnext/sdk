@@ -10,7 +10,7 @@ The RTBNext SDK provides a typed, asynchronous interface for accessing billionai
 
 The SDK follows a consistent resource-oriented design: resources are loaded lazily, cached according to the configured cache mode, and expose typed helper methods for collections, time series and indexed data.
 
-For a complete list of available API endpoints, please refer to the [API Documentation](https://docs.rtbnext.de). Visit the [API endpoint](https://api.rtbnext.de) or check the [SDK Documentation](https://sdk.rtbnext.de) for more information. Check the [System Status](https://status.rtbnext.de) for any ongoing issues or maintenance.
+To find a list of all available API endpoints, please refer to the [API Documentation](https://docs.rtbnext.de). Also visit the [API endpoint](https://api.rtbnext.de) or review the [SDK Documentation](https://sdk.rtbnext.de) for additional details. For updates on any current issues or maintenance, please refer to the [System Status](https://status.rtbnext.de).
 
 ## Installation
 
