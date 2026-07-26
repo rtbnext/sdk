@@ -110,6 +110,7 @@ export class TimeSeriesResource< D extends readonly unknown[], R extends { date:
       find ( date: string ) { return points.find( p => d( p ) === date ) ?? null },
       toArray () { return [ ...points ] },
       map < U > ( callback: ( item: T, index: number ) => U ) { return points.map( callback ) },
+      forEach ( callback: ( item: T, index: number ) => void ) { return points.forEach( callback ) },
 
       ...sliceMethods( points, c ),
       ...yearMonthMethods( points, c, d ),

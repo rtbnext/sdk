@@ -271,6 +271,8 @@ export interface TimeSeries< R extends { date: string } > extends Iterable< R > 
   toArray () : R[];
   /** Map each point in the series. */
   map < T > ( callback: ( item: R, index: number ) => T ) : T[];
+  /** Iterate over each point in the series. */
+  forEach ( callback: ( item: R, index: number ) => void ) : void,
 
   /** Take the first count points. */
   take ( count: number ) : TimeSeries< R >;
