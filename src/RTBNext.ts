@@ -1,5 +1,6 @@
 import { HttpClient } from './core/HttpClient';
 import { ResourceLoader } from './core/ResourceLoader';
+import { ResourcePool } from './core/ResourcePool';
 import { Filter } from './endpoint/Filter';
 import { List } from './endpoint/List';
 import { Mover } from './endpoint/Mover';
@@ -32,6 +33,8 @@ export class RTBNext {
   public readonly httpClient: HttpClient;
   /** The resource loader used for caching and fetching resources. */
   public readonly resourceLoader: ResourceLoader;
+  /** The resource pool used for caching and reusing resource instances. */
+  public readonly resourcePool: ResourcePool;
   /** The collection of endpoint clients available in the SDK. */
   public readonly endpoints: Endpoints;
 
@@ -62,18 +65,21 @@ export class RTBNext {
       timeout: options.httpTimeout ?? DEFAULT_OPTIONS.httpTimeout
     } );
 
-    this.resourceLoader = ResourceLoader.getInstance( this.httpClient, {
-      ...DEFAULT_OPTIONS.cache, ...options.cache
-    } );
+    this.resourceLoader = ResourceLoader.getInstance(
+      this.httpClient, { ...DEFAULT_OPTIONS.cache, ...options.cache }
+    );
+
+    this.resourcePool = new ResourcePool();
 
     const endpoints = {} as Endpoints;
+    const args = [ this.resourceLoader, this.resourcePool, endpoints ] as const;
 
-    this.profile = new Profile( this.resourceLoader, endpoints );
-    this.list = new List( this.resourceLoader, endpoints );
-    this.mover = new Mover( this.resourceLoader, endpoints );
-    this.filter = new Filter( this.resourceLoader, endpoints );
-    this.stats = new Stats( this.resourceLoader, endpoints );
-    this.system = new System( this.resourceLoader, endpoints );
+    this.profile = new Profile( ...args );
+    this.list = new List( ...args );
+    this.mover = new Mover( ...args );
+    this.filter = new Filter( ...args );
+    this.stats = new Stats( ...args );
+    this.system = new System( ...args );
 
     endpoints.profile = this.profile;
     endpoints.list = this.list;
