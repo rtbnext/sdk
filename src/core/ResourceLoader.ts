@@ -25,22 +25,22 @@ export class ResourceLoader {
   ) {}
 
   /**
-   * Builds the internal resource state from an HTTP response and optional previous state.
+   * Creates a ResourceState from an HTTP response.
    * 
    * @param res - The HTTP response returned from the server.
    * @param prev - The previous cached resource state, if available.
    * @returns The updated ResourceState including expiration and validator headers.
    */
   private createState ( res: HttpResponse, prev?: ResourceState ) : ResourceState {
-    const created = Date.now();
+    const now = Date.now();
     const maxAge = res.headers.get( 'Cache-Control' )?.match( /max-age=(\d+)/i )?.[ 1 ];
-    const expires = maxAge ? created + Number( maxAge ) * 1000 : prev?.expires;
+    const expires = maxAge ? now + Number( maxAge ) * 1000 : prev?.expires;
 
     const etag = res.headers.get( 'ETag' ) ?? prev?.etag;
     const lastModified = res.headers.get( 'Last-Modified' ) ?? prev?.lastModified;
 
     const response = res.status === 304 && prev ? { ...prev.response, headers: res.headers } : res;
-    return { response, created, expires, etag, lastModified };
+    return { response, created: now, expires, etag, lastModified };
   }
 
   /**
