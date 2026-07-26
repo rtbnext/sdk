@@ -105,7 +105,7 @@ export class Resource< D > {
 
   /** Returns whether the resource is currently valid based on the loader's cache mode. */
   public get valid () : boolean {
-    return ! this.loaded || this.loader.valid( this.state );
+    return ! this.loaded || ! this.state || this.loader.valid( this.state );
   }
 
   /**
