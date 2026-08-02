@@ -22,22 +22,22 @@ export class Filter extends Endpoint implements IFilter {
 
   /** Deceased profiles filter collection. */
   public get deceased () : FilterCollection {
-    return this.filter( `v2/filter/special/deceased.json` );
+    return this.filter( 'v2/filter/special/deceased.json' );
   }
 
   /** Drop-off profiles filter collection. */
   public get dropOff () : FilterCollection {
-    return this.filter( `v2/filter/special/dropOff.json` );
+    return this.filter( 'v2/filter/special/dropOff.json' );
   }
 
   /** Family profiles filter collection. */
   public get family () : FilterCollection {
-    return this.filter( `v2/filter/special/family.json` );
+    return this.filter( 'v2/filter/special/family.json' );
   }
 
   /** Self-made profiles filter collection. */
   public get selfMade () : FilterCollection {
-    return this.filter( `v2/filter/special/selfMade.json` );
+    return this.filter( 'v2/filter/special/selfMade.json' );
   }
 
   /** Industry filter collection. */
