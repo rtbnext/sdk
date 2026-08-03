@@ -19,7 +19,7 @@ client.list.index.collection().then( lists => {
 
 client.list.index.collection()
   .then( lists => lists.find( 'billionaires' )?.dates.get() )
-  .then( dates => dates.year( 2026 ).last.collection() )
+  .then( dates => dates.year( 2026 ).first.collection() )
   .then( snapshot => {
     console.log( 'Latest snapshot:', snapshot.count );
     snapshot.take( 10 ).forEach( item => console.log( item.name, item.rank ) );
