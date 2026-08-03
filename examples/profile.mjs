@@ -19,7 +19,7 @@ client.profile.data( 'bill-gates' ).data().then( data =>
 client.profile.index.collection().then( profiles => {
   console.log( 'Total:', profiles.total );
 
-  profiles.search( 'bill' ).orderBy( 'networth', 'desc' ).take( 5 )
+  profiles.search( 'space' ).orderBy( 'networth', 'desc' ).take( 5 )
     .forEach( item => console.log( item.name, item.uri ) );
 } );
 
