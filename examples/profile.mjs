@@ -27,6 +27,6 @@ client.profile.index.collection().then( profiles => {
 
 client.profile.get( 'elon-musk' ).history.series().then( history => {
   console.log( 'Points:', history.count );
-  console.log( 'Latest:', history.last );
+  console.log( 'Latest:', history.first );
   console.log( 'Average:', history.avg( p => p.networth ) );
 } );
