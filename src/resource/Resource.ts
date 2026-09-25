@@ -1,4 +1,5 @@
-import type { ResourceState } from '../types/core';
+import { StateLoader } from '../core/StateLoader';
+import type { ParserFn, ResourceState } from '../types/core';
 
 
 /**
@@ -23,4 +24,17 @@ export class Resource< D > {
   protected value?: D;
   /** The transformed resource value returned by `transform()`. */
   protected transformed?: any | Promise< any >;
+
+  /**
+   * Creates a new resource wrapper.
+   * 
+   * @param path - The resource path for the API request.
+   * @param loader - The resource state loader used to fetch and cache data.
+   * @param parser - The parser function used to decode the response body.
+   */
+  constructor (
+    protected readonly path: string,
+    protected readonly loader: StateLoader,
+    protected readonly parser: ParserFn< D >
+  ) {}
 }
