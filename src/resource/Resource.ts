@@ -127,4 +127,17 @@ export class Resource< D > {
 
     return this.loading;
   }
+
+  /**
+   * Refreshes the resource from the loader and resets the parsed value.
+   * 
+   * @param options - Optional request options passed to the loader.
+   */
+  public async refresh ( options?: RequestOptions ) : Promise< void > {
+    this.state = await this.loader.refresh( this.path, options );
+    this.loaded = true;
+
+    this.reset();
+    this.emit( 'refresh', 'update' );
+  }
 }
