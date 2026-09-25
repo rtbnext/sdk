@@ -113,4 +113,23 @@ export class StateLoader {
 
     return state;
   }
+
+  /** Returns the number of entries currently stored in the cache. */
+  public get size () : number {
+    return this.cache.size;
+  }
+
+  /**
+   * Deletes a resource entry from the cache.
+   * 
+   * @param path - The cache key or resource path to remove.
+   */
+  public async delete ( path: string ) : Promise< void > {
+    await this.cache.delete( path );
+  }
+
+  /** Clears all cached resource entries. */
+  public async clear () : Promise< void > {
+    await this.cache.clear();
+  }
 }
