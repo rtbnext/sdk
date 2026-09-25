@@ -37,4 +37,13 @@ export class Resource< D > {
     protected readonly loader: StateLoader,
     protected readonly parser: ParserFn< D >
   ) {}
+
+  /**
+   * Emits lifecycle events for this resource.
+   * 
+   * @param events - Event names to emit.
+   */
+  protected emit ( ...events: string[] ) : void {
+    for ( const event of events ) this.hooks.get( event )?.forEach( handler => handler( this ) );
+  }
 }
