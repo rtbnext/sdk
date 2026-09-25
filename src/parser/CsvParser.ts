@@ -19,4 +19,39 @@ export class CsvParser extends TextParser {
     const n = Number( value );
     return Number.isNaN( n ) ? value.trim() : n;
   }
+
+  /**
+   * Parses a single CSV line into an array of values.
+   * 
+   * @param line - A single line from the CSV payload.
+   * @param delimiter - The delimiter separating values.
+   * @returns An array of parsed string or numeric values.
+   */
+  private static parseLine ( line: string, delimiter: string ) : ( string | number )[] {
+    const values: ( string | number )[] = [];
+    let value = '', quoted = false;
+
+    for ( let i = 0; i < line.length; i++ ) {
+      const char = line[ i ];
+
+      if ( char === '"' ) {
+        if ( quoted && line[ i + 1 ] === '"' ) value += '"', i++;
+        else quoted = ! quoted;
+
+        continue;
+      }
+
+      if ( char === delimiter && ! quoted ) {
+        values.push( CsvParser.parseValue( value ) );
+        value = '';
+
+        continue;
+      }
+
+      value += char;
+    }
+
+    values.push( CsvParser.parseValue( value ) );
+    return values;
+  }
 }
