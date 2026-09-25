@@ -9,6 +9,8 @@ import type { RateLimiterOptions } from '../types/core';
  *  - spread: distributes requests evenly over the configured interval
  */
 export class RateLimiter {
+  /** The configuration options for the rate limiter. */
+  private readonly options: Required< RateLimiterOptions >;
   /** The interval in milliseconds between each token refill. */
   private readonly refillInterval: number;
   /** Queue of pending requests waiting for tokens. */
@@ -23,11 +25,10 @@ export class RateLimiter {
    * 
    * @param options - The configuration options for the rate limiter.
    */
-  public constructor ( private readonly options: RateLimiterOptions ) {
-    const { maxRequests, perMs } = this.options;
-
-    this.refillInterval = perMs / maxRequests;
-    this.tokens = maxRequests;
+  public constructor ( options: RateLimiterOptions ) {
+    this.options = { ...DEFAULT_OPTIONS.limiter, ...options };
+    this.refillInterval = this.options.perMs / this.options.maxRequests;
+    this.tokens = this.options.maxRequests;
   }
 
   /** Processes the queued requests if there are available tokens. */
