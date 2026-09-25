@@ -90,4 +90,27 @@ export class HttpClient {
       throw new Error( `Fetch failed: ${ err instanceof Error ? err.message : String( err ) }` );
     }
   }
+
+  /**
+   * Sends an HTTP request to the specified path, using the base URL from the client options.
+   * 
+   * If a request to the same URL is already pending, it will return the existing promise
+   * instead of creating a new request.
+   * 
+   * @param path - The path to send the request to, relative to the base URL.
+   * @param options - Optional request-specific options.
+   * @returns A promise that resolves to the HttpResponse.
+   */
+  public async request ( path: string, options?: RequestOptions ) : Promise< HttpResponse > {
+    const url = new URL( path, this.options.baseUrl ), key = url.href;
+
+    const existing = this.pending.get( key );
+    if ( existing ) return existing;
+
+    const request = this.execute( url, options );
+    this.pending.set( key, request );
+
+    try { return await request }
+    finally { this.pending.delete( key ) }
+  }
 }
