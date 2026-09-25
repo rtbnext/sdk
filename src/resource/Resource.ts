@@ -32,7 +32,7 @@ export class Resource< D > {
    * @param loader - The resource state loader used to fetch and cache data.
    * @param parser - The parser function used to decode the response body.
    */
-  constructor (
+  public constructor (
     protected readonly path: string,
     protected readonly loader: StateLoader,
     protected readonly parser: ParserFn< D >
