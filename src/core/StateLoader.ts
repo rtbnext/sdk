@@ -132,4 +132,18 @@ export class StateLoader {
   public async clear () : Promise< void > {
     await this.cache.clear();
   }
+
+  /**
+   * Creates a ResourceLoader instance with the configured cache implementation.
+   * 
+   * @param client - The HTTP client used to perform resource requests.
+   * @param options - Cache configuration options.
+   * @returns A configured ResourceLoader.
+   */
+  public static getInstance ( client: HttpClient, options: CacheOptions = {} ) : StateLoader {
+    const { type = 'memory', mode = 'ttl' } = options;
+    const cache = type === 'memory' ? new MemoryCache() : type === false ? new EmptyCache() : type;
+
+    return new StateLoader( cache, client, mode );
+  }
 }
