@@ -10,3 +10,14 @@ export function sanitize ( value: unknown, delimiter: string = '-' ) : string {
   return String( value ).trim().toLowerCase().replace( /[^a-z0-9]+/g, delimiter )
     .replace( new RegExp( `[${ delimiter }]{2,}`, 'g' ), delimiter );
 }
+
+
+/**
+ * Converts a value to a UTC date string in the format 'YYYY-MM-DD'.
+ * 
+ * @param value - The value to convert to a date string.
+ * @returns The UTC date string.
+ */
+export function ymd ( value: unknown ) : string {
+  return new Date( Date.parse( String( value ) ) ).toISOString().slice( 0, 10 );
+}
