@@ -102,4 +102,9 @@ export class Resource< D > {
     this.hooks.get( event )?.delete( handler );
     return this;
   }
+
+  /** Returns whether the resource is currently valid based on the loader's cache mode. */
+  public get valid () : boolean {
+    return ! this.loaded || ! this.state || this.loader.valid( this.state );
+  }
 }
