@@ -61,6 +61,26 @@ export class StateLoader {
   }
 
   /**
+   * Determines whether a cached resource has expired.
+   * 
+   * @param state - The resource state to inspect.
+   * @returns True when the cached state is expired, otherwise false.
+   */
+  private isExpired ( state: ResourceState ) : boolean {
+    return !! state.expires && state.expires <= Date.now();
+  }
+
+  /**
+   * Checks if a cached resource is valid based on the current cache mode and expiration.
+   * 
+   * @param state - The resource state to validate.
+   * @returns True if the resource is valid, otherwise false.
+   */
+  public valid ( state?: ResourceState ) : boolean {
+    return !! state && ( this.mode === 'session' || ( this.mode === 'ttl' && ! this.isExpired( state ) ) );
+  }
+
+  /**
    * Refreshes a cached resource by revalidating or refetching it from the network.
    * 
    * @param path - The resource path or URL to refresh.
