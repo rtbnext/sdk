@@ -116,3 +116,17 @@ export interface CacheOptions {
   /** The mode of caching to use. */
   mode?: CacheMode;
 }
+
+// --- RTBNext options ---
+
+/** Options for configuring the RTBNext SDK. */
+export interface RTBNextOptions {
+  /** The identity of the client using the SDK. */
+  client: ClientIdentity;
+  /** The base URL for the API. */
+  baseUrl?: string;
+  /** The default timeout for HTTP requests in milliseconds. */
+  httpTimeout?: number;
+  /** The cache configuration options. */
+  cache?: CacheOptions;
+}
