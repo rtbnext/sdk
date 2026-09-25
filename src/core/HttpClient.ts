@@ -1,4 +1,4 @@
-import type { HttpResponse } from '../types/core';
+import type { HttpClientOptions, HttpResponse } from '../types/core';
 import { RateLimiter } from './RateLimiter';
 
 
@@ -15,4 +15,14 @@ export class HttpClient {
   private readonly pending = new Map< string, Promise< HttpResponse > >();
   /** The default headers to include in every request. */
   private readonly headers: Headers;
+
+  /**
+   * Creates a new instance of the HttpClient.
+   * 
+   * @param options - The configuration options for the HTTP client.
+   */
+  public constructor ( private readonly options: HttpClientOptions ) {
+    this.limiter = new RateLimiter( this.options.limiter );
+    this.headers = this.createHeaders();
+  }
 }
