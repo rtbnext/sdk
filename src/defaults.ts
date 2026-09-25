@@ -1,5 +1,5 @@
 /** Default configuration options for the RTBNext SDK. */
-const DEFAULT_OPTIONS = {
+export const DEFAULT_OPTIONS = {
   sdkVersion: '1.0.0',
   baseUrl: 'https://api.rtbnext.de',
   httpTimeout: 5_000,
