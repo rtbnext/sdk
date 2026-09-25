@@ -29,4 +29,9 @@ export class RateLimiter {
     this.refillInterval = perMs / maxRequests;
     this.tokens = maxRequests;
   }
+
+  /** Processes the queued requests if there are available tokens. */
+  private processQueue () : void {
+    while ( this.tokens-- > 0 && this.queue.length ) this.queue.shift()?.();
+  }
 }
