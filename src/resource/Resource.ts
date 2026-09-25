@@ -140,4 +140,13 @@ export class Resource< D > {
     this.reset();
     this.emit( 'refresh', 'update' );
   }
+
+  /**
+   * Returns the parsed resource data, loading and parsing on demand.
+   * 
+   * @returns The parsed resource value.
+   */
+  public async data () : Promise< D > {
+    return this.load().then( () => this.parsed ? this.value! : this.parse() );
+  }
 }
