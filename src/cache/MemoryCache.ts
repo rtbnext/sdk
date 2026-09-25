@@ -36,4 +36,18 @@ export class MemoryCache implements Cache {
   public async set ( key: string, value: ResourceState ) : Promise< void > {
     this.store.set( key, value );
   }
+
+  /**
+   * Deletes a resource state from the cache by its key.
+   * 
+   * @param key - The key associated with the cached resource to delete.
+   */
+  public async delete ( key: string ) : Promise< void > {
+    this.store.delete( key );
+  }
+
+  /** Clears all resource states from the cache. */
+  public async clear () : Promise< void > {
+    this.store.clear();
+  }
 }
