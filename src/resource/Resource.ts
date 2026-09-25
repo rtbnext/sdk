@@ -1,5 +1,5 @@
 import { StateLoader } from '../core/StateLoader';
-import type { ParserFn, ResourceState } from '../types/core';
+import type { ParserFn, RequestOptions, ResourceState } from '../types/core';
 
 
 /**
@@ -106,5 +106,25 @@ export class Resource< D > {
   /** Returns whether the resource is currently valid based on the loader's cache mode. */
   public get valid () : boolean {
     return ! this.loaded || ! this.state || this.loader.valid( this.state );
+  }
+
+  /**
+   * Loads the resource if it has not already been loaded.
+   * 
+   * @param options - Optional request options passed to the loader.
+   */
+  public async load ( options?: RequestOptions ) : Promise< void > {
+    if ( this.loaded ) return;
+
+    this.loading ??= this.loader.load( this.path, options )
+      .then( state => {
+        this.state = state, this.loaded = true;
+
+        this.reset();
+        this.emit( 'load', 'update' );
+      } )
+      .finally( () => this.loading = undefined );
+
+    return this.loading;
   }
 }
