@@ -11,4 +11,9 @@ import type { Cache, ResourceState } from '../types/core';
 export class MemoryCache implements Cache {
   /** Internal Map to store cached resources. */
   private readonly store = new Map< string, ResourceState >();
+
+  /** Returns the number of items currently stored in the cache. */
+  public get size () : number {
+    return this.store.size
+  }
 }
