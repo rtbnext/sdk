@@ -30,4 +30,14 @@ export class ResourcePool< R = Resource< unknown > > {
 
     return resource;
   }
+
+  /** Returns the number of resource instances currently stored. */
+  public get size () : number {
+    return this.resources.size;
+  }
+
+  /** Removes all stored resource instances. */
+  public clear () : void {
+    this.resources.clear();
+  }
 }
