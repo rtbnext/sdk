@@ -62,6 +62,22 @@ export interface HttpResponse {
   latency: number;
 }
 
+// --- resource state ---
+
+/** The state of a cached resource. */
+export interface ResourceState {
+  /** The HTTP response associated with the resource. */
+  response: HttpResponse;
+  /** The timestamp when the resource was created in the cache. */
+  created: number;
+  /** The timestamp when the resource expires in the cache, if applicable. */
+  expires?: number;
+  /** The ETag of the resource, if applicable. */
+  etag?: string;
+  /** The Last-Modified header of the resource, if applicable. */
+  lastModified?: string;
+}
+
 // --- cache ---
 
 /** The interface for a cache implementation. */
