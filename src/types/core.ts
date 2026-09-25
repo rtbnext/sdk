@@ -93,3 +93,26 @@ export interface Cache {
   /** Clears all resource states from the cache. */
   clear () : Promise< void >;
 }
+
+/**
+ * The mode of caching to use when loading resources.
+ * 
+ *  - 'ttl': Use the cached resource if it exists and is not expired.
+ *  - 'revalidate': Always fetch the resource from the server and update the cache.
+ *  - 'session': Use the cached resource if it exists, regardless of expiration.
+ */
+export type CacheMode = 'ttl' | 'revalidate' | 'session';
+
+/**
+ * The type of cache to use, either false (no cache), 'memory' (in-memory cache),
+ * or a custom cache implementation.
+ */
+export type CacheType = false | 'memory' | Cache;
+
+/** Options for configuring the cache behavior. */
+export interface CacheOptions {
+  /** The type of cache to use. */
+  type?: CacheType;
+  /** The mode of caching to use. */
+  mode?: CacheMode;
+}
