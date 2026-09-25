@@ -61,3 +61,19 @@ export interface HttpResponse {
   /** The latency of the request in milliseconds. */
   latency: number;
 }
+
+// --- cache ---
+
+/** The interface for a cache implementation. */
+export interface Cache {
+  /** The number of items currently stored in the cache. */
+  readonly size: number;
+  /** Retrieves a resource state from the cache by its key. */
+  get ( key: string ) : Promise< ResourceState | null >;
+  /** Stores a resource state in the cache with the given key. */
+  set ( key: string, value: ResourceState ) : Promise< void >;
+  /** Deletes a resource state from the cache by its key. */
+  delete ( key: string ) : Promise< void >;
+  /** Clears all resource states from the cache. */
+  clear () : Promise< void >;
+}
