@@ -1,4 +1,4 @@
-export type { RateLimiterOptions } from '../types/core';
+import type { RateLimiterOptions } from '../types/core';
 
 
 /**
@@ -17,4 +17,16 @@ export class RateLimiter {
   private timer: NodeJS.Timeout | null = null;
   /** The current number of available tokens. */
   private tokens: number;
+
+  /**
+   * Constructs a new RateLimiter instance.
+   * 
+   * @param options - The configuration options for the rate limiter.
+   */
+  public constructor ( private readonly options: RateLimiterOptions ) {
+    const { maxRequests, perMs } = this.options;
+
+    this.refillInterval = perMs / maxRequests;
+    this.tokens = maxRequests;
+  }
 }
