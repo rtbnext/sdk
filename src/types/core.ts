@@ -26,10 +26,10 @@ export interface RateLimiterOptions {
 
 /** Options for the HTTP client. */
 export interface HttpClientOptions {
-  /** The base URL for the API. */
-  baseUrl?: string;
   /** The identity of the client making requests. */
   client: ClientIdentity;
+  /** The base URL for the API. */
+  baseUrl?: string;
   /** The rate limiter options. */
   limiter?: RateLimiterOptions;
   /** The default timeout for requests in milliseconds. */
