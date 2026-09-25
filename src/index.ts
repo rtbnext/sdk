@@ -22,3 +22,13 @@ import type { RTBNextOptions } from './types/core';
 // --- export types ---
 
 export type * from './types/core';
+
+// --- create SDK instance ---
+
+/**
+ * Creates a new RTBNext SDK instance.
+ * 
+ * @param options - RTBNext SDK configuration options.
+ * @returns A configured RTBNext SDK instance.
+ */
+const rtbnext = ( options: RTBNextOptions ) : RTBNext => new RTBNext( options );
