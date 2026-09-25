@@ -17,9 +17,9 @@ export interface ClientIdentity {
 /** Options for the rate limiter. */
 export interface RateLimiterOptions {
   /** The maximum number of requests allowed in the given time window. */
-  maxRequests: number;
+  maxRequests?: number;
   /** The time window in milliseconds for the rate limiter. */
-  perMs: number;
+  perMs?: number;
 }
 
 // --- http client ---
@@ -27,13 +27,13 @@ export interface RateLimiterOptions {
 /** Options for the HTTP client. */
 export interface HttpClientOptions {
   /** The base URL for the API. */
-  baseUrl: string;
+  baseUrl?: string;
   /** The identity of the client making requests. */
   client: ClientIdentity;
   /** The rate limiter options. */
-  limiter: RateLimiterOptions;
+  limiter?: RateLimiterOptions;
   /** The default timeout for requests in milliseconds. */
-  timeout: number;
+  timeout?: number;
 }
 
 /** The response from an HTTP request. */
