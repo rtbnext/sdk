@@ -54,4 +54,17 @@ export class CsvParser extends TextParser {
     values.push( CsvParser.parseValue( value ) );
     return values;
   }
+
+  /**
+   * Parses the HTTP response body as CSV and returns typed data.
+   * 
+   * @template D - The expected output type.
+   * @param res - The HTTP response to parse.
+   * @param delimiter - The delimiter separating values in the CSV.
+   * @returns The parsed CSV data.
+   */
+  public static override parse < D > ( res: HttpResponse, delimiter: string = ',' ) : D {
+    return TextParser.parse( res ).split( /\r?\n/ ).filter( l => l.trim().length > 0 )
+      .map( l => CsvParser.parseLine( l, delimiter ) ) as D;
+  }
 }
