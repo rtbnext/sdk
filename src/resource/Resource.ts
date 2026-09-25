@@ -38,6 +38,23 @@ export class Resource< D > {
     protected readonly parser: ParserFn< D >
   ) {}
 
+  /** Resets parsed resource state so the next call to `data()` re-parses. */
+  private reset () : void {
+    this.parsed = false, this.value = undefined, this.transformed = undefined;
+  }
+
+  /**
+   * Parses the loaded response body and emits a parse event.
+   * 
+   * @returns The parsed resource value.
+   */
+  private parse () : D {
+    this.value = this.parser( this.state!.response ), this.parsed = true;
+    this.emit( 'parse' );
+
+    return this.value!;
+  }
+
   /**
    * Emits lifecycle events for this resource.
    * 
