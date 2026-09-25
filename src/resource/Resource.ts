@@ -56,6 +56,19 @@ export class Resource< D > {
   }
 
   /**
+   * Convenience helper to transform parsed resource data.
+   * 
+   * @param fn - The transform function that receives the parsed data.
+   * @returns The transformed result.
+   */
+  protected transform < R > ( fn: ( data: D ) => Promise< R > | R ) : Promise< R > {
+    return Promise.resolve( this.transformed ??= Promise.resolve( this.data() ).then( fn )
+      .then( v => ( this.transformed = v, this.emit( 'transform' ), v ) )
+      .catch( e => ( this.transformed = undefined, Promise.reject( e ) ) )
+    );
+  }
+
+  /**
    * Emits lifecycle events for this resource.
    * 
    * @param events - Event names to emit.
