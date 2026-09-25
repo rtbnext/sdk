@@ -35,3 +35,19 @@ export interface HttpClientOptions {
   /** The default timeout for requests in milliseconds. */
   timeout: number;
 }
+
+/** The response from an HTTP request. */
+export interface HttpResponse {
+  /** The URL of the request. */
+  url: URL;
+  /** Whether the request was successful (status code 2xx). */
+  ok: boolean;
+  /** The HTTP status code of the response. */
+  status: number;
+  /** The body of the response as a Uint8Array. */
+  body: Uint8Array< ArrayBuffer >;
+  /** The headers of the response. */
+  headers: Headers;
+  /** The latency of the request in milliseconds. */
+  latency: number;
+}
