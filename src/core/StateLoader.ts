@@ -23,4 +23,23 @@ export class StateLoader {
     private readonly httpClient: HttpClient,
     private readonly mode: CacheMode
   ) {}
+
+  /**
+   * Creates a ResourceState from an HTTP response.
+   * 
+   * @param res - The HTTP response returned from the server.
+   * @param prev - The previous cached resource state, if available.
+   * @returns The updated ResourceState including expiration and validator headers.
+   */
+  private createState ( res: HttpResponse, prev?: ResourceState ) : ResourceState {
+    const now = Date.now();
+    const maxAge = res.headers.get( 'Cache-Control' )?.match( /max-age=(\d+)/i )?.[ 1 ];
+    const expires = maxAge ? now + Number( maxAge ) * 1000 : prev?.expires;
+
+    const etag = res.headers.get( 'ETag' ) ?? prev?.etag;
+    const lastModified = res.headers.get( 'Last-Modified' ) ?? prev?.lastModified;
+
+    const response = res.status === 304 && prev ? { ...prev.response, headers: res.headers } : res;
+    return { response, created: now, expires, etag, lastModified };
+  }
 }
