@@ -53,4 +53,33 @@ export class RateLimiter {
       }, this.options.perMs );
     } );
   }
+
+  /**
+   * Handles requests in spread mode.
+   * 
+   * If there are available tokens, the request is processed immediately and a timer
+   * is set to refill tokens at a steady rate.
+   * If not, the request is queued and will be processed when tokens are refilled.
+   */
+  public async spread () : Promise< void > {
+    if ( this.tokens > 0 ) {
+      this.tokens--;
+
+      if ( ! this.timer ) this.timer = setInterval( () => {
+        if ( this.tokens < this.options.maxRequests ) {
+          this.tokens++;
+          this.processQueue();
+        }
+
+        if ( this.tokens === this.options.maxRequests && ! this.queue.length ) {
+          this.timer && clearInterval( this.timer );
+          this.timer = null;
+        }
+      }, this.refillInterval );
+
+      return;
+    }
+
+    return new Promise( resolve => this.queue.push( resolve ) );
+  }
 }
