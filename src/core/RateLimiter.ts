@@ -27,7 +27,7 @@ export class RateLimiter {
    * @param options - The configuration options for the rate limiter.
    */
   public constructor ( options: RateLimiterOptions ) {
-    this.options = { ...DEFAULT_OPTIONS.limiter, ...options };
+    this.options = { ...DEFAULT_OPTIONS.client.limiter, ...options };
     this.refillInterval = this.options.perMs / this.options.maxRequests;
     this.tokens = this.options.maxRequests;
   }
