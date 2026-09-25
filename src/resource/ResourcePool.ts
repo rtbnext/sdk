@@ -7,7 +7,7 @@ import { Resource } from '../resource/Resource';
  * The resource pool prevents duplicate wrapper instances while respecting
  * resource validity. Invalid resources are replaced with newly created ones.
  * 
- * @template R - The resource type to store in the pool
+ * @template R - The resource type to store in the pool.
  */
 export class ResourcePool< R = Resource< unknown > > {
   /** Cached resource instances indexed by their resource path. */
@@ -16,7 +16,6 @@ export class ResourcePool< R = Resource< unknown > > {
   /**
    * Returns an existing valid resource or creates and stores a new instance.
    * 
-   * @template R - The resource type to return.
    * @param path - The unique resource path used as cache key.
    * @param factory - Factory function used to create a new resource instance.
    * @returns The existing valid or newly created resource instance.
@@ -34,6 +33,15 @@ export class ResourcePool< R = Resource< unknown > > {
   /** Returns the number of resource instances currently stored. */
   public get size () : number {
     return this.resources.size;
+  }
+
+  /**
+   * Removes a stored resource instance by its resource path.
+   * 
+   * @param path - The unique resource path used as cache key.
+   */
+  public delete ( path: string ) : void {
+    this.resources.delete( path );
   }
 
   /** Removes all stored resource instances. */
