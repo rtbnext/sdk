@@ -1,5 +1,6 @@
 import { EmptyCache } from '../cache/EmptyCache';
 import { MemoryCache } from '../cache/MemoryCache';
+import { DEFAULT_OPTIONS } from '../defaults';
 import type { Cache, CacheMode, CacheOptions, HttpResponse, RequestOptions, ResourceState } from '../types/core';
 import type { HttpClient } from './HttpClient';
 
@@ -141,7 +142,7 @@ export class StateLoader {
    * @returns A configured ResourceLoader.
    */
   public static getInstance ( client: HttpClient, options: CacheOptions = {} ) : StateLoader {
-    const { type = 'memory', mode = 'ttl' } = options;
+    const { type, mode } = { ...DEFAULT_OPTIONS.cache, ...options };
     const cache = type === 'memory' ? new MemoryCache() : type === false ? new EmptyCache() : type;
 
     return new StateLoader( cache, client, mode );
