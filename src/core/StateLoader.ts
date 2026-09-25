@@ -42,4 +42,21 @@ export class StateLoader {
     const response = res.status === 304 && prev ? { ...prev.response, headers: res.headers } : res;
     return { response, created: now, expires, etag, lastModified };
   }
+
+  /**
+   * Fetches a resource from the network, optionally using conditional request headers.
+   * 
+   * @param path - The resource path or URL to request.
+   * @param prev - Previous cache state used for revalidation.
+   * @param options - Additional request options.
+   * @returns The resulting resource state from the fetch operation.
+   */
+  private async fetch ( path: string, prev?: ResourceState, options?: RequestOptions ) : Promise< ResourceState > {
+    const headers = new Headers( options?.headers );
+    if ( prev?.etag ) headers.set( 'If-None-Match', prev.etag );
+    if ( prev?.lastModified ) headers.set( 'If-Modified-Since', prev.lastModified );
+
+    const res = await this.httpClient.request( path, { ...options, headers } );
+    return this.createState( res, prev );
+  }
 }
