@@ -32,3 +32,8 @@ export type * from './types/core';
  * @returns A configured RTBNext SDK instance.
  */
 const rtbnext = ( options: RTBNextOptions ) : RTBNext => new RTBNext( options );
+
+// --- define export ---
+
+export { RTBNext, rtbnext };
+export default rtbnext;
