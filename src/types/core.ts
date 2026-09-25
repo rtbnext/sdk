@@ -36,6 +36,16 @@ export interface HttpClientOptions {
   timeout?: number;
 }
 
+/** Options for individual HTTP requests. */
+export interface RequestOptions {
+  /** Optional headers to include in the request. */
+  headers?: Headers;
+  /** The rate limiting mode, either 'burst' or 'spread'. */
+  mode?: 'burst' | 'spread';
+  /** Optional timeout for the request in milliseconds. */
+  timeout?: number;
+}
+
 /** The response from an HTTP request. */
 export interface HttpResponse {
   /** The URL of the request. */
