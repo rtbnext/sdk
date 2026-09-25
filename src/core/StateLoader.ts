@@ -59,4 +59,19 @@ export class StateLoader {
     const res = await this.httpClient.request( path, { ...options, headers } );
     return this.createState( res, prev );
   }
+
+  /**
+   * Refreshes a cached resource by revalidating or refetching it from the network.
+   * 
+   * @param path - The resource path or URL to refresh.
+   * @param options - Optional request-specific options.
+   * @returns The refreshed ResourceState.
+   */
+  public async refresh ( path: string, options?: RequestOptions ) : Promise< ResourceState > {
+    const cached = await this.cache.get( path );
+    const state = await this.fetch( path, cached ?? undefined, options );
+    await this.cache.set( path, state );
+
+    return state;
+  }
 }
