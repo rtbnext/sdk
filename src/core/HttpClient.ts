@@ -67,4 +67,27 @@ export class HttpClient {
 
     return { signal: AbortSignal.timeout( options?.timeout ?? this.options.timeout ), headers };
   }
+
+  /**
+   * Executes an HTTP request to the specified URL with rate limiting and returns the response.
+   * 
+   * @param url - The URL to send the request to.
+   * @param options - Optional request-specific options.
+   * @returns A promise that resolves to the HttpResponse.
+   * @throws Error if the fetch operation fails.
+   */
+  private async execute ( url: URL, options?: RequestOptions ) : Promise< HttpResponse > {
+    await this.limiter[ options?.mode ?? 'burst' ]();
+
+    try {
+      const start = performance.now();
+      const res = await fetch( url, this.requestInit( options ) );
+      const latency = Math.round( performance.now() - start );
+      const body = new Uint8Array( await res.arrayBuffer() );
+
+      return { url, ok: res.ok, status: res.status, body, headers: res.headers, latency };
+    } catch ( err ) {
+      throw new Error( `Fetch failed: ${ err instanceof Error ? err.message : String( err ) }` );
+    }
+  }
 }
