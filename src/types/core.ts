@@ -21,3 +21,17 @@ export interface RateLimiterOptions {
   /** The time window in milliseconds for the rate limiter. */
   perMs: number;
 }
+
+// --- http client ---
+
+/** Options for the HTTP client. */
+export interface HttpClientOptions {
+  /** The base URL for the API. */
+  baseUrl: string;
+  /** The identity of the client making requests. */
+  client: ClientIdentity;
+  /** The rate limiter options. */
+  limiter: RateLimiterOptions;
+  /** The default timeout for requests in milliseconds. */
+  timeout: number;
+}
