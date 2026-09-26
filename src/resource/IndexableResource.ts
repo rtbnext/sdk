@@ -22,3 +22,19 @@ const defaultKeys = ( value: unknown ) : readonly string[] | null => {
 
   return null;
 };
+
+
+/**
+ * A resource wrapper for nested indexable endpoints.
+ * 
+ * This class provides lazy index traversal using generated accessor properties.
+ * 
+ * @template D - The raw data type of the resource.
+ * @template R - The type of individual resources returned by the index factory function.
+ */
+export class IndexableResource< D, R > extends Resource< D > {
+  /** Factory that resolves a nested path to a resource. */
+  private readonly factory: IndexFn< R >;
+  /** Optional custom key extractor for index traversal. */
+  private readonly keys: KeysFn;
+}
