@@ -97,4 +97,26 @@ export abstract class DateCollection< T, R > extends CursorCollection< T, R > {
     const prefix = `${ year }-${ String( month ).padStart( 2, '0' ) }-`;
     return this.clone( this.items.filter( item => this.date( item ).startsWith( prefix ) ) );
   }
+
+  /**
+   * Returns a new collection containing items before the specified date.
+   * 
+   * @param date - The exclusive upper date boundary.
+   * @returns A new collection containing the matching items.
+   */
+  public before ( date: string ) : this {
+    const target = ymd( date );
+    return this.clone( this.items.filter( item => this.date( item ) < target ) );
+  }
+
+  /**
+   * Returns a new collection containing items after the specified date.
+   * 
+   * @param date - The exclusive lower date boundary.
+   * @returns A new collection containing the matching items.
+   */
+  public after ( date: string ) : this {
+    const target = ymd( date );
+    return this.clone( this.items.filter( item => this.date( item ) > target ) );
+  }
 }
