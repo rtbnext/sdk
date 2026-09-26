@@ -182,4 +182,40 @@ export class CollectCollection< I extends CollectItem, E > extends CursorCollect
       ( [ key, items ] ) => [ key, this.clone( items ) ]
     ) );
   }
+
+  /**
+   * Returns items ordered by an item property.
+   * 
+   * @param key - The property used for ordering.
+   * @param descending - Whether to reverse the resulting order.
+   * @returns A new ordered collection.
+   */
+  public orderBy ( key: string, descending: boolean = false ) : this {
+    return this.clone( [ ...this.items ].sort( ( a, b ) => {
+      const left = a[ key ], right = b[ key ];
+
+      if ( left === right ) return 0;
+      if ( left === undefined || left === null ) return 1;
+      if ( right === undefined || right === null ) return -1;
+
+      return left < right ? ( descending ? 1 : -1 ) : ( descending ? -1 : 1 );
+    } ) );
+  }
+
+  /**
+   * Returns items sorted using a custom key function.
+   * 
+   * @param key - The function used to obtain the sort value.
+   * @param reverse - Whether to reverse the resulting order.
+   * @returns A new sorted collection.
+   */
+  public sort ( key: ( item: I ) => string | number | boolean, reverse: boolean = false ) : this {
+    return this.clone( [ ...this.items ].sort( ( a, b ) => {
+      const left = key( a ), right = key( b );
+      if ( left === right ) return 0;
+
+      const result = left < right ? -1 : 1;
+      return reverse ? -result : result;
+    } ) );
+  }
 }
