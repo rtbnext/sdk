@@ -61,4 +61,21 @@ export abstract class CursorCollection< T, R > extends Collection< T, R > {
   public get hasPrev () : boolean {
     return this.cursor > 0;
   }
+
+  /** Resets the cursor to its initial position. */
+  public reset () : this {
+    this.cursor = -1;
+    return this;
+  }
+
+  /**
+   * Moves the cursor to the specified position.
+   * 
+   * @param position - The zero-based cursor position.
+   * @returns This collection instance.
+   */
+  public seek ( position: number ) : this {
+    this.cursor = position;
+    return this;
+  }
 }
