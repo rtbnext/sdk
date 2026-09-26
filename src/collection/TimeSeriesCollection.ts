@@ -68,4 +68,51 @@ export class TimeSeriesCollection< R extends TimePoint, A extends AggregatePoint
 
     return `${ isoYear }-W${ String( week ).padStart( 2, '0' ) }`;
   }
+
+  /**
+   * Aggregates a group of time-series points.
+   * 
+   * @param points - The points to aggregate.
+   * @param label - Optional aggregation label.
+   * @returns The aggregated point.
+   */
+  private aggregatePoints ( points: ReadonlyArray< R >, label?: string ) : A {
+    const sorted = [ ...points ].sort( ( a, b ) => a.date.localeCompare( b.date ) );
+    const result: Record< string, unknown > = {
+      date: sorted[ sorted.length - 1 ].date,
+      label: label ?? sorted[ sorted.length - 1 ].date,
+      range: {
+        from: sorted[ 0 ].date,
+        to: sorted[ sorted.length - 1 ].date
+      }
+    };
+
+    for ( const key of Object.keys( sorted[ 0 ] ) ) {
+      if ( key === 'date' ) continue;
+
+      const values = sorted
+        .map( point => point[ key ] )
+        .filter( ( value ): value is number => typeof value === 'number' )
+        .map( Number );
+
+      if ( ! values.length ) continue;
+
+      const ordered = [ ...values ].sort( ( a, b ) => a - b );
+      const middle = Math.floor( ordered.length / 2 );
+
+      result[ key ] = {
+        first: values[ 0 ],
+        last: values[ values.length - 1 ],
+        min: Math.min( ...values ),
+        max: Math.max( ...values ),
+        avg: values.reduce( ( sum, value ) => sum + value, 0 ) / values.length,
+        median: ordered.length % 2
+          ? ordered[ middle ]
+          : ( ordered[ middle - 1 ] + ordered[ middle ] ) / 2,
+        sum: values.reduce( ( sum, value ) => sum + value, 0 )
+      };
+    }
+
+    return result as A;
+  }
 }
