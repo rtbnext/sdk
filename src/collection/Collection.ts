@@ -39,7 +39,11 @@ export class Collection< T, R > {
     return this.items.length ? this.factory( this.items[ this.items.length - 1 ] ) : undefined;
   }
 
-  public [ Symbol.iterator ] (): Iterator< R > {
+  public [ Symbol.iterator ] () : Iterator< R > {
     return this.items.map( this.factory ).values();
+  }
+
+  public at ( index: number ) : R | undefined {
+    return index >= 0 && index < this.count ? this.factory( this.items[ index ] ) : undefined;
   }
 }
