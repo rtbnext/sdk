@@ -1,7 +1,10 @@
 import { EmptyCache } from '../cache/EmptyCache';
 import { MemoryCache } from '../cache/MemoryCache';
 import { DEFAULT_OPTIONS } from '../defaults';
-import type { Cache, CacheMode, CacheOptions, HttpResponse, RequestOptions, ResourceState } from '../types/core';
+import type {
+  Cache, CacheMode, CacheOptions, HttpResponse,
+  RequestOptions, ResourceState
+} from '../types/core';
 import type { HttpClient } from './HttpClient';
 
 
@@ -52,7 +55,9 @@ export class StateLoader {
    * @param options - Additional request options.
    * @returns The resulting resource state from the fetch operation.
    */
-  private async fetch ( path: string, prev?: ResourceState, options?: RequestOptions ) : Promise< ResourceState > {
+  private async fetch (
+    path: string, prev?: ResourceState, options?: RequestOptions
+  ) : Promise< ResourceState > {
     const headers = new Headers( options?.headers );
     if ( prev?.etag ) headers.set( 'If-None-Match', prev.etag );
     if ( prev?.lastModified ) headers.set( 'If-Modified-Since', prev.lastModified );
@@ -78,7 +83,9 @@ export class StateLoader {
    * @returns True if the resource is valid, otherwise false.
    */
   public valid ( state?: ResourceState ) : boolean {
-    return !! state && ( this.mode === 'session' || ( this.mode === 'ttl' && ! this.isExpired( state ) ) );
+    return !! state && ( this.mode === 'session' || (
+      this.mode === 'ttl' && ! this.isExpired( state )
+    ) );
   }
 
   /**
