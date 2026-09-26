@@ -58,4 +58,20 @@ export class Collection< T, R > {
   public reversed () : this {
     return this.clone( [ ...this.items ].reverse() );
   }
+
+  public take ( count: number ) : this {
+    return this.clone( this.items.slice( 0, count ) );
+  }
+
+  public skip ( count: number ) : this {
+    return this.clone( this.items.slice( count ) );
+  }
+
+  public slice ( start?: number, end?: number ) : this {
+    return this.clone( this.items.slice( start, end ) );
+  }
+
+  public includes ( item: T ) : boolean {
+    return this.items.includes( item );
+  }
 }
