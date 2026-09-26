@@ -76,4 +76,15 @@ export class CollectCollection< I extends CollectItem, E > extends CursorCollect
   protected override clone ( items: ReadonlyArray< I > ) : this {
     return new ( this.constructor as any )( items, this.factory, this.total, this.findFn, this.searchFn );
   }
+
+  /**
+   * Returns an entity by its exact URI.
+   * 
+   * @param uri - The exact URI to find.
+   * @returns The resolved entity, or undefined.
+   */
+  public get ( uri: string ) : E | undefined {
+    const item = this.items.find( item => item.uri === uri );
+    return item === undefined ? undefined : this.factory( item );
+  }
 }
