@@ -1,5 +1,8 @@
 import type { StateLoader } from '../core/StateLoader';
+import { parser } from '../parser';
+import { Resource } from '../resource/Resource';
 import type { ResourcePool } from '../resource/ResourcePool';
+import type { ParserMode } from '../types/core';
 import type { Endpoints } from '../types/endpoint';
 
 
@@ -22,4 +25,15 @@ export abstract class Endpoint {
     protected readonly pool: ResourcePool,
     protected readonly endpoints: Endpoints
   ) {}
+
+  /**
+   * Creates a new resource instance for the given path and parser mode.
+   * 
+   * @param path - The resource path.
+   * @param mode - The parser mode to use for the resource.
+   * @returns A new Resource instance.
+   */
+  protected resource ( path: string, mode: ParserMode ) {
+    return this.pool.get( path, () => new Resource( path, this.loader, parser( mode ) ) );
+  }
 }
