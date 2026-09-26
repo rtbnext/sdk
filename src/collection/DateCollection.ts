@@ -48,4 +48,17 @@ export abstract class DateCollection< T, R > extends CursorCollection< T, R > {
   public get oldest () : R | undefined {
     return this.last;
   }
+
+  /**
+   * Moves the cursor to the nearest available date on or before the target date.
+   * 
+   * @param position - The target date.
+   * @returns This collection instance.
+   */
+  public override seek ( position: string ) : this {
+    const target = ymd( position );
+    this.cursor = this.items.findIndex( item => this.date( item ) <= target );
+
+    return this;
+  }
 }

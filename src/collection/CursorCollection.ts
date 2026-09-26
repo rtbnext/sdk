@@ -75,8 +75,8 @@ export abstract class CursorCollection< T, R > extends Collection< T, R > {
    * @param position - The zero-based cursor position.
    * @returns This collection instance.
    */
-  public seek ( position: number ) : this {
-    this.cursor = position;
+  public seek ( position: string | number ) : this {
+    this.cursor = Number( position );
     return this;
   }
 
