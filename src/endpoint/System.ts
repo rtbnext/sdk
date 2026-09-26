@@ -1,4 +1,4 @@
-import type { ISystem } from '../types/endpoint';
+import type { ISystem, SystemStatus } from '../types/endpoint';
 import { Endpoint } from './Endpoint';
 
 
@@ -7,4 +7,9 @@ import { Endpoint } from './Endpoint';
  * 
  * Provides access to system status information.
  */
-export class System extends Endpoint implements ISystem {}
+export class System extends Endpoint implements ISystem {
+  /** Returns the current system status resource. */
+  public get status () : SystemStatus {
+    return this.resource( 'v2/system/status.json', 'json' );
+  }
+}
