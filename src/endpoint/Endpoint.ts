@@ -41,7 +41,7 @@ export abstract class Endpoint {
    * @param mode - The parser mode to use for the resource.
    * @returns A new Resource instance.
    */
-  protected resource < D > ( path: string, mode: ParserMode ) : Resource< D > {
+  protected resource < D > ( path: string, mode: ParserMode = 'json' ) : Resource< D > {
     return this.pool.get( path, () => new Resource< D >( path, this.loader, parser( mode ) ) );
   }
 
