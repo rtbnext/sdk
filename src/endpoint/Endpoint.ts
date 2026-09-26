@@ -72,9 +72,7 @@ export abstract class Endpoint {
   protected dateable < D extends DateData, R > (
     path: string, date: DateFn< R >
   ) : DateableResource< D, R > {
-    return this.pool.get( path, () => new DateableResource< D, R >(
-      path, this.loader, json, date
-    ) );
+    return this.pool.get( path, () => new DateableResource< D, R >( path, this.loader, json, date ) );
   }
 
   /**
@@ -88,9 +86,7 @@ export abstract class Endpoint {
   protected indexable < D, R > (
     path: string, index: IndexFn< R >, keys?: KeysFn
   ) : IndexableResource< D, R > {
-    return this.pool.get( path, () => new IndexableResource(
-      path, this.loader, json, index, keys
-    ) );
+    return this.pool.get( path, () => new IndexableResource( path, this.loader, json, index, keys ) );
   }
 
   /**
