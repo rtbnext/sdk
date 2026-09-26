@@ -1,3 +1,4 @@
+import { TimeSeriesCollection } from '../collection/TimeSeriesCollection';
 import type { StateLoader } from '../core/StateLoader';
 import type { ParserFn } from '../types/core';
 import type { PointFn, TimePoint, TimeSeriesRow } from '../types/resource';
@@ -14,7 +15,10 @@ import { Resource } from './Resource';
  * @template R - The type of time-series points.
  * @template A - The type of aggregated time-series points.
  */
-export class TimeSeriesResource< D extends ReadonlyArray< TimeSeriesRow >, R extends TimePoint, A extends TimePoint > extends Resource< D > {
+export class TimeSeriesResource<
+  D extends ReadonlyArray< TimeSeriesRow >,
+  R extends TimePoint
+> extends Resource< D > {
   /** Factory that converts a raw row into a typed time-series point. */
   private readonly point: PointFn< TimeSeriesRow, R >;
 
@@ -26,8 +30,30 @@ export class TimeSeriesResource< D extends ReadonlyArray< TimeSeriesRow >, R ext
    * @param parser - The parser function that converts raw HTTP responses into the expected data type.
    * @param point - The factory used to convert rows into typed points.
    */
-  public constructor ( path: string, loader: StateLoader, parser: ParserFn< D >, point: PointFn< TimeSeriesRow, R > ) {
+  public constructor (
+    path: string, loader: StateLoader, parser: ParserFn< D >,
+    point: PointFn< TimeSeriesRow, R >
+  ) {
     super( path, loader, parser );
     this.point = point;
+  }
+
+  /**
+   * Creates a time-series collection from raw rows.
+   * 
+   * @param rows - The raw time-series rows.
+   * @returns A new time-series collection.
+   */
+  private collectPoints ( rows: D ) : TimeSeriesCollection< R > {
+    return new TimeSeriesCollection< R >( [ ...rows ].reverse().map( this.point ) );
+  }
+
+  /**
+   * Returns the parsed time-series data as a typed collection.
+   * 
+   * @returns The time-series collection.
+   */
+  public series () : Promise< TimeSeriesCollection< R > > {
+    return this.transform( data => this.collectPoints( data ) );
   }
 }

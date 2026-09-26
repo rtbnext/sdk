@@ -15,7 +15,11 @@ import { Resource } from './Resource';
  * @template I - The type of raw collectable items.
  * @template E - The type of resolved entities.
  */
-export class CollectableResource< D extends CollectData< I >, I extends CollectItem, E > extends Resource< D > {
+export class CollectableResource<
+  D extends CollectData< I >,
+  I extends CollectItem,
+  E
+> extends Resource< D > {
   /** The factory used to resolve raw items into entities. */
   protected readonly entity: EntityFn< I, E >;
   /** Optional custom item finder. */

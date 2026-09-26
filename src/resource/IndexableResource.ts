@@ -1,6 +1,6 @@
 import type { StateLoader } from '../core/StateLoader';
 import type { ParserFn } from '../types/core';
-import type { IndexFn, IndexOptions, IndexResult, KeysFn, ResourceTree } from '../types/resource';
+import type { IndexFn, IndexResult, KeysFn, ResourceTree } from '../types/resource';
 import { Resource } from './Resource';
 
 
@@ -46,11 +46,14 @@ export class IndexableResource< D, R > extends Resource< D > {
    * @param parser - The parser function that converts raw HTTP responses into the expected data type.
    * @param options - Configuration options for index traversal and resource resolution.
    */
-  public constructor ( path: string, loader: StateLoader, parser: ParserFn< D >, options: IndexOptions< R > ) {
+  public constructor (
+    path: string, loader: StateLoader, parser: ParserFn< D >,
+    index: IndexFn< R >, keys?: KeysFn
+  ) {
     super( path, loader, parser );
 
-    this.factory = options.index;
-    this.keys = options.keys ?? defaultKeys;
+    this.factory = index;
+    this.keys = keys ?? defaultKeys;
   }
 
   /**
