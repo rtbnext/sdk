@@ -26,4 +26,21 @@ export class TimeSeriesCollection< R extends TimePoint, A extends AggregatePoint
   ) {
     super( items, factory, date, total );
   }
+
+  /**
+   * Returns the numeric values represented by the collection.
+   * 
+   * Without a callback, all numeric point properties except `date` are used.
+   * 
+   * @param callback - Optional function used to extract a numeric value.
+   * @returns The numeric values.
+   */
+  private numbers ( callback?: NumberCallback< R > ) : number[] {
+    if ( callback ) return this.toArray().map( point => callback( point ) );
+
+    return this.toArray().flatMap( point =>  Object.entries( point )
+      .filter( ( [ key, value ] ) => key !== 'date' && typeof value === 'number' )
+      .map( ( [ , value ] ) => value as number )
+    );
+  }
 }
