@@ -130,21 +130,21 @@ export type NumberCallback< R > = ( point: R ) => number;
 /** A function that converts a raw time-series row into a typed point. */
 export type PointFn< D, R > = ( row: D ) => R;
 
-/** Statistical values calculated for an aggregated column. */
+/** Aggregated numeric summary values. */
 export interface AggregateValue {
-  /** The first value in the aggregation range. */
+  /** The first numeric value in the range. */
   first: number;
-  /** The last value in the aggregation range. */
+  /** The last numeric value in the range. */
   last: number;
-  /** The minimum value in the aggregation range. */
+  /** The minimum numeric value in the range. */
   min: number;
-  /** The maximum value in the aggregation range. */
+  /** The maximum numeric value in the range. */
   max: number;
-  /** The arithmetic mean of the values. */
+  /** The average numeric value in the range. */
   avg: number;
-  /** The median of the values. */
+  /** The median numeric value in the range. */
   median: number;
-  /** The sum of the values. */
+  /** The total sum of numeric values in the range. */
   sum: number;
 }
 
@@ -156,14 +156,16 @@ export interface AggregateRange {
   to: string;
 }
 
-/** An aggregated time-series point. */
-export interface AggregatePoint {
-  /** The last date in the aggregation range. */
+/** An aggregated point derived from a time-series point type. */
+export type AggregatePoint< R extends TimePoint > = {
+  [ K in keyof Omit< R, 'date' > ]: R[ K ] extends number
+    ? AggregateValue
+    : R[ K ];
+} & {
+  /** The point's date. */
   date: string;
-  /** The aggregation label. */
+  /** The human-readable label for the aggregation. */
   label: string;
-  /** The date range covered by the aggregation. */
+  /** The date range covered by this aggregate point. */
   range: AggregateRange;
-  /** Additional aggregated columns. */
-  [ key: string ]: unknown;
-}
+};

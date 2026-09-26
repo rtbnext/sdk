@@ -1,4 +1,7 @@
-import type { AggregatePeriod, AggregatePoint, NumberCallback, TimePoint } from '../types/resource';
+import type {
+  AggregatePeriod, AggregatePoint, DateResolver, ItemFactory,
+  NumberCallback, TimePoint
+} from '../types/resource';
 import { DateCollection } from './DateCollection';
 
 
@@ -13,7 +16,7 @@ import { DateCollection } from './DateCollection';
  */
 export class TimeSeriesCollection<
   R extends TimePoint,
-  A extends AggregatePoint = AggregatePoint
+  A extends AggregatePoint< R > = AggregatePoint< R >
 > extends DateCollection< R, R > {
   /**
    * Creates a new time-series collection.
@@ -24,8 +27,8 @@ export class TimeSeriesCollection<
    * @param total - The total number of available points.
    */
   public constructor (
-    items: ReadonlyArray< R >, factory: ( item: R ) => R = item => item,
-    date: ( item: R ) => string = item => item.date, total?: number
+    items: ReadonlyArray< R >, factory: ItemFactory< R, R > = item => item,
+    date: DateResolver< R > = item => item.date, total?: number
   ) {
     super( items, factory, date, total );
   }
@@ -93,10 +96,9 @@ export class TimeSeriesCollection<
     for ( const key of Object.keys( sorted[ 0 ] ) ) {
       if ( key === 'date' ) continue;
 
-      const values = sorted
-        .map( point => point[ key ] )
-        .filter( ( value ): value is number => typeof value === 'number' )
-        .map( Number );
+      const values = sorted.map( point => point[ key ] ).filter(
+        ( value ): value is number => typeof value === 'number'
+      );
 
       if ( ! values.length ) continue;
 
