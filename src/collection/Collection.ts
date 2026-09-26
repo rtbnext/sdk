@@ -91,11 +91,7 @@ export abstract class Collection< T, R > {
     return index >= 0 && index < this.count ? this.factory( this.items[ index ] ) : undefined;
   }
 
-  /**
-   * Returns all resolved items as an array.
-   * 
-   * @returns An array containing all resolved items.
-   */
+  /** Returns all resolved items as an array. */
   public toArray () : R[] {
     return this.items.map( this.factory );
   }
@@ -111,11 +107,7 @@ export abstract class Collection< T, R > {
     return this.toArray().map( callback );
   }
 
-  /**
-   * Returns a new collection containing the items in reverse order.
-   * 
-   * @returns A new collection with reversed items.
-   */
+  /** Returns a new collection containing the items in reverse order. */
   public reversed () : this {
     return this.clone( [ ...this.items ].reverse() );
   }
