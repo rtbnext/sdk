@@ -15,4 +15,22 @@ import { CursorCollection } from './CursorCollection';
 export abstract class DateCollection< T, R > extends CursorCollection< T, R > {
   /** The resolver used to obtain the date from a raw item. */
   protected readonly date: DateResolver< T >;
+
+  /**
+   * Creates a new date collection.
+   * 
+   * @param items - The raw items contained in the collection.
+   * @param factory - The factory used to resolve raw items into resources.
+   * @param date - The resolver used to obtain the date from a raw item.
+   * @param total - The total number of available items.
+   */
+  public constructor (
+    items: ReadonlyArray< T >,
+    factory: ItemFactory< T, R > = item => item as unknown as R,
+    date: DateResolver< T > = item => item as unknown as string,
+    total?: number
+  ) {
+    super( items, factory, total );
+    this.date = date;
+  }
 }
