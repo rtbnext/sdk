@@ -1,3 +1,4 @@
+import { CollectCollection } from '../collection/CollectCollection';
 import { StateLoader } from '../core/StateLoader';
 import type { CollectData, CollectItem, EntityFn, FindFn, SearchFn } from '../types/collection';
 import type { ParserFn } from '../types/core';
@@ -41,5 +42,15 @@ export class CollectableResource< D extends CollectData< I >, I extends CollectI
     this.entity = entity;
     this.findFn = find;
     this.searchFn = search;
+  }
+
+  /**
+   * Creates a collection from collectable items.
+   * 
+   * @param items - The items to wrap.
+   * @returns A new collectable collection.
+   */
+  protected collect ( items: ReadonlyArray< I > ) : CollectCollection< I, E > {
+    return new CollectCollection( items, this.entity, undefined, this.findFn, this.searchFn );
   }
 }
