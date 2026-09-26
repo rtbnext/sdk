@@ -36,9 +36,8 @@ export class RTBNext {
     if ( ! options?.client?.name || ! options?.client?.version )
       throw new Error( 'Client identity is required for RTBNext SDK initialization.' );
 
-    const { baseUrl, client, httpTimeout: timeout, cache } = options;
-    this.httpClient = new HttpClient( { baseUrl, client, timeout } );
-    this.stateLoader = StateLoader.getInstance( this.httpClient, cache );
+    this.httpClient = new HttpClient( options );
+    this.stateLoader = StateLoader.getInstance( this.httpClient, options.cache );
     this.resourcePool = new ResourcePool();
 
     const endpoints = {} as Endpoints;
