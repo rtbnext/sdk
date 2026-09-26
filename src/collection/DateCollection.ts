@@ -74,4 +74,27 @@ export abstract class DateCollection< T, R > extends CursorCollection< T, R > {
 
     return item === undefined ? undefined : this.factory( item );
   }
+
+  /**
+   * Returns a new collection containing items from the specified year.
+   * 
+   * @param year - The year to filter by.
+   * @returns A new collection containing the matching items.
+   */
+  public year ( year: number ) : this {
+    const prefix = `${ year }-`;
+    return this.clone( this.items.filter( item => this.date( item ).startsWith( prefix ) ) );
+  }
+
+  /**
+   * Returns a new collection containing items from the specified month.
+   * 
+   * @param year - The year to filter by.
+   * @param month - The month to filter by.
+   * @returns A new collection containing the matching items.
+   */
+  public month ( year: number, month: number ) : this {
+    const prefix = `${ year }-${ String( month ).padStart( 2, '0' ) }-`;
+    return this.clone( this.items.filter( item => this.date( item ).startsWith( prefix ) ) );
+  }
 }
