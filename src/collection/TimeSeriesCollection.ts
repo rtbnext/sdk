@@ -115,4 +115,14 @@ export class TimeSeriesCollection< R extends TimePoint, A extends AggregatePoint
 
     return result as A;
   }
+
+  /**
+   * Creates a collection containing aggregated points.
+   * 
+   * @param points - The aggregated points.
+   * @returns A new time-series collection.
+   */
+  private aggregatedSeries ( points: ReadonlyArray< A > ) : TimeSeriesCollection< A, A > {
+    return new TimeSeriesCollection< A, A >( points );
+  }
 }
