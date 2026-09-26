@@ -46,4 +46,16 @@ export class Collection< T, R > {
   public at ( index: number ) : R | undefined {
     return index >= 0 && index < this.count ? this.factory( this.items[ index ] ) : undefined;
   }
+
+  public toArray () : R[] {
+    return this.items.map( this.factory );
+  }
+
+  public map < U > ( callback: ( item: R, index: number ) => U ) : U[] {
+    return this.toArray().map( callback );
+  }
+
+  public reversed () : this {
+    return this.clone( [ ...this.items ].reverse() );
+  }
 }
