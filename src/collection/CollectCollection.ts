@@ -87,4 +87,14 @@ export class CollectCollection< I extends CollectItem, E > extends CursorCollect
     const item = this.items.find( item => item.uri === uri );
     return item === undefined ? undefined : this.factory( item );
   }
+
+  /**
+   * Returns a new collection containing items matching a predicate.
+   * 
+   * @param predicate - The predicate used to select items.
+   * @returns A new filtered collection.
+   */
+  public filter ( predicate: ( item: I ) => boolean ) : this {
+    return this.clone( this.items.filter( predicate ) );
+  }
 }
