@@ -1,11 +1,15 @@
 import type { StateLoader } from '../core/StateLoader';
 import { json, parser } from '../parser';
 import { CollectableResource } from '../resource/CollectableResource';
+import { DateableResource } from '../resource/DateableResource';
 import { Resource } from '../resource/Resource';
 import type { ResourcePool } from '../resource/ResourcePool';
 import type { ParserMode } from '../types/core';
 import type { Endpoints } from '../types/endpoint';
-import type { CollectData, CollectItem, EntityFn, FindFn, SearchFn } from '../types/resource';
+import type {
+  CollectData, CollectItem, DateData, DateFn, EntityFn,
+  FindFn, SearchFn
+} from '../types/resource';
 
 
 /**
@@ -53,6 +57,21 @@ export abstract class Endpoint {
   ) : CollectableResource< D, I, E > {
     return this.pool.get( path, () => new CollectableResource< D, I, E >(
       path, this.loader, json, entity, find, search
+    ) );
+  }
+
+  /**
+   * Creates a new dateable resource.
+   * 
+   * @param path - The resource path.
+   * @param date - The factory used to resolve dates into resources.
+   * @returns A dateable resource.
+   */
+  protected dateable < D extends DateData, R > (
+    path: string, date: DateFn< R >
+  ) : DateableResource< D, R > {
+    return this.pool.get( path, () => new DateableResource< D, R >(
+      path, this.loader, json, date
     ) );
   }
 }
