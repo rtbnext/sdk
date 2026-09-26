@@ -50,7 +50,9 @@ export type EntityFn< I, E > = ItemFactory< I, E >;
  * 
  * @template I - The type of collectable item.
  */
-export type FindFn< I extends CollectItem > = ( items: ReadonlyArray< I >, uriLike: string ) => I | undefined;
+export type FindFn< I extends CollectItem > = (
+  items: ReadonlyArray< I >, uriLike: string
+) => I | undefined;
 
 
 /**
@@ -58,7 +60,9 @@ export type FindFn< I extends CollectItem > = ( items: ReadonlyArray< I >, uriLi
  * 
  * @template I - The type of collectable item.
  */
-export type SearchFn< I extends CollectItem > = ( item: I, query: string, terms: ReadonlyArray< string > ) => boolean;
+export type SearchFn< I extends CollectItem > = (
+  item: I, query: string, terms: ReadonlyArray< string >
+) => boolean;
 
 
 // --- indexable ---
@@ -68,14 +72,6 @@ export type IndexFn< R > = ( path: readonly string[] ) => R;
 
 /** A function that extracts index keys from a value. */
 export type KeysFn = ( value: unknown ) => readonly string[] | null;
-
-/** Options for indexable resources. */
-export interface IndexOptions< R > {
-  /** Maps a path to a nested resource. */
-  index: IndexFn< R >;
-  /** Optionally derives keys from a value. */
-  keys?: KeysFn;
-}
 
 /** A record of nested resources accessible by index paths. */
 export type ResourceTree = Readonly< Record< string, unknown > >;
