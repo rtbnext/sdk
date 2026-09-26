@@ -97,4 +97,26 @@ export class CollectCollection< I extends CollectItem, E > extends CursorCollect
   public filter ( predicate: ( item: I ) => boolean ) : this {
     return this.clone( this.items.filter( predicate ) );
   }
+
+  /**
+   * Returns the first entity matching a URI-like value.
+   * 
+   * @param uriLike - The URI-like value to find.
+   * @returns The resolved entity, or undefined.
+   */
+  public find ( uriLike: string ) : E | undefined {
+    const item = this.findFn( this.items, uriLike );
+    return item === undefined ? undefined : this.factory( item );
+  }
+
+  /**
+   * Returns a new collection containing items matching a search query.
+   * 
+   * @param query - The search query.
+   * @returns A new collection containing the matching items.
+   */
+  public search ( query: string ) : this {
+    const sanitized = sanitize( query ), terms = query.split( /\s+/ ).filter( Boolean );
+    return this.clone( this.items.filter( item => this.searchFn( item, sanitized, terms ) ) );
+  }
 }
