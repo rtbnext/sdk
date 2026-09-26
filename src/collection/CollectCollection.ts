@@ -1,4 +1,5 @@
 import type { CollectItem, EntityFn, FindFn, SearchFn } from '../types/collection';
+import { sanitize } from '../utils';
 import { CursorCollection } from './CursorCollection';
 
 
@@ -17,6 +18,18 @@ export class CollectCollection< I extends CollectItem, E > extends CursorCollect
   protected readonly findFn: FindFn< I >;
   /** The function used to test items against search queries. */
   protected readonly searchFn: SearchFn< I >;
+
+  /**
+   * Returns the default item finder.
+   * 
+   * @param items - The items to search.
+   * @param uriLike - The URI-like value to find.
+   * @returns The first matching item, or undefined.
+   */
+  private static defaultFind< I extends CollectItem > ( items: ReadonlyArray< I >, uriLike: string ) : I | undefined {
+    const uri = sanitize( uriLike );
+    return items.find( item => item.uri === uri );
+  }
 
   /**
    * Creates a new collectable collection.
