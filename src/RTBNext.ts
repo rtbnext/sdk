@@ -1,7 +1,8 @@
 import { HttpClient } from './core/HttpClient';
 import { StateLoader } from './core/StateLoader';
 import { ResourcePool } from './resource/ResourcePool';
-import { RTBNextOptions } from './types/core';
+import type { RTBNextOptions } from './types/core';
+import type { Endpoints, ISystem } from './types/endpoint';
 
 
 /**
@@ -18,6 +19,11 @@ export class RTBNext {
   private readonly stateLoader: StateLoader;
   /** The resource pool used for caching and reusing resource instances. */
   private readonly resourcePool: ResourcePool;
+  /** The collection of endpoint clients available in the SDK. */
+  public readonly endpoints: Endpoints;
+
+  /** The System endpoint. */
+  public readonly system: ISystem;
 
   /**
    * Creates a new RTBNext SDK instance.
@@ -33,5 +39,8 @@ export class RTBNext {
     this.httpClient = new HttpClient( { baseUrl, client, timeout } );
     this.stateLoader = StateLoader.getInstance( this.httpClient, cache );
     this.resourcePool = new ResourcePool();
+
+    const endpoints = {} as Endpoints;
+    const args = [ this.stateLoader, this.resourcePool, endpoints ] as const;
   }
 }
