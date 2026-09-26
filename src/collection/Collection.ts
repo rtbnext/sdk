@@ -1,4 +1,4 @@
-import type { ItemFactory } from '../types/collection';
+import type { ItemFactory } from '../types/resource';
 
 
 /**

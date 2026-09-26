@@ -1,4 +1,4 @@
-import type { DateResolver, ItemFactory } from '../types/collection';
+import type { DateResolver, ItemFactory } from '../types/resource';
 import { ymd } from '../utils';
 import { CursorCollection } from './CursorCollection';
 

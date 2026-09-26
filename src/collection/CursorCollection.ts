@@ -1,5 +1,5 @@
 import { DEFAULT_OPTIONS } from '../defaults';
-import type { ItemFactory } from '../types/collection';
+import type { ItemFactory } from '../types/resource';
 import { Collection } from './Collection';
 
 

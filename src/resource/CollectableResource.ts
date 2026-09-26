@@ -1,7 +1,7 @@
 import { CollectCollection } from '../collection/CollectCollection';
 import { StateLoader } from '../core/StateLoader';
-import type { CollectData, CollectItem, EntityFn, FindFn, SearchFn } from '../types/collection';
 import type { ParserFn } from '../types/core';
+import type { CollectData, CollectItem, EntityFn, FindFn, SearchFn } from '../types/resource';
 import { Resource } from './Resource';
 
 

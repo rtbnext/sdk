@@ -1,4 +1,4 @@
-import type { CollectItem, EntityFn, FindFn, SearchFn } from '../types/collection';
+import type { CollectItem, EntityFn, FindFn, SearchFn } from '../types/resource';
 import { sanitize } from '../utils';
 import { CursorCollection } from './CursorCollection';
 
