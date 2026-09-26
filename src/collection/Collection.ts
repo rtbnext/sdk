@@ -38,4 +38,8 @@ export class Collection< T, R > {
   public get last () : R | undefined {
     return this.items.length ? this.factory( this.items[ this.items.length - 1 ] ) : undefined;
   }
+
+  public [ Symbol.iterator ] (): Iterator< R > {
+    return this.items.map( this.factory ).values();
+  }
 }
