@@ -119,4 +119,44 @@ export class CollectCollection< I extends CollectItem, E > extends CursorCollect
     const sanitized = sanitize( query ), terms = query.split( /\s+/ ).filter( Boolean );
     return this.clone( this.items.filter( item => this.searchFn( item, sanitized, terms ) ) );
   }
+
+  /**
+   * Returns the intersection with another collection.
+   * 
+   * @param other - The other collection.
+   * @returns A new collection containing items present in both collections.
+   */
+  public intersect ( other: this ) : this {
+    const uris = new Set( other.items.map( item => item.uri ) );
+    return this.clone( this.items.filter( item => uris.has( item.uri ) ) );
+  }
+
+  /**
+   * Returns a new collection excluding items from another collection.
+   * 
+   * @param other - The other collection.
+   * @returns A new collection excluding matching items.
+   */
+  public exclude ( other: this ) : this {
+    const uris = new Set( other.items.map( item => item.uri ) );
+    return this.clone( this.items.filter( item => ! uris.has( item.uri ) ) );
+  }
+
+  /**
+   * Returns the union of this collection and another collection.
+   * 
+   * Items are identified by their URI and occur only once in the result.
+   * 
+   * @param other - The other collection.
+   * @returns A new collection containing the union of both collections.
+   */
+  public union ( other: this ) : this {
+    const seen = new Set< string >(), merged: I[] = [];
+
+    for ( const item of [ ...this.items, ...other.items ] )
+      if ( ! seen.has( item.uri ) )
+        seen.add( item.uri ), merged.push( item );
+
+    return this.clone( merged );
+  }
 }
