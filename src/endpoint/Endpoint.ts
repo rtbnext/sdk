@@ -48,7 +48,7 @@ export abstract class Endpoint {
    * @param search - Optional function used to match search queries.
    * @returns A collectable resource.
    */
-  protected collectable< D extends CollectData< I >, I extends CollectItem, E > (
+  protected collectable < D extends CollectData< I >, I extends CollectItem, E > (
     path: string, entity: EntityFn< I, E >, find?: FindFn< I >, search?: SearchFn< I >
   ) : CollectableResource< D, I, E > {
     return this.pool.get( path, () => new CollectableResource< D, I, E >(
