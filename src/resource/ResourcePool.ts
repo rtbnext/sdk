@@ -6,12 +6,10 @@ import { Resource } from '../resource/Resource';
  * 
  * The resource pool prevents duplicate wrapper instances while respecting
  * resource validity. Invalid resources are replaced with newly created ones.
- * 
- * @template R - The resource type to store in the pool.
  */
-export class ResourcePool< R = any > {
+export class ResourcePool {
   /** Cached resource instances indexed by their resource path. */
-  private readonly resources = new Map< string, R >();
+  private readonly resources = new Map< string, unknown >();
 
   /**
    * Returns an existing valid resource or creates and stores a new instance.
@@ -20,9 +18,9 @@ export class ResourcePool< R = any > {
    * @param factory - Factory function used to create a new resource instance.
    * @returns The existing valid or newly created resource instance.
    */
-  public get ( path: string, factory: () => R ) : R {
+  public get < R > ( path: string, factory: () => R ) : R {
     const existing = this.resources.get( path );
-    if ( existing instanceof Resource && existing.valid ) return existing;
+    if ( existing instanceof Resource && existing.valid ) return existing as R;
 
     const resource = factory();
     this.resources.set( path, resource );
