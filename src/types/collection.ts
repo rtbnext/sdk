@@ -44,3 +44,18 @@ export interface CollectData< I extends CollectItem > {
  * @template E - The type of resolved entity.
  */
 export type EntityFn< I, E > = ItemFactory< I, E >;
+
+/**
+ * Finds an item using a URI-like value.
+ * 
+ * @template I - The type of collectable item.
+ */
+export type FindFn< I extends CollectItem > = ( items: ReadonlyArray< I >, uriLike: string ) => I | undefined;
+
+
+/**
+ * Tests whether an item matches a search query.
+ * 
+ * @template I - The type of collectable item.
+ */
+export type SearchFn< I extends CollectItem > = ( item: I, query: string, terms: ReadonlyArray< string > ) => boolean;
