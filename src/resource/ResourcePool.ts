@@ -9,7 +9,7 @@ import { Resource } from '../resource/Resource';
  * 
  * @template R - The resource type to store in the pool.
  */
-export class ResourcePool< R = Resource< unknown > > {
+export class ResourcePool< R = any > {
   /** Cached resource instances indexed by their resource path. */
   private readonly resources = new Map< string, R >();
 
