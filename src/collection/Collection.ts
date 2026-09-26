@@ -22,7 +22,7 @@ export class Collection< T, R > {
     this.total = total ?? items.length;
   }
 
-  private clone ( items: ReadonlyArray< T > ) : Collection< T, R > {
-    return new Collection( items, this.factory, this.total );
+  protected clone ( items: ReadonlyArray< T > ) : this {
+    return new ( this.constructor as any )( items, this.factory, this.total );
   }
 }
