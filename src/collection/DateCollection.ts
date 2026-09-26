@@ -61,4 +61,17 @@ export abstract class DateCollection< T, R > extends CursorCollection< T, R > {
 
     return this;
   }
+
+  /**
+   * Returns the item matching the specified date.
+   * 
+   * @param date - The target date.
+   * @returns The resolved item, or undefined if no matching item exists.
+   */
+  public find ( date: string ) : R | undefined {
+    const target = ymd( date );
+    const item = this.items.find( item => this.date( item ) === target );
+
+    return item === undefined ? undefined : this.factory( item );
+  }
 }
