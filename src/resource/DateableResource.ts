@@ -1,3 +1,4 @@
+import { DateCollection } from '../collection/DateCollection';
 import type { StateLoader } from '../core/StateLoader';
 import type { ParserFn } from '../types/core';
 import type { DateData, DateFn } from '../types/resource';
@@ -27,5 +28,15 @@ export class DateableResource< D extends DateData, R > extends Resource< D > {
   public constructor ( path: string, loader: StateLoader, parser: ParserFn< D >, date: DateFn< R > ) {
     super( path, loader, parser );
     this.factory = date;
+  }
+
+  /**
+   * Creates a date-indexed resource collection.
+   * 
+   * @param dates - The available date values.
+   * @returns A new date collection.
+   */
+  private collectDates ( dates: ReadonlyArray< string > ) : DateCollection< string, R > {
+    return new DateCollection( dates, this.factory, date => date );
   }
 }
