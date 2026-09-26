@@ -81,6 +81,16 @@ export abstract class CursorCollection< T, R > extends Collection< T, R > {
   }
 
   /**
+   * Returns the resolved item at the specified index.
+   * 
+   * @param index - The zero-based item index.
+   * @returns The resolved item, or undefined if the index is out of bounds.
+   */
+  public at ( index: number ) : R | undefined {
+    return index >= 0 && index < this.count ? this.factory( this.items[ index ] ) : undefined;
+  }
+
+  /**
    * Returns a new collection containing one page of items.
    * 
    * @param page - The one-based page number.

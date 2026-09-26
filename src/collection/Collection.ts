@@ -81,16 +81,6 @@ export abstract class Collection< T, R > {
     return this.items.includes( item );
   }
 
-  /**
-   * Returns the resolved item at the specified index.
-   * 
-   * @param index - The zero-based item index.
-   * @returns The resolved item, or undefined if the index is out of bounds.
-   */
-  public at ( index: number ) : R | undefined {
-    return index >= 0 && index < this.count ? this.factory( this.items[ index ] ) : undefined;
-  }
-
   /** Returns all resolved items as an array. */
   public toArray () : R[] {
     return this.items.map( this.factory );
