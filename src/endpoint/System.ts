@@ -10,6 +10,6 @@ import { Endpoint } from './Endpoint';
 export class System extends Endpoint implements ISystem {
   /** Returns the current system status resource. */
   public get status () : SystemStatus {
-    return this.resource( 'v2/system/status.json', 'json' );
+    return this.resource( 'v2/system/status.json' );
   }
 }
