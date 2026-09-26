@@ -32,6 +32,16 @@ export class DateCollection< T, R > extends CursorCollection< T, R > {
     this.date = date;
   }
 
+  /**
+   * Creates a new collection instance containing the specified items.
+   * 
+   * @param items - The raw points for the new collection.
+   * @returns A new time-series collection.
+   */
+  protected override clone ( items: ReadonlyArray< T > ) : this {
+    return new ( this.constructor as any )( items, this.factory, this.date, this.total );
+  }
+
   /** Returns the resolved date values of all items. */
   public get dates () : string[] {
     return this.items.map( this.date );
