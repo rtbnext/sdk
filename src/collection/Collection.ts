@@ -7,7 +7,7 @@ import type { ItemFactory } from '../types/collection';
  * This class serves as a base for resource collections, providing methods to
  * manipulate and access the underlying items while maintaining immutability.
  */
-export class Collection< T, R > {
+export abstract class Collection< T, R > {
   protected readonly factory: ItemFactory< T, R >;
 
   public readonly items: ReadonlyArray< T >;
@@ -43,6 +43,14 @@ export class Collection< T, R > {
     return this.items.map( this.factory ).values();
   }
 
+  public get [ Symbol.toStringTag ] (): string {
+    return this.constructor.name;
+  }
+
+  public includes ( item: T ) : boolean {
+    return this.items.includes( item );
+  }
+
   public at ( index: number ) : R | undefined {
     return index >= 0 && index < this.count ? this.factory( this.items[ index ] ) : undefined;
   }
@@ -69,9 +77,5 @@ export class Collection< T, R > {
 
   public slice ( start?: number, end?: number ) : this {
     return this.clone( this.items.slice( start, end ) );
-  }
-
-  public includes ( item: T ) : boolean {
-    return this.items.includes( item );
   }
 }
