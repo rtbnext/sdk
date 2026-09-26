@@ -39,4 +39,9 @@ export class DateableResource< D extends DateData, R > extends Resource< D > {
   private collectDates ( dates: ReadonlyArray< string > ) : DateCollection< string, R > {
     return new DateCollection( dates, this.factory, date => date );
   }
+
+  /** Returns the date-indexed resource collection. */
+  public get () : Promise< DateCollection< string, R > > {
+    return this.transform( data => this.collectDates( [ ...data.dates ].reverse() ) );
+  }
 }
