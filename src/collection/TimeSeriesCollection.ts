@@ -150,4 +150,38 @@ export class TimeSeriesCollection< R extends TimePoint, A extends AggregatePoint
   public max ( callback?: NumberCallback< R > ) : number {
     return Math.max( ...this.numbers( callback ) );
   }
+
+  /**
+   * Returns the sum of numeric values.
+   * 
+   * @param callback - Optional function used to select the numeric value.
+   * @returns The sum.
+   */
+  public sum ( callback?: NumberCallback< R > ) : number {
+    return this.numbers( callback ).reduce( ( sum, value ) => sum + value, 0 );
+  }
+
+  /**
+   * Returns the arithmetic mean of numeric values.
+   * 
+   * @param callback - Optional function used to select the numeric value.
+   * @returns The average value.
+   */
+  public avg ( callback?: NumberCallback< R > ) : number {
+    const values = this.numbers( callback );
+    return this.sum( callback ) / values.length;
+  }
+
+  /**
+   * Returns the median numeric value.
+   * 
+   * @param callback - Optional function used to select the numeric value.
+   * @returns The median value.
+   */
+  public median ( callback?: NumberCallback< R > ) : number {
+    const values = [ ...this.numbers( callback ) ].sort( ( a, b ) => a - b );
+    const middle = Math.floor( values.length / 2 );
+
+    return values.length % 2 ? values[ middle ] : ( values[ middle - 1 ] + values[ middle ] ) / 2;
+  }
 }
