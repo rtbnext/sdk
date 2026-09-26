@@ -33,4 +33,19 @@ export abstract class DateCollection< T, R > extends CursorCollection< T, R > {
     super( items, factory, total );
     this.date = date;
   }
+
+  /** Returns the resolved date values of all items. */
+  public get dates () : string[] {
+    return this.items.map( this.date );
+  }
+
+  /** Returns the latest dated item. */
+  public get latest () : R | undefined {
+    return this.first;
+  }
+
+  /** Returns the oldest dated item. */
+  public get oldest () : R | undefined {
+    return this.last;
+  }
 }
