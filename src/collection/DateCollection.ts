@@ -25,10 +25,8 @@ export class DateCollection< T, R > extends CursorCollection< T, R > {
    * @param total - The total number of available items.
    */
   public constructor (
-    items: ReadonlyArray< T >,
-    factory: ItemFactory< T, R > = item => item as unknown as R,
-    date: DateResolver< T > = item => item as unknown as string,
-    total?: number
+    items: ReadonlyArray< T >, factory: ItemFactory< T, R > = item => item as unknown as R,
+    date: DateResolver< T > = item => item as unknown as string, total?: number
   ) {
     super( items, factory, total );
     this.date = date;
