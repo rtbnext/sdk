@@ -125,4 +125,9 @@ export class TimeSeriesCollection< R extends TimePoint, A extends AggregatePoint
   private aggregatedSeries ( points: ReadonlyArray< A > ) : TimeSeriesCollection< A, A > {
     return new TimeSeriesCollection< A, A >( points );
   }
+
+  /** Returns all time-series points. */
+  public get points () : R[] {
+    return this.toArray();
+  }
 }
