@@ -43,4 +43,29 @@ export class TimeSeriesCollection< R extends TimePoint, A extends AggregatePoint
       .map( ( [ , value ] ) => value as number )
     );
   }
+
+  /**
+   * Creates an aggregation key from a date.
+   * 
+   * @param date - The date to group.
+   * @param period - The aggregation period.
+   * @returns The aggregation key.
+   */
+  private period ( date: string, period: AggregatePeriod ) : string {
+    const [ year, month, day ] = date.split( '-' ).map( Number );
+
+    if ( period === 'year' ) return String( year );
+    if ( period === 'quarter' ) return `${ year }-Q${ Math.floor( ( month - 1 ) / 3 ) + 1 }`;
+    if ( period === 'month' ) return `${ year }-${ String( month ).padStart( 2, '0' ) }`;
+
+    const value = new Date( Date.UTC( year, month - 1, day ) );
+    const thursday = new Date( value );
+    thursday.setUTCDate( value.getUTCDate() + 4 - ( value.getUTCDay() || 7 ) );
+
+    const isoYear = thursday.getUTCFullYear();
+    const first = new Date( Date.UTC( isoYear, 0, 1 ) );
+    const week = Math.ceil( ( ( thursday.getTime() - first.getTime() ) / 86400000 + 1 ) / 7 );
+
+    return `${ isoYear }-W${ String( week ).padStart( 2, '0' ) }`;
+  }
 }
