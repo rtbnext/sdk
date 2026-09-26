@@ -200,4 +200,24 @@ export class TimeSeriesCollection< R extends TimePoint, A extends AggregatePoint
 
     return result;
   }
+
+  /**
+   * Returns numeric values mapped from the points.
+   * 
+   * @param callback - Function used to extract the numeric value.
+   * @returns The mapped values.
+   */
+  public values ( callback: NumberCallback< R > ) : number[] {
+    return this.points.map( callback );
+  }
+
+  /**
+   * Returns all values of a column.
+   * 
+   * @param key - The column name.
+   * @returns The column values.
+   */
+  public column ( key: string ) : unknown[] {
+    return this.points.map( point => point[ key ] );
+  }
 }
