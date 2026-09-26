@@ -1,5 +1,6 @@
 import { HttpClient } from './core/HttpClient';
 import { StateLoader } from './core/StateLoader';
+import { System } from './endpoint/System';
 import { ResourcePool } from './resource/ResourcePool';
 import type { RTBNextOptions } from './types/core';
 import type { Endpoints, ISystem } from './types/endpoint';
@@ -42,5 +43,9 @@ export class RTBNext {
 
     const endpoints = {} as Endpoints;
     const args = [ this.stateLoader, this.resourcePool, endpoints ] as const;
+
+    this.system = endpoints.system = new System( ...args );
+
+    this.endpoints = Object.freeze( endpoints );
   }
 }
