@@ -4,6 +4,16 @@ import { JsonParser } from './JsonParser';
 import { TextParser } from './TextParser';
 
 
+/** Text parser that parses HTTP responses as plain text. */
+export const text = TextParser.parse;
+
+/** JSON parser that parses HTTP responses as JSON. */
+export const json = JsonParser.parse;
+
+/** CSV parser that parses HTTP responses as CSV. */
+export const csv = CsvParser.parse;
+
+
 /**
  * Returns a parser function based on the specified parser mode.
  * 
