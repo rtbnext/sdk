@@ -29,4 +29,9 @@ export abstract class CursorCollection< T, R > extends Collection< T, R > {
   ) {
     super( items, factory, total );
   }
+
+  /** Returns the current cursor position. */
+  public get position () : number {
+    return this.cursor;
+  }
 }
