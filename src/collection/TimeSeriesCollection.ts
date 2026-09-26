@@ -184,4 +184,20 @@ export class TimeSeriesCollection< R extends TimePoint, A extends AggregatePoint
 
     return values.length % 2 ? values[ middle ] : ( values[ middle - 1 ] + values[ middle ] ) / 2;
   }
+
+  /** Returns the date labels of all points. */
+  public get labels () : string[] {
+    return this.points.map( point => point.date );
+  }
+
+  /** Returns all point values grouped by column. */
+  public get columns () : Record< string, unknown[] > {
+    const result: Record< string, unknown[] > = {};
+
+    for ( const point of this.points )
+      for ( const [ key, value ] of Object.entries( point ) )
+        ( result[ key ] ??= [] ).push( value );
+
+    return result;
+  }
 }
