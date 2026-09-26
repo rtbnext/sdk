@@ -26,7 +26,9 @@ export class CollectCollection< I extends CollectItem, E > extends CursorCollect
    * @param uriLike - The URI-like value to find.
    * @returns The first matching item, or undefined.
    */
-  private static defaultFind < I extends CollectItem > ( items: ReadonlyArray< I >, uriLike: string ) : I | undefined {
+  private static defaultFind < I extends CollectItem > (
+    items: ReadonlyArray< I >, uriLike: string
+  ) : I | undefined {
     const uri = sanitize( uriLike );
     return items.find( item => item.uri === uri );
   }
@@ -39,7 +41,9 @@ export class CollectCollection< I extends CollectItem, E > extends CursorCollect
    * @param terms - The individual search terms.
    * @returns Whether the item matches the query.
    */
-  private static defaultSearch < I extends CollectItem > ( item: I, query: string, terms: ReadonlyArray< string > ) : boolean {
+  private static defaultSearch < I extends CollectItem > (
+    item: I, query: string, terms: ReadonlyArray< string >
+  ) : boolean {
     const name = item.searchName || sanitize( item.name ?? '' ), text = item.text ?? '';
 
     return query.includes( name ) || query.includes( text ) || terms.every(
