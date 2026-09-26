@@ -1,7 +1,7 @@
 /** Default configuration options for the RTBNext SDK. */
 export const DEFAULT_OPTIONS = {
   sdkVersion: '1.1.0',
-  client: {
+  httpClient: {
     baseUrl: 'https://api.rtbnext.de',
     timeout: 5_000,
     limiter: {

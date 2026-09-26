@@ -25,7 +25,7 @@ export class HttpClient {
    * @param options - The configuration options for the HTTP client.
    */
   public constructor ( options: HttpClientOptions ) {
-    this.options = { ...DEFAULT_OPTIONS.client, ...options };
+    this.options = { ...DEFAULT_OPTIONS.httpClient, ...options };
     this.limiter = new RateLimiter( this.options.limiter );
     this.headers = this.createHeaders();
   }
