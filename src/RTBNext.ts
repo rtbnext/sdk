@@ -33,6 +33,8 @@ export class RTBNext {
    * @throws Error if the client identity is not provided in the options.
    */
   public constructor ( options: RTBNextOptions ) {
+    options = JSON.parse( JSON.stringify( options ) );
+
     if ( ! options?.client?.name || ! options?.client?.version )
       throw new Error( 'Client identity is required for RTBNext SDK initialization.' );
 
