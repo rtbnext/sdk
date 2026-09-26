@@ -12,7 +12,7 @@ import { CursorCollection } from './CursorCollection';
  * @template T - The type of the raw items contained in the collection.
  * @template R - The type of the resolved items returned by the collection.
  */
-export abstract class DateCollection< T, R > extends CursorCollection< T, R > {
+export class DateCollection< T, R > extends CursorCollection< T, R > {
   /** The resolver used to obtain the date from a raw item. */
   protected readonly date: DateResolver< T >;
 
