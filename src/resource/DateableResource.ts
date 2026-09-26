@@ -37,7 +37,7 @@ export class DateableResource< D extends DateData, R > extends Resource< D > {
    * @returns A new date collection.
    */
   private collectDates ( dates: ReadonlyArray< string > ) : DateCollection< string, R > {
-    return new DateCollection( dates, this.factory, date => date );
+    return new DateCollection( dates, this.factory );
   }
 
   /** Returns the date-indexed resource collection. */
