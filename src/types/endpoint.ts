@@ -15,4 +15,20 @@ export interface ISystem {
   readonly status: SystemStatus;
 }
 
-export interface Endpoints {}
+// --- endpoints ---
+
+/** Endpoints available in the RTBNext SDK. */
+export interface Endpoints {
+  /** The Profile endpoint. */
+  profile: IProfile;
+  /** The List endpoint. */
+  list: IList;
+  /** The Mover endpoint. */
+  mover: IMover;
+  /** The Filter endpoint. */
+  filter: IFilter;
+  /** The Stats endpoint. */
+  stats: IStats;
+  /** The System endpoint. */
+  system: ISystem;
+}
