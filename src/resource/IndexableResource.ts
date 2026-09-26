@@ -101,11 +101,7 @@ export class IndexableResource< D, R > extends Resource< D > {
     return undefined;
   }
 
-  /**
-   * Returns the lazily indexed resource tree for the parsed data.
-   * 
-   * @returns The nested index result.
-   */
+  /* Returns the lazily indexed resource tree for the parsed data. */
   public get () : Promise< IndexResult< D, R > > {
     return this.transform( data => this.traverse( data ) as IndexResult< D, R > );
   }
