@@ -10,4 +10,8 @@ export class Collection< T, R > {
     public readonly factory: ( item: T ) => R = item => item as unknown as R,
     public readonly total: number = items.length
   ) {}
+
+  private clone ( items: ReadonlyArray< T > ) : Collection< T, R > {
+    return new Collection( items, this.factory, this.total );
+  }
 }
