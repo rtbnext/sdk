@@ -34,4 +34,29 @@ export abstract class CursorCollection< T, R > extends Collection< T, R > {
   public get position () : number {
     return this.cursor;
   }
+
+  /** Returns the current resolved item, or undefined if the cursor is out of bounds. */
+  public get current () : R | undefined {
+    return this.at( this.cursor );
+  }
+
+  /**
+   * Advances the cursor and returns the next resolved item.
+   * 
+   * @returns The next resolved item, or undefined if no item exists.
+   */
+  public get next () : R | undefined {
+    this.cursor++;
+    return this.at( this.cursor );
+  }
+
+  /**
+   * Moves the cursor backwards and returns the previous resolved item.
+   * 
+   * @returns The previous resolved item, or undefined if no item exists.
+   */
+  public get prev () : R | undefined {
+    this.cursor--;
+    return this.at( this.cursor );
+  }
 }
