@@ -130,4 +130,24 @@ export class TimeSeriesCollection< R extends TimePoint, A extends AggregatePoint
   public get points () : R[] {
     return this.toArray();
   }
+
+  /**
+   * Returns the minimum numeric value.
+   * 
+   * @param callback - Optional function used to select the numeric value.
+   * @returns The minimum value.
+   */
+  public min ( callback?: NumberCallback< R > ) : number {
+    return Math.min( ...this.numbers( callback ) );
+  }
+
+  /**
+   * Returns the maximum numeric value.
+   * 
+   * @param callback - Optional function used to select the numeric value.
+   * @returns The maximum value.
+   */
+  public max ( callback?: NumberCallback< R > ) : number {
+    return Math.max( ...this.numbers( callback ) );
+  }
 }
