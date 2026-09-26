@@ -103,6 +103,9 @@ export type IndexResult< T, R > =
 
 // --- dateable ---
 
+/** A function that resolves a date string to a resource. */
+export type DateFn< R > = ( item: string ) => R;
+
 /** Parsed data returned by a date-indexed endpoint. */
 export interface DateData {
   /** The available date values. */
