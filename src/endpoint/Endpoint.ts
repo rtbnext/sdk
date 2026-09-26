@@ -1,15 +1,16 @@
 import type { StateLoader } from '../core/StateLoader';
-import { json, parser } from '../parser';
+import { csv, json, parser } from '../parser';
 import { CollectableResource } from '../resource/CollectableResource';
 import { DateableResource } from '../resource/DateableResource';
 import { IndexableResource } from '../resource/IndexableResource';
 import { Resource } from '../resource/Resource';
 import type { ResourcePool } from '../resource/ResourcePool';
+import { TimeSeriesResource } from '../resource/TimeSeriesResource';
 import type { ParserMode } from '../types/core';
 import type { Endpoints } from '../types/endpoint';
 import type {
-  CollectData, CollectItem, DateData, DateFn, EntityFn,
-  FindFn, IndexFn, KeysFn, SearchFn
+  CollectData, CollectItem, DateData, DateFn, EntityFn, FindFn, IndexFn,
+  KeysFn, PointFn, SearchFn, TimePoint, TimeSeriesRow
 } from '../types/resource';
 
 
@@ -90,5 +91,18 @@ export abstract class Endpoint {
     return this.pool.get( path, () => new IndexableResource(
       path, this.loader, json, index, keys
     ) );
+  }
+
+  /**
+   * Creates a new time-series resource.
+   * 
+   * @param path - The resource path.
+   * @param point - The factory used to convert rows into typed points.
+   * @returns A time-series resource.
+   */
+  protected series < D extends ReadonlyArray< TimeSeriesRow >, R extends TimePoint > (
+    path: string, point: PointFn< TimeSeriesRow, R >
+  ) : TimeSeriesResource< D, R > {
+    return this.pool.get( path, () => new TimeSeriesResource( path, this.loader, csv, point ) );
   }
 }
