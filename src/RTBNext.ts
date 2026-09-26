@@ -1,9 +1,10 @@
 import { HttpClient } from './core/HttpClient';
 import { StateLoader } from './core/StateLoader';
+import { Mover } from './endpoint/Mover';
 import { System } from './endpoint/System';
 import { ResourcePool } from './resource/ResourcePool';
 import type { RTBNextOptions } from './types/core';
-import type { Endpoints, ISystem } from './types/endpoint';
+import type { Endpoints, IMover, ISystem } from './types/endpoint';
 
 
 /**
@@ -23,6 +24,8 @@ export class RTBNext {
   /** The collection of endpoint clients available in the SDK. */
   public readonly endpoints: Endpoints;
 
+  /** The Mover endpoint. */
+  public readonly mover: IMover;
   /** The System endpoint. */
   public readonly system: ISystem;
 
@@ -45,6 +48,7 @@ export class RTBNext {
     const endpoints = {} as Endpoints;
     const args = [ this.stateLoader, this.resourcePool, endpoints ] as const;
 
+    this.mover = endpoints.mover = new Mover( ...args );
     this.system = endpoints.system = new System( ...args );
 
     this.endpoints = Object.freeze( endpoints );
