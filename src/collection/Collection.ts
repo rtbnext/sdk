@@ -8,9 +8,10 @@ import type { ItemFactory } from '../types/collection';
  * manipulate and access the underlying items while maintaining immutability.
  */
 export class Collection< T, R > {
-  public readonly items: ReadonlyArray< T >;
   protected readonly factory: ItemFactory< T, R >;
-  protected readonly total: number;
+
+  public readonly items: ReadonlyArray< T >;
+  public readonly total: number;
 
   public constructor (
     items: ReadonlyArray< T >,
@@ -24,5 +25,17 @@ export class Collection< T, R > {
 
   protected clone ( items: ReadonlyArray< T > ) : this {
     return new ( this.constructor as any )( items, this.factory, this.total );
+  }
+
+  public get count () : number {
+    return this.items.length;
+  }
+
+  public get first () : R | undefined {
+    return this.items.length ? this.factory( this.items[ 0 ] ) : undefined;
+  }
+
+  public get last () : R | undefined {
+    return this.items.length ? this.factory( this.items[ this.items.length - 1 ] ) : undefined;
   }
 }
