@@ -66,4 +66,14 @@ export class CollectCollection< I extends CollectItem, E > extends CursorCollect
     this.findFn = find ?? defaultFind;
     this.searchFn = search ?? defaultSearch;
   }
+
+  /**
+   * Creates a new collection preserving its configuration.
+   * 
+   * @param items - The raw items for the new collection.
+   * @returns A new collection instance of the same type.
+   */
+  protected override clone ( items: ReadonlyArray< I > ) : this {
+    return new ( this.constructor as any )( items, this.factory, this.total, this.findFn, this.searchFn );
+  }
 }
