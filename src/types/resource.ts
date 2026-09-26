@@ -100,3 +100,11 @@ export type IndexResult< T, R > =
       [ K in IndexKeys< T > ]: IndexResult< T[ K ], R >;
     } : never
     : Record< IndexLeaf< T >, R >;
+
+// --- dateable ---
+
+/** Parsed data returned by a date-indexed endpoint. */
+export interface DateData {
+  /** The available date values. */
+  dates: ReadonlyArray< string >;
+}
