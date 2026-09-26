@@ -159,4 +159,27 @@ export class CollectCollection< I extends CollectItem, E > extends CursorCollect
 
     return this.clone( merged );
   }
+
+  /**
+   * Groups items using a callback.
+   * 
+   * @template K - The type of the group keys.
+   * @param callback - The function used to determine each item's group.
+   * @returns A map containing one collection for each group.
+   */
+  public groupBy < K > ( callback: ( item: I ) => K ) : Map< K, this > {
+    const groups = new Map< K, I[] >();
+
+    for ( const item of this.items ) {
+      const key = callback( item );
+      const group = groups.get( key ) ?? [];
+
+      group.push( item );
+      groups.set( key, group );
+    }
+
+    return new Map( [ ...groups.entries() ].map(
+      ( [ key, items ] ) => [ key, this.clone( items ) ]
+    ) );
+  }
 }
