@@ -4,6 +4,35 @@ import { CursorCollection } from './CursorCollection';
 
 
 /**
+ * Default item finder.
+ * 
+ * @param items - The items to search.
+ * @param uriLike - The URI-like value to find.
+ * @returns The first matching item, or undefined.
+ */
+const defaultFind = < I extends CollectItem > ( items: ReadonlyArray< I >, uriLike: string ) : I | undefined => {
+  const uri = sanitize( uriLike );
+  return items.find( item => item.uri === uri );
+};
+
+/**
+ * Default search matcher.
+ * 
+ * @param item - The item to test.
+ * @param query - The sanitized search query.
+ * @param terms - The individual search terms.
+ * @returns Whether the item matches the query.
+ */
+const defaultSearch = < I extends CollectItem > ( item: I, query: string, terms: ReadonlyArray< string > ) : boolean => {
+  const name = item.searchName || sanitize( item.name ?? '' ), text = item.text ?? '';
+
+  return query.includes( name ) || query.includes( text ) || terms.every(
+    term => name.includes( term ) || text.includes( term )
+  );
+};
+
+
+/**
  * Provides collection operations for entity-based resources.
  * 
  * This class extends the cursor collection with searching, filtering,
@@ -20,38 +49,6 @@ export class CollectCollection< I extends CollectItem, E > extends CursorCollect
   protected readonly searchFn: SearchFn< I >;
 
   /**
-   * Returns the default item finder.
-   * 
-   * @param items - The items to search.
-   * @param uriLike - The URI-like value to find.
-   * @returns The first matching item, or undefined.
-   */
-  private static defaultFind < I extends CollectItem > (
-    items: ReadonlyArray< I >, uriLike: string
-  ) : I | undefined {
-    const uri = sanitize( uriLike );
-    return items.find( item => item.uri === uri );
-  }
-
-  /**
-   * Returns the default search matcher.
-   * 
-   * @param item - The item to test.
-   * @param query - The sanitized search query.
-   * @param terms - The individual search terms.
-   * @returns Whether the item matches the query.
-   */
-  private static defaultSearch < I extends CollectItem > (
-    item: I, query: string, terms: ReadonlyArray< string >
-  ) : boolean {
-    const name = item.searchName || sanitize( item.name ?? '' ), text = item.text ?? '';
-
-    return query.includes( name ) || query.includes( text ) || terms.every(
-      term => name.includes( term ) || text.includes( term )
-    );
-  }
-
-  /**
    * Creates a new collectable collection.
    * 
    * @param items - The collectable items contained in the collection.
@@ -66,7 +63,7 @@ export class CollectCollection< I extends CollectItem, E > extends CursorCollect
   ) {
     super( items, factory, total );
 
-    this.findFn = find ?? CollectCollection.defaultFind;
-    this.searchFn = search ?? CollectCollection.defaultSearch;
+    this.findFn = find ?? defaultFind;
+    this.searchFn = search ?? defaultSearch;
   }
 }
