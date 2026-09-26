@@ -12,5 +12,8 @@ export const DEFAULT_OPTIONS = {
   cache: {
     type: 'memory',
     mode: 'ttl'
+  },
+  collection: {
+    perPage: 10
   }
 } as const;
