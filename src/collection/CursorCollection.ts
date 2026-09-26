@@ -1,3 +1,4 @@
+import { DEFAULT_OPTIONS } from '../defaults';
 import type { ItemFactory } from '../types/collection';
 import { Collection } from './Collection';
 
@@ -77,5 +78,30 @@ export abstract class CursorCollection< T, R > extends Collection< T, R > {
   public seek ( position: number ) : this {
     this.cursor = position;
     return this;
+  }
+
+  /**
+   * Returns a new collection containing one page of items.
+   * 
+   * @param page - The one-based page number.
+   * @param perPage - The number of items per page.
+   * @returns A new collection containing the selected page.
+   */
+  public page ( page: number, perPage: number = DEFAULT_OPTIONS.collection.perPage ) : this {
+    const start = Math.max( page - 1, 0 ) * perPage;
+    return this.clone( this.items.slice( start, start + perPage ) );
+  }
+
+  /**
+   * Returns all pages of the collection.
+   * 
+   * @param perPage - The number of items per page.
+   * @returns An array containing all collection pages.
+   */
+  public pages ( perPage: number = DEFAULT_OPTIONS.collection.perPage ) : this[] {
+    return Array.from(
+      { length: Math.ceil( this.count / perPage ) },
+      ( _, index ) => this.page( index + 1, perPage )
+    );
   }
 }
