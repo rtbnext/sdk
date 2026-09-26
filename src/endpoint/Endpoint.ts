@@ -57,9 +57,9 @@ export abstract class Endpoint {
   protected collectable < D extends CollectData< I >, I extends CollectItem, E > (
     path: string, entity: EntityFn< I, E >, find?: FindFn< I >, search?: SearchFn< I >
   ) : CollectableResource< D, I, E > {
-    return this.pool.get( path, () => new CollectableResource< D, I, E >(
-      path, this.loader, json, entity, find, search
-    ) );
+    return this.pool.get( path, () =>
+      new CollectableResource< D, I, E >( path, this.loader, json, entity, find, search )
+    );
   }
 
   /**
@@ -72,7 +72,9 @@ export abstract class Endpoint {
   protected dateable < D extends DateData, R > (
     path: string, date: DateFn< R >
   ) : DateableResource< D, R > {
-    return this.pool.get( path, () => new DateableResource< D, R >( path, this.loader, json, date ) );
+    return this.pool.get( path, () =>
+      new DateableResource< D, R >( path, this.loader, json, date )
+    );
   }
 
   /**
@@ -86,7 +88,9 @@ export abstract class Endpoint {
   protected indexable < D, R > (
     path: string, index: IndexFn< R >, keys?: KeysFn
   ) : IndexableResource< D, R > {
-    return this.pool.get( path, () => new IndexableResource( path, this.loader, json, index, keys ) );
+    return this.pool.get( path, () =>
+      new IndexableResource< D, R >( path, this.loader, json, index, keys )
+    );
   }
 
   /**
@@ -99,6 +103,8 @@ export abstract class Endpoint {
   protected series < D extends ReadonlyArray< TimeSeriesRow >, R extends TimePoint > (
     path: string, point: PointFn< TimeSeriesRow, R >
   ) : TimeSeriesResource< D, R > {
-    return this.pool.get( path, () => new TimeSeriesResource( path, this.loader, csv, point ) );
+    return this.pool.get( path, () =>
+      new TimeSeriesResource< D, R >( path, this.loader, csv, point )
+    );
   }
 }
