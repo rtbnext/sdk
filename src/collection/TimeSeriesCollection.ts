@@ -220,4 +220,23 @@ export class TimeSeriesCollection< R extends TimePoint, A extends AggregatePoint
   public column ( key: string ) : unknown[] {
     return this.points.map( point => point[ key ] );
   }
+
+  /**
+   * Aggregates points by a predefined period or custom grouping function.
+   * 
+   * @param period - The aggregation period or grouping function.
+   * @returns A collection containing the aggregated points.
+   */
+  public aggregate ( period: AggregatePeriod | ( ( point: R ) => string ) ) : TimeSeriesCollection< A, A > {
+    const groups = new Map< string, R[] >();
+
+    for ( const point of this.points ) {
+      const key = typeof period === 'function' ? period( point ) : this.period( point.date, period );
+      ( groups.get( key ) ?? groups.set( key, [] ).get( key )! ).push( point );
+    }
+
+    return this.aggregatedSeries( [ ...groups.entries() ].map( ( [ label, points ] ) =>
+      this.aggregatePoints( points, label )
+    ) );
+  }
 }
