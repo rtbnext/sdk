@@ -10,7 +10,9 @@ import { CursorCollection } from './CursorCollection';
  * @param uriLike - The URI-like value to find.
  * @returns The first matching item, or undefined.
  */
-const defaultFind = < I extends CollectItem > ( items: ReadonlyArray< I >, uriLike: string ) : I | undefined => {
+const defaultFind = < I extends CollectItem > (
+  items: ReadonlyArray< I >, uriLike: string
+) : I | undefined => {
   const uri = sanitize( uriLike );
   return items.find( item => item.uri === uri );
 };
@@ -23,7 +25,9 @@ const defaultFind = < I extends CollectItem > ( items: ReadonlyArray< I >, uriLi
  * @param terms - The individual search terms.
  * @returns Whether the item matches the query.
  */
-const defaultSearch = < I extends CollectItem > ( item: I, query: string, terms: ReadonlyArray< string > ) : boolean => {
+const defaultSearch = < I extends CollectItem > (
+  item: I, query: string, terms: ReadonlyArray< string >
+) : boolean => {
   const name = item.searchName || sanitize( item.name ?? '' ), text = item.text ?? '';
 
   return query.includes( name ) || query.includes( text ) || terms.every(
@@ -74,7 +78,9 @@ export class CollectCollection< I extends CollectItem, E > extends CursorCollect
    * @returns A new collection instance of the same type.
    */
   protected override clone ( items: ReadonlyArray< I > ) : this {
-    return new ( this.constructor as any )( items, this.factory, this.total, this.findFn, this.searchFn );
+    return new ( this.constructor as any )(
+      items, this.factory, this.total, this.findFn, this.searchFn
+    );
   }
 
   /**

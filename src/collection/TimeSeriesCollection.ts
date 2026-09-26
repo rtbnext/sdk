@@ -11,7 +11,10 @@ import { DateCollection } from './DateCollection';
  * @template R - The type of time-series points.
  * @template A - The type of aggregated time-series points.
  */
-export class TimeSeriesCollection< R extends TimePoint, A extends AggregatePoint > extends DateCollection< R, R > {
+export class TimeSeriesCollection<
+  R extends TimePoint,
+  A extends AggregatePoint = AggregatePoint
+> extends DateCollection< R, R > {
   /**
    * Creates a new time-series collection.
    * 
@@ -122,8 +125,8 @@ export class TimeSeriesCollection< R extends TimePoint, A extends AggregatePoint
    * @param points - The aggregated points.
    * @returns A new time-series collection.
    */
-  private aggregatedSeries ( points: ReadonlyArray< A > ) : TimeSeriesCollection< A, A > {
-    return new TimeSeriesCollection< A, A >( points );
+  private aggregatedSeries ( points: ReadonlyArray< A > ) : TimeSeriesCollection< A > {
+    return new TimeSeriesCollection< A >( points );
   }
 
   /** Returns all time-series points. */
@@ -227,7 +230,7 @@ export class TimeSeriesCollection< R extends TimePoint, A extends AggregatePoint
    * @param period - The aggregation period or grouping function.
    * @returns A collection containing the aggregated points.
    */
-  public aggregate ( period: AggregatePeriod | ( ( point: R ) => string ) ) : TimeSeriesCollection< A, A > {
+  public aggregate ( period: AggregatePeriod | ( ( point: R ) => string ) ) : TimeSeriesCollection< A > {
     const groups = new Map< string, R[] >();
 
     for ( const point of this.points ) {
@@ -246,7 +249,7 @@ export class TimeSeriesCollection< R extends TimePoint, A extends AggregatePoint
    * @param count - The number of buckets.
    * @returns A collection containing the aggregated buckets.
    */
-  public buckets ( count: number ) : TimeSeriesCollection< A, A > {
+  public buckets ( count: number ) : TimeSeriesCollection< A > {
     if ( count >= this.count ) return this.aggregatedSeries( this.points.map( ( point, index ) =>
       this.aggregatePoints( [ point ], `${ index + 1 }/${ this.count }` )
     ) );
