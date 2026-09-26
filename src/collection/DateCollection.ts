@@ -119,4 +119,41 @@ export abstract class DateCollection< T, R > extends CursorCollection< T, R > {
     const target = ymd( date );
     return this.clone( this.items.filter( item => this.date( item ) > target ) );
   }
+
+  /**
+   * Returns a new collection containing items from the specified date onward.
+   * 
+   * @param date - The inclusive lower date boundary.
+   * @returns A new collection containing the matching items.
+   */
+  public since ( date: string ) : this {
+    const target = ymd( date );
+    return this.clone( this.items.filter( item => this.date( item ) >= target ) );
+  }
+
+  /**
+   * Returns a new collection containing items up to the specified date.
+   * 
+   * @param date - The inclusive upper date boundary.
+   * @returns A new collection containing the matching items.
+   */
+  public until ( date: string ) : this {
+    const target = ymd( date );
+    return this.clone( this.items.filter( item => this.date( item ) <= target ) );
+  }
+
+  /**
+   * Returns a new collection containing items within the specified date range.
+   * 
+   * @param start - The inclusive start date.
+   * @param end - The inclusive end date.
+   * @returns A new collection containing the matching items.
+   */
+  public between ( start: string, end: string ) : this {
+    const s = ymd( start ), e = ymd( end );
+
+    return this.clone( this.items.filter(
+      item => s <= this.date( item ) && this.date( item ) <= e
+    ) );
+  }
 }
