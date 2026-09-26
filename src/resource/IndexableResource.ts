@@ -70,4 +70,34 @@ export class IndexableResource< D, R > extends Resource< D > {
 
     return Object.freeze( out );
   }
+
+  /**
+   * Traverses the parsed index structure and converts it into a nested accessor tree.
+   * 
+   * @param value - The parsed index payload.
+   * @param path - The current traversal path.
+   * @returns The lazily traversable index result.
+   */
+  private traverse ( value: unknown, path: string[] = [] ) : unknown {
+    const keys = this.keys( value );
+
+    if ( keys ) return this.createIndex( keys, path );
+
+    if ( value && typeof value === 'object' ) {
+      const out: Record< string, unknown > = {};
+
+      for ( const [ key, child ] of Object.entries( value ) ) {
+        if ( key === '$metadata' ) continue;
+
+        Object.defineProperty( out, key, {
+          enumerable: true, configurable: false,
+          get: () => this.traverse( child, [ ...path, key ] )
+        } );
+      }
+
+      return Object.freeze( out );
+    }
+
+    return undefined;
+  }
 }
