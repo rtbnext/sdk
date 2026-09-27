@@ -104,9 +104,7 @@ export class TimeSeriesCollection<
     return result as A;
   }
 
-  /**
-   * Creates a time-series collection from aggregated points.
-   */
+  /** Creates a time-series collection from aggregated points. */
   private aggregatedSeries ( points: ReadonlyArray< A > ) : TimeSeriesCollection< A > {
     return new TimeSeriesCollection< A >( points );
   }
@@ -143,5 +141,31 @@ export class TimeSeriesCollection<
     const middle = Math.floor( values.length / 2 );
 
     return values.length % 2 ? values[ middle ] : ( values[ middle - 1 ] + values[ middle ] ) / 2;
+  }
+
+  /** Returns the date labels of all points. */
+  public get labels () : string[] {
+    return this.points.map( point => point.date );
+  }
+
+  /** Returns all point values grouped by property. */
+  public get columns () : Record< string, unknown[] > {
+    const result: Record< string, unknown[] > = {};
+
+    for ( const point of this.points )
+      for ( const [ key, value ] of Object.entries( point ) )
+        ( result[ key ] ??= [] ).push( value );
+
+    return result;
+  }
+
+  /** Returns all values of a point property. */
+  public column < K extends keyof R > ( key: K ) : R[ K ][] {
+    return this.points.map( point => point[ key ] );
+  }
+
+  /** Resolves one numeric value for each point. */
+  public values ( callback: NumberCallback< R > ) : number[] {
+    return this.points.map( callback );
   }
 }
