@@ -57,4 +57,9 @@ export class CollectableResource<
   protected collect ( items: ReadonlyArray< I > ) : CollectCollection< I, E > {
     return new CollectCollection( items, this.entity, undefined, this.findFn, this.searchFn );
   }
+
+  /** Returns the resource collection. */
+  public collection () : Promise< CollectCollection< I, E > > {
+    return this.transform( data => this.collect( data.items ) );
+  }
 }
