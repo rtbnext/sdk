@@ -30,5 +30,9 @@ export class RTBNext {
 
     if ( ! options?.client?.name || ! options?.client?.version )
       throw new Error( 'Client identity is required for RTBNext SDK initialization.' );
+
+    this.httpClient = new HttpClient( options );
+    this.stateLoader = StateLoader.getInstance( this.httpClient, options.cache );
+    this.resourcePool = new ResourcePool();
   }
 }
