@@ -19,3 +19,26 @@ export type ResourceTree = Readonly< Record< string, unknown > >;
  * @template T - The type of the object from which to extract keys.
  */
 export type IndexKeys< T > = Exclude< keyof T, '$metadata' >;
+
+/** Extracts the leaf keys from a nested index structure. */
+type IndexLeaf< T > =
+  T extends readonly ( infer I )[]
+    ? I extends string ? I : never
+    : T extends { items: infer I }
+      ? I extends readonly ( infer E )[]
+        ? E extends string ? E : never
+        : Extract< keyof I, string >
+      : never;
+
+/**
+ * Recursive index result type for nested index structures.
+ * 
+ * @template T - The type of the nested index structure.
+ * @template R - The type of individual resources returned by the index factory function.
+ */
+export type IndexResult< T, R > =
+  IndexLeaf< T > extends never
+    ? T extends object ? {
+      [ K in IndexKeys< T > ]: IndexResult< T[ K ], R >;
+    } : never
+    : Record< IndexLeaf< T >, R >;
