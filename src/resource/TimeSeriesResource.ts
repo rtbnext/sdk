@@ -1,5 +1,7 @@
+import type { StateLoader } from '../core/StateLoader';
 import type { TimePoint } from '../types/collection';
-import type { TimeSeriesData } from '../types/resource';
+import type { ParserFn } from '../types/core';
+import type { PointFn, TimeSeriesData } from '../types/resource';
 import { Resource } from './Resource';
 
 
@@ -15,4 +17,23 @@ import { Resource } from './Resource';
 export class TimeSeriesResource<
   D extends TimeSeriesData,
   R extends TimePoint
-> extends Resource< D > {}
+> extends Resource< D > {
+  /** Factory that converts a raw row into a typed time-series point. */
+  private readonly point: PointFn< D[ number ], R >;
+
+  /**
+   * Creates a new time-series resource.
+   * 
+   * @param path - The resource path relative to the API base URL.
+   * @param loader - The resource state loader responsible for fetching and caching the resource.
+   * @param parser - The parser function that converts raw HTTP responses into the expected data type.
+   * @param point - The factory used to convert rows into typed points.
+   */
+  public constructor (
+    path: string, loader: StateLoader, parser: ParserFn< D >,
+    point: PointFn< D[ number ], R >
+  ) {
+    super( path, loader, parser );
+    this.point = point;
+  }
+}
