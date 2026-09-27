@@ -79,7 +79,8 @@ export class TimeSeriesCollection<
     for ( const key of Object.keys( sorted[ 0 ] ) ) {
       if ( key === 'date' ) continue;
 
-      const values = sorted.map( point => ( point as any )[ key ] )
+      const values = sorted
+        .map( point => ( point as Record< string, unknown > )[ key ] )
         .filter( ( value ): value is number => typeof value === 'number' );
 
       if ( ! values.length ) continue;
