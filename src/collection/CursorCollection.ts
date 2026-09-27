@@ -58,9 +58,15 @@ export abstract class CursorCollection< T, R > extends Collection< T, R > {
    * 
    * @param position - The zero-based cursor position.
    * @returns This collection instance.
+   * @throws Error if the position is not a non-negative integer.
    */
-  public seek ( position: string | number ) : this {
-    this.cursor = Number( position );
+  public seek ( position: unknown ) : this {
+    const value = Number( position );
+
+    if ( ! Number.isInteger( value ) || value < 0 )
+      throw new TypeError( 'Cursor position must be a non-negative integer.' );
+
+    this.cursor = value;
     return this;
   }
 
