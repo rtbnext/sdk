@@ -25,5 +25,7 @@ export class RTBNext {
    * @param options - Configuration options for the SDK.
    * @throws Error if the client identity is not provided in the options.
    */
-  public constructor ( options: RTBNextOptions ) {}
+  public constructor ( options: RTBNextOptions ) {
+    options = JSON.parse( JSON.stringify( options ) );
+  }
 }
