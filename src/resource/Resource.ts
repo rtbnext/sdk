@@ -66,4 +66,44 @@ export class Resource< D > {
       .catch( e => ( this.transformed = undefined, Promise.reject( e ) ) )
     );
   }
+
+  /**
+   * Emits lifecycle events for this resource.
+   * 
+   * @param events - Event names to emit.
+   */
+  protected emit ( ...events: string[] ) : void {
+    for ( const event of events ) this.hooks.get( event )?.forEach( handler => handler( this ) );
+  }
+
+  /**
+   * Registers an event handler for the resource.
+   * 
+   * @param event - The event name.
+   * @param handler - The event handler.
+   * @returns The current resource instance.
+   */
+  public on ( event: string, handler: ( self: this ) => void ) : this {
+    if ( ! this.hooks.has( event ) ) this.hooks.set( event, new Set() );
+    this.hooks.get( event )!.add( handler );
+
+    return this;
+  }
+
+  /**
+   * Removes an event handler from the resource.
+   * 
+   * @param event - The event name.
+   * @param handler - The event handler to remove.
+   * @returns The current resource instance.
+   */
+  public off ( event: string, handler: ( self: this ) => void ) : this {
+    this.hooks.get( event )?.delete( handler );
+    return this;
+  }
+
+  /** Returns whether the resource is currently valid based on the loader's cache mode. */
+  public get valid () : boolean {
+    return ! this.loaded || ! this.state || this.loader.valid( this.state );
+  }
 }
