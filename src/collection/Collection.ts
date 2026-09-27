@@ -15,9 +15,9 @@ export abstract class Collection< T, R > {
   protected readonly factory: ItemFactory< T, R >;
 
   /** The raw items contained in the collection. */
-  protected readonly _items: ReadonlyArray< T >;
+  public readonly items: ReadonlyArray< T >;
   /** The total number of available items. */
-  protected readonly _total: number;
+  public readonly total: number;
 
   /**
    * Creates a new collection.
@@ -32,8 +32,8 @@ export abstract class Collection< T, R > {
   ) {
     this.factory = factory;
 
-    this._items = items;
-    this._total = total ?? items.length;
+    this.items = items;
+    this.total = total ?? items.length;
   }
 
   /**
@@ -43,37 +43,27 @@ export abstract class Collection< T, R > {
    * @returns A new collection instance of the same type.
    */
   protected clone ( items: ReadonlyArray< T > ) : this {
-    return new ( this.constructor as any )( items, this.factory, this._total );
-  }
-
-  /** Returns the raw items contained in the collection. */
-  public get items () : ReadonlyArray< T > {
-    return this._items;
-  }
-
-  /** Returns the total number of available items. */
-  public get total () : number {
-    return this._total;
+    return new ( this.constructor as any )( items, this.factory, this.total );
   }
 
   /** Returns the number of items currently contained. */
   public get count () : number {
-    return this._items.length;
+    return this.items.length;
   }
 
   /** Returns the first resolved item, or undefined if the collection is empty. */
   public get first () : R | undefined {
-    return this._items.length ? this.factory( this._items[ 0 ] ) : undefined;
+    return this.items.length ? this.factory( this.items[ 0 ] ) : undefined;
   }
 
   /** Returns the last resolved item, or undefined if the collection is empty. */
   public get last () : R | undefined {
-    return this._items.length ? this.factory( this._items[ this._items.length - 1 ] ) : undefined;
+    return this.items.length ? this.factory( this.items[ this.items.length - 1 ] ) : undefined;
   }
 
   /** Returns an iterator over the resolved items. */
   public [ Symbol.iterator ] () : Iterator< R > {
-    return this._items.map( this.factory ).values();
+    return this.items.map( this.factory ).values();
   }
 
   /** Returns the runtime name of the collection class. */
@@ -88,12 +78,12 @@ export abstract class Collection< T, R > {
    * @returns True if the item is contained in the collection.
    */
   public includes ( item: T ) : boolean {
-    return this._items.includes( item );
+    return this.items.includes( item );
   }
 
   /** Returns all resolved items as an array. */
   public toArray () : R[] {
-    return this._items.map( this.factory );
+    return this.items.map( this.factory );
   }
 
   /**
@@ -118,7 +108,7 @@ export abstract class Collection< T, R > {
 
   /** Returns a new collection containing the items in reverse order. */
   public reversed () : this {
-    return this.clone( [ ...this._items ].reverse() );
+    return this.clone( [ ...this.items ].reverse() );
   }
 
   /**
@@ -128,7 +118,7 @@ export abstract class Collection< T, R > {
    * @returns A new collection containing the selected items.
    */
   public take ( count: number ) : this {
-    return this.clone( this._items.slice( 0, count ) );
+    return this.clone( this.items.slice( 0, count ) );
   }
 
   /**
@@ -138,7 +128,7 @@ export abstract class Collection< T, R > {
    * @returns A new collection containing the remaining items.
    */
   public skip ( count: number ) : this {
-    return this.clone( this._items.slice( count ) );
+    return this.clone( this.items.slice( count ) );
   }
 
   /**
@@ -149,6 +139,6 @@ export abstract class Collection< T, R > {
    * @returns A new collection containing the selected items.
    */
   public slice ( start?: number, end?: number ) : this {
-    return this.clone( this._items.slice( start, end ) );
+    return this.clone( this.items.slice( start, end ) );
   }
 }
