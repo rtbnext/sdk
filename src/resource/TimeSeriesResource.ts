@@ -47,4 +47,9 @@ export class TimeSeriesResource<
   private collectPoints ( rows: D ) : TimeSeriesCollection< R > {
     return new TimeSeriesCollection< R >( [ ...rows ].reverse().map( this.point ) );
   }
+
+  /** Returns the parsed time-series data as a typed collection. */
+  public series () : Promise< TimeSeriesCollection< R > > {
+    return this.transform( data => this.collectPoints( data ) );
+  }
 }
