@@ -15,3 +15,10 @@
  * @author Paul Köhler (komed3)
  * @license MIT
  */
+
+
+// --- export types ---
+
+export type * from './types/collection';
+export type * from './types/core';
+export type * from './types/resource';
