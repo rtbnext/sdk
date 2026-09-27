@@ -58,4 +58,8 @@ export type IndexResult< T, R > =
 
 // --- time series ---
 
-export type TimeSeriesRow = unknown[];
+/** A single row of time-series data returned by the API. */
+export type TimeSeriesRow = ReadonlyArray< unknown >;
+
+/** Time-series data, represented as an array of rows. */
+export type TimeSeriesData = ReadonlyArray< TimeSeriesRow >;
