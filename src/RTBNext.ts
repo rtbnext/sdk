@@ -2,6 +2,7 @@ import { HttpClient } from './core/HttpClient';
 import { StateLoader } from './core/StateLoader';
 import { ResourcePool } from './resource/ResourcePool';
 import type { RTBNextOptions } from './types/core';
+import type { Endpoints } from './types/endpoints';
 
 
 /**
@@ -34,5 +35,8 @@ export class RTBNext {
     this.httpClient = new HttpClient( options );
     this.stateLoader = StateLoader.getInstance( this.httpClient, options.cache );
     this.resourcePool = new ResourcePool();
+
+    const endpoints = {} as Endpoints;
+    const args = [ this.stateLoader, this.resourcePool, endpoints ] as const;
   }
 }
