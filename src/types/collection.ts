@@ -1,9 +1,18 @@
 // --- abstract ---
 
-/** A function to transform an item of type T into an item of type R. */
+/**
+ * A function to transform an item of type T into an item of type R.
+ * 
+ * @template T - The type of the input item.
+ * @template R - The type of the output item.
+ */
 export type ItemFactory< T, R > = ( item: T ) => R;
 
-/** A function to transform an item of type T into a string representation. */
+/**
+ * A function to transform an item of type T into a string representation
+ * 
+ * @template T - The type of the input item.
+ */
 export type DateResolver< T > = ( item: T ) => string;
 
 
@@ -36,7 +45,12 @@ export interface CollectData< I extends CollectItem > {
   items: ReadonlyArray< I >;
 }
 
-/** A normalized entity type for collection items. */
+/**
+ * A normalized entity type for collection items.
+ * 
+ * @template I - The type of collectable item.
+ * @template T - The type of additional properties to include in the entity.
+ */
 export type Entity< I extends CollectItem, T = unknown > = Readonly< I & CollectItem & T >;
 
 /**
@@ -46,3 +60,22 @@ export type Entity< I extends CollectItem, T = unknown > = Readonly< I & Collect
  * @template E - The type of resolved entity.
  */
 export type EntityFn< I extends CollectItem, E extends Entity< I > > = ItemFactory< I, E >;
+
+/**
+ * Finds an item using a URI-like value.
+ * 
+ * @template I - The type of collectable item.
+ */
+export type FindFn< I extends CollectItem > = (
+  items: ReadonlyArray< I >, uriLike: string
+) => I | undefined;
+
+
+/**
+ * Tests whether an item matches a search query.
+ * 
+ * @template I - The type of collectable item.
+ */
+export type SearchFn< I extends CollectItem > = (
+  item: I, query: string, terms: ReadonlyArray< string >
+) => boolean;
