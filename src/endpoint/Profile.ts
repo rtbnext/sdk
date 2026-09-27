@@ -31,7 +31,7 @@ export class Profile extends Endpoint implements IProfile, ProfileProvider {
    * @param item - The raw profile item.
    * @returns A profile entity with lazy-loaded `meta`, `data`, and `history` properties.
    */
-  protected entity < I extends { uri: string } > ( item: I ) : ProfileEntity< I > {
+  protected entity < I extends CollectItem > ( item: I ) : ProfileEntity< I > {
     let meta: ProfileMeta, data: ProfileData, history: ProfileHistory;
     const self = this;
   
