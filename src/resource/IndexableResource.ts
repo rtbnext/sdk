@@ -1,6 +1,6 @@
 import type { StateLoader } from '../core/StateLoader';
 import type { ParserFn } from '../types/core';
-import type { IndexFn, KeysFn } from '../types/resource';
+import type { IndexFn, KeysFn, ResourceTree } from '../types/resource';
 import { Resource } from './Resource';
 
 
@@ -54,5 +54,23 @@ export class IndexableResource< D, R > extends Resource< D > {
 
     this.factory = index;
     this.keys = keys ?? defaultKeys;
+  }
+
+  /**
+   * Builds a frozen object with deferred property access for each index key.
+   * 
+   * @param keys - The keys to expose.
+   * @param path - The current resource path prefix.
+   * @returns An object mapping keys to lazily resolved sub-resources.
+   */
+  private createIndex ( keys: readonly string[], path: string[] ) : ResourceTree {
+    const out: Record< string, unknown > = {};
+
+    for ( const key of keys ) Object.defineProperty( out, key, {
+      enumerable: true, configurable: false,
+      get: () => this.factory( [ ...path, key ] )
+    } );
+
+    return Object.freeze( out );
   }
 }
