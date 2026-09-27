@@ -27,6 +27,17 @@ export type * from './types/core';
 export type * from './types/resource';
 
 
+// --- create SDK instance ---
+
+/**
+ * Creates a new RTBNext SDK instance.
+ * 
+ * @param options - RTBNext SDK configuration options.
+ * @returns A configured RTBNext SDK instance.
+ */
+const rtbnext = ( options: RTBNextOptions ) : RTBNext => new RTBNext( options );
+
+
 // --- define export ---
 
 export { RTBNext };
