@@ -52,4 +52,18 @@ export class Resource< D > {
 
     return this.value!;
   }
+
+  /**
+   * Convenience helper to transform parsed resource data.
+   * 
+   * @template R - The type of the transformed result.
+   * @param fn - The transform function that receives the parsed data.
+   * @returns The transformed result.
+   */
+  protected transform < R > ( fn: ( data: D ) => Promise< R > | R ) : Promise< R > {
+    return Promise.resolve( this.transformed ??= Promise.resolve( this.data() ).then( fn )
+      .then( v => ( this.transformed = v, this.emit( 'transform' ), v ) )
+      .catch( e => ( this.transformed = undefined, Promise.reject( e ) ) )
+    );
+  }
 }
