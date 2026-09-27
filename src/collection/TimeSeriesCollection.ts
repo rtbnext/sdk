@@ -49,14 +49,11 @@ export class TimeSeriesCollection<
 
     const date = new Date( Date.UTC( year, month - 1, day ) );
     const thursday = new Date( date );
-
     thursday.setUTCDate( date.getUTCDate() + 4 - ( date.getUTCDay() || 7 ) );
 
     const isoYear = thursday.getUTCFullYear();
     const first = new Date( Date.UTC( isoYear, 0, 1 ) );
-    const week = Math.ceil(
-      ( ( thursday.getTime() - first.getTime() ) / 86400000 + 1 ) / 7
-    );
+    const week = Math.ceil( ( ( thursday.getTime() - first.getTime() ) / 86400000 + 1 ) / 7 );
 
     return `${ isoYear }-W${ String( week ).padStart( 2, '0' ) }`;
   }
