@@ -1,4 +1,4 @@
-import type { CollectData, CollectItem, Entity } from '../types/collection';
+import type { CollectData, CollectItem, Entity, EntityFn, FindFn, SearchFn } from '../types/collection';
 import { Resource } from './Resource';
 
 
@@ -16,4 +16,11 @@ export class CollectableResource<
   D extends CollectData< I >,
   I extends CollectItem,
   E extends Entity< I >
-> extends Resource< D > {}
+> extends Resource< D > {
+  /** The factory used to resolve raw items into entities. */
+  protected readonly entity: EntityFn< I, E >;
+  /** Optional custom item finder. */
+  protected readonly findFn?: FindFn< I >;
+  /** Optional custom search matcher. */
+  protected readonly searchFn?: SearchFn< I >;
+}
