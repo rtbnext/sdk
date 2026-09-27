@@ -32,4 +32,32 @@ export class TimeSeriesCollection<
       .map( ( [ , value ] ) => value as number )
     );
   }
+
+  /**
+   * Creates an aggregation key for a date.
+   * 
+   * @param value - The date to group.
+   * @param period - The aggregation period.
+   * @returns The aggregation key.
+   */
+  private period ( value: string, period: AggregatePeriod ) : string {
+    const [ year, month, day ] = value.split( '-' ).map( Number );
+
+    if ( period === 'year' ) return String( year );
+    if ( period === 'quarter' ) return `${ year }-Q${ Math.floor( ( month - 1 ) / 3 ) + 1 }`;
+    if ( period === 'month' ) return `${ year }-${ String( month ).padStart( 2, '0' ) }`;
+
+    const date = new Date( Date.UTC( year, month - 1, day ) );
+    const thursday = new Date( date );
+
+    thursday.setUTCDate( date.getUTCDate() + 4 - ( date.getUTCDay() || 7 ) );
+
+    const isoYear = thursday.getUTCFullYear();
+    const first = new Date( Date.UTC( isoYear, 0, 1 ) );
+    const week = Math.ceil(
+      ( ( thursday.getTime() - first.getTime() ) / 86400000 + 1 ) / 7
+    );
+
+    return `${ isoYear }-W${ String( week ).padStart( 2, '0' ) }`;
+  }
 }
