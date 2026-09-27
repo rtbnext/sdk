@@ -23,8 +23,6 @@ export interface CollectItem {
   name?: string;
   /** The searchable text, if available. */
   text?: string;
-  /** Additional API properties. */
-  [ key: string ]: unknown;
 }
 
 /**
@@ -117,8 +115,6 @@ export type TimeSeriesRow = readonly unknown[];
 export interface TimePoint {
   /** The date of the time-series point. */
   date: string;
-  /** Additional time-series values. */
-  [ key: string ]: unknown;
 }
 
 /** A supported time-series aggregation period. */
