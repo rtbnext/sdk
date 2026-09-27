@@ -130,7 +130,11 @@ export interface CacheOptions {
 /** The mode of parsing to use when processing HTTP responses. */
 export type ParserMode = 'text' | 'json' | 'csv';
 
-/** A function that parses an HTTP response into a specific data type. */
+/**
+ * A function that parses an HTTP response into a specific data type.
+ * 
+ * @template D - The type of data returned by the parser.
+ */
 export type ParserFn< D > = ( res: HttpResponse ) => D;
 
 
