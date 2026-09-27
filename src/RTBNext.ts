@@ -1,6 +1,7 @@
 import { HttpClient } from './core/HttpClient';
 import { StateLoader } from './core/StateLoader';
 import { ResourcePool } from './resource/ResourcePool';
+import type { RTBNextOptions } from './types/core';
 
 
 /**
@@ -17,4 +18,12 @@ export class RTBNext {
   private readonly stateLoader: StateLoader;
   /** The resource pool used for caching and reusing resource instances. */
   private readonly resourcePool: ResourcePool;
+
+  /**
+   * Creates a new RTBNext SDK instance.
+   * 
+   * @param options - Configuration options for the SDK.
+   * @throws Error if the client identity is not provided in the options.
+   */
+  public constructor ( options: RTBNextOptions ) {}
 }
