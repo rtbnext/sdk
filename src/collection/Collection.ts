@@ -107,6 +107,15 @@ export abstract class Collection< T, R > {
     return this.toArray().map( callback );
   }
 
+  /**
+   * Executes the provided callback for each resolved item in the collection.
+   * 
+   * @param callback - The callback invoked for each resolved item.
+   */
+  public forEach ( callback: ( item: R, index: number ) => void ) : void {
+    this.toArray().forEach( callback );
+  }
+
   /** Returns a new collection containing the items in reverse order. */
   public reversed () : this {
     return this.clone( [ ...this._items ].reverse() );
