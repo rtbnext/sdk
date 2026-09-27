@@ -1,3 +1,5 @@
+import type { StateLoader } from '../core/StateLoader';
+import type { ParserFn } from '../types/core';
 import type { IndexFn, KeysFn } from '../types/resource';
 import { Resource } from './Resource';
 
@@ -35,4 +37,22 @@ export class IndexableResource< D, R > extends Resource< D > {
   private readonly factory: IndexFn< R >;
   /** Optional custom key extractor for index traversal. */
   private readonly keys: KeysFn;
+
+  /**
+   * Creates a new indexable resource.
+   * 
+   * @param path - The resource path relative to the API base URL.
+   * @param loader - The resource state loader responsible for fetching and caching the resource.
+   * @param parser - The parser function that converts raw HTTP responses into the expected data type.
+   * @param options - Configuration options for index traversal and resource resolution.
+   */
+  public constructor (
+    path: string, loader: StateLoader, parser: ParserFn< D >,
+    index: IndexFn< R >, keys?: KeysFn
+  ) {
+    super( path, loader, parser );
+
+    this.factory = index;
+    this.keys = keys ?? defaultKeys;
+  }
 }
