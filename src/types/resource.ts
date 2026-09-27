@@ -35,13 +35,16 @@ export interface CollectData< I extends CollectItem > {
   items: ReadonlyArray< I >;
 }
 
+/** A normalized entity type for collection items. */
+export type Entity< I extends CollectItem, T = unknown > = Readonly< I & CollectItem & T >;
+
 /**
  * Resolves a collectable item into an entity.
  * 
  * @template I - The type of collectable item.
  * @template E - The type of resolved entity.
  */
-export type EntityFn< I, E > = ItemFactory< I, E >;
+export type EntityFn< I extends CollectItem, E extends Entity< I > > = ItemFactory< I, E >;
 
 /**
  * Finds an item using a URI-like value.
