@@ -9,6 +9,7 @@ export interface DateData {
   dates: ReadonlyArray< string >;
 }
 
+
 // --- indexable ---
 
 /**
@@ -53,3 +54,8 @@ export type IndexResult< T, R > =
       [ K in IndexKeys< T > ]: IndexResult< T[ K ], R >;
     } : never
     : Record< IndexLeaf< T >, R >;
+
+
+// --- time series ---
+
+export type TimeSeriesRow = unknown[];
