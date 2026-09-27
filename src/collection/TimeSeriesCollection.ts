@@ -110,4 +110,30 @@ export class TimeSeriesCollection<
   private aggregatedSeries ( points: ReadonlyArray< A > ) : TimeSeriesCollection< A > {
     return new TimeSeriesCollection< A >( points );
   }
+
+  /** Returns all time-series points. */
+  public get points () : R[] {
+    return this.toArray();
+  }
+
+  /** Returns the minimum numeric value. */
+  public min ( callback?: NumberCallback< R > ) : number {
+    return Math.min( ...this.numbers( callback ) );
+  }
+
+  /** Returns the maximum numeric value. */
+  public max ( callback?: NumberCallback< R > ) : number {
+    return Math.max( ...this.numbers( callback ) );
+  }
+
+  /** Returns the sum of all numeric values. */
+  public sum ( callback?: NumberCallback< R > ) : number {
+    return this.numbers( callback ).reduce( ( sum, value ) => sum + value, 0 );
+  }
+
+  /** Returns the arithmetic mean of all numeric values. */
+  public avg ( callback?: NumberCallback< R > ) : number {
+    const values = this.numbers( callback );
+    return this.sum( callback ) / values.length;
+  }
 }
