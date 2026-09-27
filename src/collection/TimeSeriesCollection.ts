@@ -136,4 +136,12 @@ export class TimeSeriesCollection<
     const values = this.numbers( callback );
     return this.sum( callback ) / values.length;
   }
+
+  /** Returns the median of all numeric values. */
+  public median ( callback?: NumberCallback< R > ) : number {
+    const values = [ ...this.numbers( callback ) ].sort( ( a, b ) => a - b );
+    const middle = Math.floor( values.length / 2 );
+
+    return values.length % 2 ? values[ middle ] : ( values[ middle - 1 ] + values[ middle ] ) / 2;
+  }
 }
