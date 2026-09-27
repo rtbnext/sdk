@@ -15,6 +15,9 @@ export interface ClientIdentity {
 
 // ---- rate limiter ---
 
+/** The mode of rate limiting to use, either 'burst' or 'spread'. */
+export type RateLimiterMode = 'burst' | 'spread';
+
 /** Options for the rate limiter. */
 export interface RateLimiterOptions {
   /** The maximum number of requests allowed in the given time window. */
@@ -42,8 +45,8 @@ export interface HttpClientOptions {
 export interface RequestOptions {
   /** Optional headers to include in the request. */
   headers?: Headers;
-  /** The rate limiting mode, either 'burst' or 'spread'. */
-  mode?: 'burst' | 'spread';
+  /** The rate limiting mode. */
+  mode?: RateLimiterMode;
   /** Optional timeout for the request in milliseconds. */
   timeout?: number;
 }
