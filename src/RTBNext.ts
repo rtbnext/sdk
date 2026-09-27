@@ -19,6 +19,8 @@ export class RTBNext {
   private readonly stateLoader: StateLoader;
   /** The resource pool used for caching and reusing resource instances. */
   private readonly resourcePool: ResourcePool;
+  /** The collection of endpoint clients available in the SDK. */
+  public readonly endpoints: Endpoints;
 
   /**
    * Creates a new RTBNext SDK instance.
@@ -38,5 +40,7 @@ export class RTBNext {
 
     const endpoints = {} as Endpoints;
     const args = [ this.stateLoader, this.resourcePool, endpoints ] as const;
+
+    this.endpoints = Object.freeze( endpoints );
   }
 }
