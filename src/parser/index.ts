@@ -19,7 +19,7 @@ export const csv = CsvParser.parse;
  * 
  * @param mode - The parser mode to use ('text', 'json', or 'csv').
  * @returns A parser function that takes an HTTP response and returns the parsed data.
- * @throws An error if the specified parser mode is unsupported.
+ * @throws Error if the specified parser mode is unsupported.
  */
 export const parser = < D > ( mode: ParserMode ) : ParserFn< D > => {
   switch ( mode ) {
