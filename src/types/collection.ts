@@ -70,7 +70,6 @@ export type FindFn< I extends CollectItem > = (
   items: ReadonlyArray< I >, uriLike: string
 ) => I | undefined;
 
-
 /**
  * Tests whether an item matches a search query.
  * 
@@ -79,3 +78,60 @@ export type FindFn< I extends CollectItem > = (
 export type SearchFn< I extends CollectItem > = (
   item: I, query: string, terms: ReadonlyArray< string >
 ) => boolean;
+
+
+// --- time series ---
+
+/** Supported aggregation periods for time-series data. */
+export type AggregatePeriod = 'week' | 'month' | 'quarter' | 'year';
+
+/**
+ * A function to extract a numeric value from a time-series point.
+ * 
+ * @template R - The type of the time-series point.
+ */
+export type NumberCallback< R > = ( point: R ) => number;
+
+/** A time-series point containing a date. */
+export interface TimePoint {
+  /** The date of the time-series point. */
+  date: string;
+}
+
+/** Aggregated numeric summary values. */
+export interface AggregateValue {
+  /** The first numeric value in the range. */
+  first: number;
+  /** The last numeric value in the range. */
+  last: number;
+  /** The minimum numeric value in the range. */
+  min: number;
+  /** The maximum numeric value in the range. */
+  max: number;
+  /** The average numeric value in the range. */
+  avg: number;
+  /** The median numeric value in the range. */
+  median: number;
+  /** The total sum of numeric values in the range. */
+  sum: number;
+}
+
+/** The date range covered by an aggregate point. */
+export interface AggregateRange {
+  /** The first date in the range. */
+  from: string;
+  /** The last date in the range. */
+  to: string;
+}
+
+/** An aggregated point derived from a time-series record. */
+export type AggregatePoint< R extends TimePoint > = {
+  [ K in keyof Omit< R, 'date' > ]: R[ K ] extends number ? AggregateValue : R[ K ];
+} & {
+  /** The point's date. */
+  date: string;
+  /** The human-readable label for the aggregation. */
+  label: string;
+  /** The date range covered by this aggregate point. */
+  range: AggregateRange;
+};
