@@ -60,4 +60,50 @@ export class TimeSeriesCollection<
 
     return `${ isoYear }-W${ String( week ).padStart( 2, '0' ) }`;
   }
+
+  /**
+   * Aggregates a group of points into a single summary point.
+   * 
+   * @param points - The points to aggregate.
+   * @param label - Optional label for the aggregate point.
+   * @returns The aggregated point.
+   */
+  private aggregatePoints ( points: ReadonlyArray< R >, label?: string ) : A {
+    const sorted = [ ...points ].sort( ( a, b ) => a.date.localeCompare( b.date ) );
+    const result: Record< string, unknown > = {
+      date: sorted[ sorted.length - 1 ].date,
+      label: label ?? sorted[ sorted.length - 1 ].date,
+      range: {
+        from: sorted[ 0 ].date,
+        to: sorted[ sorted.length - 1 ].date
+      }
+    };
+
+    for ( const key of Object.keys( sorted[ 0 ] ) ) {
+      if ( key === 'date' ) continue;
+
+      const values = sorted.map( point => ( point as any )[ key ] )
+        .filter( ( value ): value is number => typeof value === 'number' );
+
+      if ( ! values.length ) continue;
+
+      const ordered = [ ...values ].sort( ( a, b ) => a - b );
+      const middle = Math.floor( ordered.length / 2 );
+      const sum = values.reduce( ( total, value ) => total + value, 0 );
+
+      result[ key ] = {
+        first: values[ 0 ],
+        last: values[ values.length - 1 ],
+        min: Math.min( ...values ),
+        max: Math.max( ...values ),
+        avg: sum / values.length,
+        median: ordered.length % 2
+          ? ordered[ middle ]
+          : ( ordered[ middle - 1 ] + ordered[ middle ] ) / 2,
+        sum
+      };
+    }
+
+    return result as A;
+  }
 }
