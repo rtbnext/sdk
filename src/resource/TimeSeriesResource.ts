@@ -1,3 +1,4 @@
+import { TimeSeriesCollection } from '../collection/TimeSeriesCollection';
 import type { StateLoader } from '../core/StateLoader';
 import type { TimePoint } from '../types/collection';
 import type { ParserFn } from '../types/core';
@@ -35,5 +36,15 @@ export class TimeSeriesResource<
   ) {
     super( path, loader, parser );
     this.point = point;
+  }
+
+  /**
+   * Creates a time-series collection from raw rows.
+   * 
+   * @param rows - The raw time-series rows.
+   * @returns A new time-series collection.
+   */
+  private collectPoints ( rows: D ) : TimeSeriesCollection< R > {
+    return new TimeSeriesCollection< R >( [ ...rows ].reverse().map( this.point ) );
   }
 }
