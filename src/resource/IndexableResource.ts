@@ -1,6 +1,6 @@
 import type { StateLoader } from '../core/StateLoader';
 import type { ParserFn } from '../types/core';
-import type { IndexFn, KeysFn, ResourceTree } from '../types/resource';
+import type { IndexFn, IndexResult, KeysFn, ResourceTree } from '../types/resource';
 import { Resource } from './Resource';
 
 
@@ -102,5 +102,10 @@ export class IndexableResource< D, R > extends Resource< D > {
     }
 
     return undefined;
+  }
+
+  /* Returns the lazily indexed resource tree for the parsed data. */
+  public get () : Promise< IndexResult< D, R > > {
+    return this.transform( data => this.traverse( data ) as IndexResult< D, R > );
   }
 }
