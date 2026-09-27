@@ -63,3 +63,11 @@ export type TimeSeriesRow = ReadonlyArray< unknown >;
 
 /** Time-series data, represented as an array of rows. */
 export type TimeSeriesData = ReadonlyArray< TimeSeriesRow >;
+
+/**
+ * A function that converts a raw time-series row into a typed point.
+ * 
+ * @template D - The raw time-series data row type.
+ * @template R - The type of the time-series point.
+ */
+export type PointFn< D, R > = ( row: D ) => R;
