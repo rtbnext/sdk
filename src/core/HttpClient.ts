@@ -77,7 +77,7 @@ export class HttpClient {
    * @throws Error if the fetch operation fails.
    */
   private async execute ( url: URL, options?: RequestOptions ) : Promise< HttpResponse > {
-    await this.limiter[ options?.mode ?? 'burst' ]();
+    await this.limiter.acquire( options?.mode );
 
     try {
       const start = performance.now();
