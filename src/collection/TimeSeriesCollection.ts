@@ -106,4 +106,11 @@ export class TimeSeriesCollection<
 
     return result as A;
   }
+
+  /**
+   * Creates a time-series collection from aggregated points.
+   */
+  private aggregatedSeries ( points: ReadonlyArray< A > ) : TimeSeriesCollection< A > {
+    return new TimeSeriesCollection< A >( points );
+  }
 }
