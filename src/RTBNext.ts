@@ -2,7 +2,7 @@ import { HttpClient } from './core/HttpClient';
 import { StateLoader } from './core/StateLoader';
 import { ResourcePool } from './resource/ResourcePool';
 import type { RTBNextOptions } from './types/core';
-import type { Endpoints } from './types/endpoints';
+import type { Endpoints } from './types/endpoint';
 
 
 /**
