@@ -51,7 +51,7 @@ export interface CollectData< I extends CollectItem > {
  * @template I - The type of collectable item.
  * @template T - The type of additional properties to include in the entity.
  */
-export type Entity< I extends CollectItem, T = unknown > = Readonly< I & CollectItem & T >;
+export type Entity< I extends CollectItem, T = unknown > = Readonly< I & T >;
 
 /**
  * Resolves a collectable item into an entity.
