@@ -168,4 +168,21 @@ export class TimeSeriesCollection<
   public values ( callback: NumberCallback< R > ) : number[] {
     return this.points.map( callback );
   }
+
+  /** Aggregates points by a calendar period or custom grouping function. */
+  public aggregate ( period: AggregatePeriod | ( ( point: R ) => string ) ) : TimeSeriesCollection< A > {
+    const groups = new Map< string, R[] >();
+
+    for ( const point of this.points ) {
+      const key = typeof period === 'function' ? period( point ) : this.period( point.date, period );
+      const group = groups.get( key ) ?? [];
+
+      group.push( point );
+      groups.set( key, group );
+    }
+
+    return this.aggregatedSeries( [ ...groups.entries() ].map( ( [ label, points ] ) =>
+      this.aggregatePoints( points, label )
+    ) );
+  }
 }
