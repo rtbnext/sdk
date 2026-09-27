@@ -1,9 +1,17 @@
 import type { TSnapshotIndex } from '@rtbnext/schema/src/base/generic';
 import type { TMover } from '@rtbnext/schema/src/model/mover';
+import type {
+  TProfileData, TProfileHistory, TProfileIndex,
+  TProfileIndexItem, TProfileMetaData
+} from '@rtbnext/schema/src/model/profile';
+import type { TSearchIndex, TSearchIndexItem } from '@rtbnext/schema/src/model/search';
 import type { TStatus } from '@rtbnext/schema/src/model/status';
 
+import type { CollectableResource } from '../resource/CollectableResource';
 import type { DateableResource } from '../resource/DateableResource';
 import type { Resource } from '../resource/Resource';
+import type { TimeSeriesResource } from '../resource/TimeSeriesResource';
+import type { CollectData, CollectItem, Entity } from './resource';
 
 
 // --- profile ---
