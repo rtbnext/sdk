@@ -40,4 +40,5 @@ const rtbnext = ( options: RTBNextOptions ) : RTBNext => new RTBNext( options );
 
 // --- define export ---
 
-export { RTBNext };
+export { RTBNext, rtbnext };
+export default rtbnext;
