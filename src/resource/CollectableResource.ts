@@ -1,4 +1,6 @@
+import type { StateLoader } from '../core/StateLoader';
 import type { CollectData, CollectItem, Entity, EntityFn, FindFn, SearchFn } from '../types/collection';
+import type { ParserFn } from '../types/core';
 import { Resource } from './Resource';
 
 
@@ -23,4 +25,25 @@ export class CollectableResource<
   protected readonly findFn?: FindFn< I >;
   /** Optional custom search matcher. */
   protected readonly searchFn?: SearchFn< I >;
+
+  /**
+   * Creates a new collectable resource.
+   * 
+   * @param path - The resource path for the API request.
+   * @param loader - The resource state loader used to fetch data.
+   * @param parser - The parser function used to decode the response.
+   * @param entity - The factory used to resolve items into entities.
+   * @param find - Optional function used to find items by URI-like values.
+   * @param search - Optional function used to match search queries.
+   */
+  public constructor (
+    path: string, loader: StateLoader, parser: ParserFn< D >, entity: EntityFn< I, E >,
+    find?: FindFn< I >, search?: SearchFn< I >
+  ) {
+    super( path, loader, parser );
+
+    this.entity = entity;
+    this.findFn = find;
+    this.searchFn = search;
+  }
 }
