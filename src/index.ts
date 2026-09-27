@@ -16,9 +16,17 @@
  * @license MIT
  */
 
+import { RTBNext } from './RTBNext';
+import type { RTBNextOptions } from './types/core';
+
 
 // --- export types ---
 
 export type * from './types/collection';
 export type * from './types/core';
 export type * from './types/resource';
+
+
+// --- define export ---
+
+export { RTBNext };
