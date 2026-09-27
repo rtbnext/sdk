@@ -39,4 +39,9 @@ export class Resource< D > {
     protected readonly loader: StateLoader,
     protected readonly parser: ParserFn< D >
   ) {}
+
+  /** Resets parsed resource state so the next call to `data()` re-parses. */
+  private reset () : void {
+    this.parsed = false, this.value = undefined, this.transformed = undefined;
+  }
 }
