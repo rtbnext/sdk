@@ -109,7 +109,7 @@ export abstract class Endpoint {
    * @returns A time-series resource.
    */
   protected series < D extends TimeSeriesData, R extends TimePoint > (
-    path: string, point: PointFn< D[ number ], R >
+    path: string, point: PointFn< D, R >
   ) : TimeSeriesResource< D, R > {
     return this.pool.get( path, () =>
       new TimeSeriesResource< D, R >( path, this.loader, csv, point )

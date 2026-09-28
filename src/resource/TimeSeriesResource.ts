@@ -20,7 +20,7 @@ export class TimeSeriesResource<
   R extends TimePoint
 > extends Resource< D > {
   /** Factory that converts a raw row into a typed time-series point. */
-  private readonly point: PointFn< D[ number ], R >;
+  private readonly point: PointFn< D, R >;
 
   /**
    * Creates a new time-series resource.
@@ -32,7 +32,7 @@ export class TimeSeriesResource<
    */
   public constructor (
     path: string, loader: StateLoader, parser: ParserFn< D >,
-    point: PointFn< D[ number ], R >
+    point: PointFn< D, R >
   ) {
     super( path, loader, parser );
     this.point = point;
