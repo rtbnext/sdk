@@ -1,13 +1,14 @@
 import { HttpClient } from './core/HttpClient';
 import { StateLoader } from './core/StateLoader';
 import { Filter } from './endpoint/Filter';
+import { List } from './endpoint/List';
 import { Mover } from './endpoint/Mover';
 import { Profile } from './endpoint/Profile';
 import { System } from './endpoint/System';
 import { ResourcePool } from './resource/ResourcePool';
 import type { RTBNextOptions } from './types/core';
 import type {
-  Endpoints, FilterEndpoint, MoverEndpoint,
+  Endpoints, FilterEndpoint, ListEndpoint, MoverEndpoint,
   ProfileEndpoint, SystemEndpoint
 } from './types/endpoint';
 
@@ -31,6 +32,8 @@ export class RTBNext {
 
   /** The Profile endpoint. */
   public readonly profile: ProfileEndpoint;
+  /** The List endpoint. */
+  public readonly list: ListEndpoint;
   /** The Mover endpoint. */
   public readonly mover: MoverEndpoint;
   /** The Filter endpoint. */
@@ -58,6 +61,7 @@ export class RTBNext {
     const args = [ this.stateLoader, this.resourcePool, endpoints ] as const;
 
     this.profile = endpoints.profile = new Profile( ...args );
+    this.list = endpoints.list = new List( ...args );
     this.mover = endpoints.mover = new Mover( ...args );
     this.filter = endpoints.filter = new Filter( ...args );
     this.system = endpoints.system = new System( ...args );
