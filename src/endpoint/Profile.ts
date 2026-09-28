@@ -1,4 +1,4 @@
-import type { ProfileEndpoint } from '../types/endpoint';
+import type { ProfileData, ProfileEndpoint, ProfileEntity, ProfileHistory, ProfileMeta } from '../types/endpoint';
 import { Endpoint } from './Endpoint';
 
 
@@ -26,4 +26,22 @@ export const useProfileProvider = ( profile: ProfileEndpoint ) : ProfileProvider
  * 
  * Provides access to profile metadata, details, history, index, and search index.
  */
-export class Profile extends Endpoint implements ProfileEndpoint, ProfileProvider {}
+export class Profile extends Endpoint implements ProfileEndpoint, ProfileProvider {
+  /**
+   * Creates a profile entity with lazy-loaded related resources.
+   * 
+   * @template I - The type of the raw profile item, which must include a `uri` property.
+   * @param item - The raw profile item.
+   * @returns A profile entity with lazy-loaded `meta`, `data`, and `history` properties.
+   */
+  protected entity < I extends { uri: string } > ( item: I ) : ProfileEntity< I > {
+    let meta: ProfileMeta, data: ProfileData, history: ProfileHistory;
+    const self = this;
+  
+    return Object.freeze( { ...item,
+      get meta () { return meta ??= self.meta( item.uri ) },
+      get data () { return data ??= self.data( item.uri ) },
+      get history () { return history ??= self.history( item.uri ) }
+    } );
+  }
+}
