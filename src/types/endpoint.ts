@@ -110,7 +110,15 @@ export type ListDateIndex< T extends TListItem & CollectItem > =
 /** The list index resource. */
 export type ListIndex = CollectableResource< TListIndex, TListIndexItem, ListEntity< any > >;
 
-export interface ListEndpoint {}
+/** The list endpoint interface. */
+export interface ListEndpoint {
+  /** Retrieve a list snapshot for a URI and date. */
+  snapshot < T extends TListItem & CollectItem > ( uri: string, date: string ) : ListSnapshot< T >;
+  /** Retrieve a date-indexed list resource for a URI. */
+  get < T extends TListItem & CollectItem > ( uri: string ) : ListDateIndex< T >;
+  /** The list index resource. */
+  readonly index: ListIndex;
+}
 
 
 // --- mover ---
