@@ -16,3 +16,13 @@ client.profile.data( 'bill-gates' ).data().then( data => {
   console.log( 'CV:', data.bio.cv );
   console.log( 'Short:', data.wiki.desc );
 } );
+
+
+// --- use the profile index collection ---
+
+client.profile.index.collection().then( profiles => {
+  console.log( 'Total:', profiles.total );
+
+  profiles.search( 'bill' ).orderBy( 'networth', 'desc' ).take( 5 )
+    .forEach( item => console.log( item.name, item.uri ) );
+} );
