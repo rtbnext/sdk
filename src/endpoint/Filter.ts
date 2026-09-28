@@ -23,22 +23,22 @@ export class Filter extends Endpoint implements FilterEndpoint {
 
   /** Deceased profiles filter collection. */
   public get deceased () : FilterCollection {
-    return this.filter( `v2/filter/special/deceased.json` );
+    return this.filter( 'v2/filter/special/deceased.json' );
   }
 
   /** Drop-off profiles filter collection. */
   public get dropOff () : FilterCollection {
-    return this.filter( `v2/filter/special/dropOff.json` );
+    return this.filter( 'v2/filter/special/dropOff.json' );
   }
 
   /** Family profiles filter collection. */
   public get family () : FilterCollection {
-    return this.filter( `v2/filter/special/family.json` );
+    return this.filter( 'v2/filter/special/family.json' );
   }
 
   /** Self-made profiles filter collection. */
   public get selfMade () : FilterCollection {
-    return this.filter( `v2/filter/special/selfMade.json` );
+    return this.filter( 'v2/filter/special/selfMade.json' );
   }
 
   /**
@@ -54,7 +54,7 @@ export class Filter extends Endpoint implements FilterEndpoint {
   /**
    * Age group filter collection.
    * 
-   * @param ageGroup - The age group identifier (e.g., '18-24', '25-34').
+   * @param ageGroup - The age group identifier (e.g., `18-24`, `25-34`).
    * @returns The filter collection for the specified age group.
    */
   public age ( ageGroup: TAgeGroup ) : FilterCollection {
@@ -64,7 +64,7 @@ export class Filter extends Endpoint implements FilterEndpoint {
   /**
    * Gender filter collection.
    * 
-   * @param gender - The gender identifier (e.g., 'male', 'female').
+   * @param gender - The gender identifier (e.g., `male`, `female`).
    * @returns The filter collection for the specified gender.
    */
   public gender ( gender: TGender ) : FilterCollection {
@@ -74,7 +74,7 @@ export class Filter extends Endpoint implements FilterEndpoint {
   /**
    * Marital status filter collection.
    * 
-   * @param maritalStatus - The marital status identifier (e.g., 'single', 'married').
+   * @param maritalStatus - The marital status identifier (e.g., `single`, `married`).
    * @returns The filter collection for the specified marital status.
    */
   public maritalStatus ( maritalStatus: TMaritalStatus ) : FilterCollection {
@@ -84,7 +84,7 @@ export class Filter extends Endpoint implements FilterEndpoint {
   /**
    * Citizenship filter collection.
    * 
-   * @param isoCode - The ISO country code (e.g., 'US', 'CA').
+   * @param isoCode - The ISO country code (e.g., `US`, `CA`).
    * @returns The filter collection for the specified citizenship.
    */
   public citizenship ( isoCode: string ) : FilterCollection {
@@ -94,7 +94,7 @@ export class Filter extends Endpoint implements FilterEndpoint {
   /**
    * Country filter collection.
    * 
-   * @param isoCode - The ISO country code (e.g., 'US', 'CA').
+   * @param isoCode - The ISO country code (e.g., `US`, `CA`).
    * @returns The filter collection for the specified country.
    */
   public country ( isoCode: string ) : FilterCollection {
@@ -104,7 +104,7 @@ export class Filter extends Endpoint implements FilterEndpoint {
   /**
    * State filter collection.
    * 
-   * @param uspsCode - The USPS state code (e.g., 'CA', 'NY').
+   * @param uspsCode - The USPS state code (e.g., `CA`, `NY`).
    * @returns The filter collection for the specified state.
    */
   public state ( uspsCode: string ) : FilterCollection {

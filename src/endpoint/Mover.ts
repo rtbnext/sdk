@@ -12,7 +12,7 @@ export class Mover extends Endpoint implements MoverEndpoint {
   /**
    * Returns a mover snapshot for a given date.
    * 
-   * @param date - The date for which to retrieve the mover snapshot (in YYYY-MM-DD format).
+   * @param date - The date for which to retrieve the mover snapshot (in `YYYY-MM-DD` format).
    * @returns A MoverSnapshot resource for the specified date.
    */
   public snapshot ( date: string ) : MoverSnapshot {
