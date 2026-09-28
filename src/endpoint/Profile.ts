@@ -1,5 +1,10 @@
+import type { TProfileHistoryItem } from '@rtbnext/schema/src/model/profile';
+
 import type { CollectData, CollectItem, FindFn, SearchFn } from '../types/collection';
-import type { ProfileCollection, ProfileData, ProfileEndpoint, ProfileEntity, ProfileHistory, ProfileMeta } from '../types/endpoint';
+import type {
+  ProfileCollection, ProfileData, ProfileEndpoint, ProfileEntity,
+  ProfileHistory, ProfileHistoryPoint, ProfileMeta
+} from '../types/endpoint';
 import { Endpoint } from './Endpoint';
 
 
@@ -60,5 +65,15 @@ export class Profile extends Endpoint implements ProfileEndpoint, ProfileProvide
     path: string, find?: FindFn< I >, search?: SearchFn< I >
   ) : ProfileCollection< D, I > {
     return this.collectable( path, item => this.entity( item ), find, search );
+  }
+
+  /**
+   * Converts a raw profile history row into a typed history point.
+   * 
+   * @param row - The raw history row.
+   * @returns The converted, typed history point.
+   */
+  protected point ( [ date, rank, networth, change, changePct ]: TProfileHistoryItem ) : ProfileHistoryPoint {
+    return { date, rank, networth, change, changePct };
   }
 }
