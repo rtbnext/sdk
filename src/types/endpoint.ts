@@ -1,6 +1,7 @@
 import type { TAgeGroup, TGender, TIndustry, TMaritalStatus } from '@rtbnext/schema/src/base/const';
 import type { TSnapshotIndex } from '@rtbnext/schema/src/base/generic';
 import type { TFilter, TFilterIndex, TFilterItem } from '@rtbnext/schema/src/model/filter';
+import type { TListIndex, TListIndexItem, TListItem, TListSnapshot } from '@rtbnext/schema/src/model/list';
 import type { TMover } from '@rtbnext/schema/src/model/mover';
 import type {
   TProfileData, TProfileHistory, TProfileIndex,
@@ -92,6 +93,22 @@ export interface ProfileEndpoint {
 
 
 // --- list ---
+
+/** A list entity that includes date-indexed snapshots. */
+export type ListEntity< T extends TListItem & CollectItem > = TListIndexItem & {
+  dates: ListDateIndex< T >;
+};
+
+/** A snapshot collection for list data. */
+export type ListSnapshot< T extends TListItem & CollectItem > =
+  CollectableResource< TListSnapshot< T >, T, ProfileEntity< T > >;
+
+/** A date-indexed list of snapshots. */
+export type ListDateIndex< T extends TListItem & CollectItem > =
+  DateableResource< TSnapshotIndex, ListSnapshot< T > >;
+
+/** The list index resource. */
+export type ListIndex = CollectableResource< TListIndex, TListIndexItem, ListEntity< any > >;
 
 export interface ListEndpoint {}
 
