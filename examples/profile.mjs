@@ -26,3 +26,12 @@ client.profile.index.collection().then( profiles => {
   profiles.search( 'bill' ).orderBy( 'networth', 'desc' ).take( 5 )
     .forEach( item => console.log( item.name, item.uri ) );
 } );
+
+
+// --- work with profile history ---
+
+client.profile.get( 'elon-musk' ).history.series().then( history => {
+  console.log( 'Points:', history.count );
+  console.log( 'Latest:', history.last );
+  console.log( 'Average:', history.avg( p => p.networth ) );
+} );
