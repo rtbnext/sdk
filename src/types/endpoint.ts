@@ -94,16 +94,29 @@ export interface ProfileEndpoint {
 
 // --- list ---
 
-/** A list entity that includes date-indexed snapshots. */
+/**
+ * A list entity that includes date-indexed snapshots.
+ * 
+ * @template T - The type of list item.
+ */
 export type ListEntity< T extends TListItem & CollectItem > = TListIndexItem & {
+  /** The date-indexed snapshots for the list entity. */
   dates: ListDateIndex< T >;
 };
 
-/** A snapshot collection for list data. */
+/**
+ * A snapshot collection for list data.
+ * 
+ * @template T - The type of list item.
+ */
 export type ListSnapshot< T extends TListItem & CollectItem > =
   CollectableResource< TListSnapshot< T >, T, ProfileEntity< T > >;
 
-/** A date-indexed list of snapshots. */
+/**
+ * A date-indexed list of snapshots.
+ * 
+ * @template T - The type of list item.
+ */
 export type ListDateIndex< T extends TListItem & CollectItem > =
   DateableResource< TSnapshotIndex, ListSnapshot< T > >;
 
