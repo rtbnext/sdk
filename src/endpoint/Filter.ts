@@ -1,4 +1,5 @@
-import { TAgeGroup, TGender, TIndustry } from '@rtbnext/schema/src/base/const';
+import type { TAgeGroup, TGender, TIndustry } from '@rtbnext/schema/src/base/const';
+
 import type { FilterCollection, FilterEndpoint } from '../types/endpoint';
 import { Endpoint } from './Endpoint';
 import { useProfile } from './Profile';
