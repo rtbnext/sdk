@@ -1,4 +1,5 @@
 import type { TSnapshotIndex } from '@rtbnext/schema/src/base/generic';
+import type { TFilter, TFilterItem } from '@rtbnext/schema/src/model/filter';
 import type { TMover } from '@rtbnext/schema/src/model/mover';
 import type {
   TProfileData, TProfileHistory, TProfileIndex,
@@ -9,6 +10,7 @@ import type { TStatus } from '@rtbnext/schema/src/model/status';
 
 import type { CollectableResource } from '../resource/CollectableResource';
 import type { DateableResource } from '../resource/DateableResource';
+import type { IndexableResource } from '../resource/IndexableResource';
 import type { Resource } from '../resource/Resource';
 import type { TimeSeriesResource } from '../resource/TimeSeriesResource';
 import type { CollectData, CollectItem, Entity } from './collection';
