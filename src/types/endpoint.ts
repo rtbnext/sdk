@@ -49,10 +49,19 @@ export interface ProfileResources {
   readonly history: ProfileHistory;
 }
 
-/** A profile entity with its associated resources. */
+/**
+ * A profile entity with its associated resources.
+ * 
+ * @template I - The type of collectable item.
+ */
 export type ProfileEntity< I extends CollectItem > = Entity< I, ProfileResources >;
 
-/** A collection of profile entities keyed by URI. */
+/**
+ * A collection of profile entities keyed by URI.
+ * 
+ * @template D - The type of collectable data.
+ * @template I - The type of collectable item.
+ */
 export type ProfileCollection< D extends CollectData< I >, I extends CollectItem > =
   CollectableResource< D, I, ProfileEntity< I > >;
 
