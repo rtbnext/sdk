@@ -78,8 +78,8 @@ export class Filter extends Endpoint implements FilterEndpoint {
 
   /** Provides the root filter index resource. */
   public get index () : FilterIndex {
-    return this.indexable( 'v2/filter/index.json', path =>
-      this.filter( `v2/filter/${ path.join( '/' ) }.json` )
+    return this.indexable( 'v2/filter/index.json',
+      path => this.filter( `v2/filter/${ path.join( '/' ) }.json` )
     );
   }
 }
