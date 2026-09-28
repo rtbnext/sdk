@@ -1,10 +1,7 @@
 import { EmptyCache } from '../cache/EmptyCache';
 import { MemoryCache } from '../cache/MemoryCache';
 import { DEFAULT_OPTIONS } from '../defaults';
-import type {
-  Cache, CacheMode, CacheOptions, HttpResponse,
-  RequestOptions, ResourceState
-} from '../types/core';
+import type { Cache, CacheMode, CacheOptions, HttpResponse, RequestOptions, ResourceState } from '../types/core';
 import type { HttpClient } from './HttpClient';
 
 
