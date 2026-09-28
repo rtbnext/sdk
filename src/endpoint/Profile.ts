@@ -16,5 +16,5 @@ interface ProfileProvider {
  * 
  * @param profile - The profile endpoint implementation.
  */
-export const profileProvider = ( profile: ProfileEndpoint ) : ProfileProvider[ 'use' ] =>
+export const useProfileProvider = ( profile: ProfileEndpoint ) : ProfileProvider[ 'use' ] =>
   ( profile as ProfileEndpoint & ProfileProvider ).use;
