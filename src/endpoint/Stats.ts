@@ -1,7 +1,10 @@
+import type { TIndustry } from '@rtbnext/schema/src/base/const';
 import type { THistoryItem } from '@rtbnext/schema/src/model/stats';
 
-import { TIndustry } from '@rtbnext/schema/src/base/const';
-import type { DBStats, GlobalStats, HistoryPoint, ProfileStats, Scatter, StatsEndpoint, StatsGroup, StatsHistory, WealthStats } from '../types/endpoint';
+import type {
+  DBStats, GlobalStats, HistoryPoint, ProfileStats, Scatter, StatsEndpoint,
+  StatsGroup, StatsHistory, WealthStats
+} from '../types/endpoint';
 import { Endpoint } from './Endpoint';
 import { useProfile } from './Profile';
 
