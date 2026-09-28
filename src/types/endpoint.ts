@@ -114,6 +114,12 @@ export interface MoverEndpoint {
 
 // --- filter ---
 
+/** A collection of filter items. */
+export type FilterCollection = CollectableResource< TFilter, TFilterItem, ProfileEntity< TFilterItem > >;
+
+/** A filter index resource. */
+export type FilterIndex = IndexableResource< TFilter, FilterCollection >;
+
 export interface FilterEndpoint {}
 
 
