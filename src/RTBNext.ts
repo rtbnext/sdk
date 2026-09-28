@@ -1,8 +1,9 @@
 import { HttpClient } from './core/HttpClient';
 import { StateLoader } from './core/StateLoader';
+import { System } from './endpoint/System';
 import { ResourcePool } from './resource/ResourcePool';
 import type { RTBNextOptions } from './types/core';
-import type { Endpoints } from './types/endpoint';
+import type { Endpoints, SystemEndpoint } from './types/endpoint';
 
 
 /**
@@ -22,6 +23,9 @@ export class RTBNext {
   /** The collection of endpoint clients available in the SDK. */
   public readonly endpoints: Endpoints;
 
+  /** The System endpoint. */
+  public readonly system: SystemEndpoint;
+
   /**
    * Creates a new RTBNext SDK instance.
    * 
@@ -40,6 +44,8 @@ export class RTBNext {
 
     const endpoints = {} as Endpoints;
     const args = [ this.stateLoader, this.resourcePool, endpoints ] as const;
+
+    this.system = endpoints.system = new System( ...args );
 
     this.endpoints = Object.freeze( endpoints );
   }
