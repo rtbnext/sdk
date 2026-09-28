@@ -1,7 +1,7 @@
 import type { TListItem } from '@rtbnext/schema/src/model/list';
 
 import type { CollectItem } from '../types/collection';
-import type { ListDateIndex, ListEndpoint, ListSnapshot } from '../types/endpoint';
+import type { ListDateIndex, ListEndpoint, ListIndex, ListSnapshot } from '../types/endpoint';
 import { sanitize, ymd } from '../utils';
 import { Endpoint } from './Endpoint';
 import { useProfile } from './Profile';
@@ -24,6 +24,13 @@ export class List extends Endpoint implements ListEndpoint {
   public get < T extends TListItem & CollectItem > ( uri: string ) : ListDateIndex< T > {
     return this.dateable( `v2/list/${ sanitize( uri ) }/index.json`,
       value => this.snapshot< T >( uri, value )
+    );
+  }
+
+  /** Returns the root list index resource. */
+  public get index () : ListIndex {
+    return this.collectable( 'v2/list/index.json',
+      item => ( { ...item, dates: this.get( item.uri ) } )
     );
   }
 }
