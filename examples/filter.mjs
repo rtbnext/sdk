@@ -1,4 +1,4 @@
-import rtbnext from '../src/index';
+import rtbnext from '../dist/esm/index.js';
 
 
 const client = rtbnext( {
@@ -14,6 +14,14 @@ const client = rtbnext( {
 
 client.filter.gender( 'f' ).collection().then( profiles => {
   console.log( 'Female profiles:', profiles.count );
+  profiles.take( 10 ).forEach( profile => console.log( profile.name, profile.uri ) );
+} );
+
+
+// --- use filter index ---
+
+client.filter.index.get().then( index => index.country.US.collection() ).then( profiles => {
+  console.log( 'U.S. profiles:', profiles.count );
   profiles.take( 10 ).forEach( profile => console.log( profile.name, profile.uri ) );
 } );
 
