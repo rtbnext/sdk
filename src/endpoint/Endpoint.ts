@@ -35,6 +35,7 @@ export abstract class Endpoint {
   /**
    * Creates a new resource instance for the given path and parser mode.
    * 
+   * @template D - The expected data type of the resource.
    * @param path - The resource path.
    * @param mode - The parser mode to use for the resource.
    * @returns A new Resource instance.
@@ -46,6 +47,9 @@ export abstract class Endpoint {
   /**
    * Creates a new collectable resource.
    * 
+   * @template D - The parsed resource data type.
+   * @template I - The type of raw collectable items.
+   * @template E - The type of resolved entities.
    * @param path - The resource path.
    * @param entity - The factory used to resolve items into entities.
    * @param find - Optional function used to find items by URI-like values.
@@ -63,6 +67,8 @@ export abstract class Endpoint {
   /**
    * Creates a new dateable resource.
    * 
+   * @template D - The raw data type of the resource.
+   * @template R - The type of individual resources returned by the date factory.
    * @param path - The resource path.
    * @param date - The factory used to resolve dates into resources.
    * @returns A dateable resource.
@@ -78,6 +84,8 @@ export abstract class Endpoint {
   /**
    * Creates a new indexable resource.
    * 
+   * @template D - The raw data type of the resource.
+   * @template R - The type of individual resources returned by the index factory function.
    * @param path - The resource path.
    * @param index - The factory used to resolve indexed paths.
    * @param keys - Optional function used to determine child keys.
@@ -94,6 +102,8 @@ export abstract class Endpoint {
   /**
    * Creates a new time-series resource.
    * 
+   * @template D - The raw data type of the resource.
+   * @template R - The type of individual time-series points.
    * @param path - The resource path.
    * @param point - The factory used to convert rows into typed points.
    * @returns A time-series resource.
