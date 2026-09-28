@@ -190,6 +190,24 @@ export interface FilterEndpoint {
 
 // --- stats ---
 
+/** A point in a statistics time series. */
+export type HistoryPoint = {
+  /** The ISO date of the history point. */
+  date: string;
+  /** The total count of profiles at that date. */
+  count: number;
+  /** The total net worth of profiles at that date. */
+  total: number;
+  /** The woman count at that date. */
+  woman: number;
+  /** The woman quota at that date. */
+  quota: number;
+  /** The net worth change since the prior date. */
+  change: number;
+  /** The percentage change in net worth since the prior date. */
+  changePct: number;
+};
+
 export interface StatsEndpoint {}
 
 
