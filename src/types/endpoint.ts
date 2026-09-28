@@ -1,12 +1,37 @@
 import type { TSnapshotIndex } from '@rtbnext/schema/src/base/generic';
 import type { TMover } from '@rtbnext/schema/src/model/mover';
+import type { TProfileData, TProfileHistory, TProfileMetaData } from '@rtbnext/schema/src/model/profile';
 import type { TStatus } from '@rtbnext/schema/src/model/status';
 
 import type { DateableResource } from '../resource/DateableResource';
 import type { Resource } from '../resource/Resource';
+import type { TimeSeriesResource } from '../resource/TimeSeriesResource';
 
 
 // --- profile ---
+
+/** A single point in a profile's historical timeline. */
+export interface ProfileHistoryPoint {
+  /** The ISO date of the history point. */
+  date: string;
+  /** The profile's rank on that date. */
+  rank: number;
+  /** The profile's net worth at that date. */
+  networth: number;
+  /** The change in net worth since the prior date. */
+  change: number;
+  /** The percentage change in net worth since the prior date. */
+  changePct: number;
+}
+
+/** Metadata for a profile resource. */
+export type ProfileMeta = Resource< TProfileMetaData >;
+
+/** Full profile data resource. */
+export type ProfileData = Resource< TProfileData >;
+
+/** Historical time series resource for profile data. */
+export type ProfileHistory = TimeSeriesResource< TProfileHistory, ProfileHistoryPoint >;
 
 export interface ProfileEndpoint {}
 
