@@ -3,6 +3,7 @@ import type { THistoryItem } from '@rtbnext/schema/src/model/stats';
 import type { DBStats, GlobalStats, HistoryPoint, ProfileStats, Scatter, StatsEndpoint, StatsGroup, StatsHistory, WealthStats } from '../types/endpoint';
 import { Endpoint } from './Endpoint';
 import { useProfile } from './Profile';
+import { TIndustry } from '@rtbnext/schema/src/base/const';
 
 
 /**
@@ -64,5 +65,19 @@ export class Stats extends Endpoint implements StatsEndpoint {
   /** Historical stats time-series resource. */
   public get history () : StatsHistory {
     return this.series( 'v2/stats/history.csv', row => this.point( row ) );
+  }
+
+  /** Industry stats time series for a specific industry. */
+  public industry ( industry: TIndustry ) : StatsHistory {
+    return this.series( `v2/stats/industry/${ industry.toLowerCase() }.csv`,
+      row => this.point( row )
+    );
+  }
+
+  /** Citizenship stats time series for a specific country. */
+  public citizenship ( isoCode: string ) : StatsHistory {
+    return this.series( `v2/stats/citizenship/${ isoCode.toUpperCase() }.csv`,
+      row => this.point( row )
+    );
   }
 }
