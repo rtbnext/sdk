@@ -40,4 +40,20 @@ export interface SystemEndpoint {
 }
 
 
-export interface Endpoints {}
+// --- endpoints ---
+
+/** Endpoints available in the RTBNext SDK. */
+export interface Endpoints {
+  /** The Profile endpoint. */
+  profile: ProfileEndpoint;
+  /** The List endpoint. */
+  list: ListEndpoint;
+  /** The Mover endpoint. */
+  mover: MoverEndpoint;
+  /** The Filter endpoint. */
+  filter: FilterEndpoint;
+  /** The Stats endpoint. */
+  stats: StatsEndpoint;
+  /** The System endpoint. */
+  system: SystemEndpoint;
+}
