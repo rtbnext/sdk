@@ -10,6 +10,9 @@ const client = rtbnext( {
 } );
 
 
-// --- ... ---
+// --- filter profiles ---
 
-...
+client.filter.gender( 'f' ).collection().then( profiles => {
+  console.log( 'Female profiles:', profiles.count );
+  profiles.take( 10 ).forEach( profile => console.log( profile.name, profile.uri ) );
+} );
