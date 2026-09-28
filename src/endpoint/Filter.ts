@@ -1,6 +1,6 @@
 import type { TAgeGroup, TGender, TIndustry, TMaritalStatus } from '@rtbnext/schema/src/base/const';
 
-import type { FilterCollection, FilterEndpoint } from '../types/endpoint';
+import type { FilterCollection, FilterEndpoint, FilterIndex } from '../types/endpoint';
 import { Endpoint } from './Endpoint';
 import { useProfile } from './Profile';
 
@@ -74,5 +74,12 @@ export class Filter extends Endpoint implements FilterEndpoint {
   /** State filter collection. */
   public state ( uspsCode: string ) : FilterCollection {
     return this.filter( `v2/filter/state/${ uspsCode.toUpperCase() }.json` );
+  }
+
+  /** Provides the root filter index resource. */
+  public get index () : FilterIndex {
+    return this.indexable( 'v2/filter/index.json', path =>
+      this.filter( `v2/filter/${ path.join( '/' ) }.json` )
+    );
   }
 }
