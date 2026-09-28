@@ -1,3 +1,4 @@
+import { TAgeGroup, TGender, TIndustry } from '@rtbnext/schema/src/base/const';
 import type { FilterCollection, FilterEndpoint } from '../types/endpoint';
 import { Endpoint } from './Endpoint';
 import { useProfile } from './Profile';
@@ -37,5 +38,20 @@ export class Filter extends Endpoint implements FilterEndpoint {
   /** Self-made profiles filter collection. */
   public get selfMade () : FilterCollection {
     return this.filter( `v2/filter/special/selfMade.json` );
+  }
+
+  /** Industry filter collection. */
+  public industry ( industry: TIndustry ) : FilterCollection {
+    return this.filter( `v2/filter/industry/${ industry.toLowerCase() }.json` );
+  }
+
+  /** Age group filter collection. */
+  public age ( ageGroup: TAgeGroup ) : FilterCollection {
+    return this.filter( `v2/filter/age/${ ageGroup }.json` );
+  }
+
+  /** Gender filter collection. */
+  public gender ( gender: TGender ) : FilterCollection {
+    return this.filter( `v2/filter/gender/${ gender.toLowerCase() }.json` );
   }
 }
