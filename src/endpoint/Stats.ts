@@ -67,14 +67,24 @@ export class Stats extends Endpoint implements StatsEndpoint {
     return this.series( 'v2/stats/history.csv', row => this.point( row ) );
   }
 
-  /** Industry stats time series for a specific industry. */
+  /**
+   * Industry stats time series for a specific industry.
+   * 
+   * @param industry - The industry to retrieve stats for.
+   * @returns The stats history for the specified industry.
+   */
   public industry ( industry: TIndustry ) : StatsHistory {
     return this.series( `v2/stats/industry/${ industry.toLowerCase() }.csv`,
       row => this.point( row )
     );
   }
 
-  /** Citizenship stats time series for a specific country. */
+  /**
+   * Citizenship stats time series for a specific country.
+   * 
+   * @param isoCode - The ISO code of the country to retrieve stats for.
+   * @returns The stats history for the specified country.
+   */
   public citizenship ( isoCode: string ) : StatsHistory {
     return this.series( `v2/stats/citizenship/${ isoCode.toUpperCase() }.csv`,
       row => this.point( row )
