@@ -3,6 +3,16 @@ import type { TStatus } from '@rtbnext/schema/src/model/status';
 import type { Resource } from '../resource/Resource';
 
 
+// --- filter ---
+
+export interface FilterEndpoint {}
+
+
+// --- stats ---
+
+export interface StatsEndpoint {}
+
+
 // --- system ---
 
 /** The system status resource. */
