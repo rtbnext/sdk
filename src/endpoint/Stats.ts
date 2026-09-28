@@ -1,6 +1,6 @@
 import type { THistoryItem } from '@rtbnext/schema/src/model/stats';
 
-import type { HistoryPoint, StatsEndpoint, StatsGroup } from '../types/endpoint';
+import type { DBStats, GlobalStats, HistoryPoint, ProfileStats, StatsEndpoint, StatsGroup } from '../types/endpoint';
 import { Endpoint } from './Endpoint';
 
 
@@ -33,5 +33,20 @@ export class Stats extends Endpoint implements StatsEndpoint {
       value => value && typeof value === 'object' && 'items' in value
         ? Object.keys( value.items as object ) : null
     );
+  }
+
+  /** Database stats resource. */
+  public get db () : DBStats {
+    return this.resource( 'v2/stats/db.json' );
+  }
+
+  /** Global stats resource. */
+  public get global () : GlobalStats {
+    return this.resource( 'v2/stats/global.json' );
+  }
+
+  /** Profile stats resource. */
+  public get profile () : ProfileStats {
+    return this.resource( 'v2/stats/profile.json' );
   }
 }
