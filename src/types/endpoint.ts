@@ -62,7 +62,21 @@ export type ProfileIndex = ProfileCollection< TProfileIndex, TProfileIndexItem >
 /** A search index of profiles. */
 export type SearchIndex = ProfileCollection< TSearchIndex, TSearchIndexItem >;
 
-export interface ProfileEndpoint {}
+/** The profile endpoint interface. */
+export interface ProfileEndpoint {
+  /** Retrieve profile metadata by URI. */
+  meta ( uri: string ) : ProfileMeta;
+  /** Retrieve full profile data by URI. */
+  data ( uri: string ) : ProfileData;
+  /** Retrieve profile history by URI. */
+  history ( uri: string ) : ProfileHistory;
+  /** Retrieve a profile entity by URI. */
+  get ( uri: string ) : ProfileEntity< CollectItem >;
+  /** The profile index resource. */
+  readonly index: ProfileIndex;
+  /** The search index for profiles. */
+  readonly searchIndex: SearchIndex;
+}
 
 
 // --- list ---
