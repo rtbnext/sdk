@@ -233,7 +233,29 @@ export type StatsHistory = TimeSeriesResource< THistory, HistoryPoint >;
 /** A grouped stats index resource. */
 export type StatsGroup< T extends string > = IndexableResource< TStatsGroup< T >[ 'index' ], StatsHistory >;
 
-export interface StatsEndpoint {}
+/** The stats endpoint interface. */
+export interface StatsEndpoint {
+  /** Database statistics resource. */
+  readonly db: DBStats;
+  /** Global statistics resource. */
+  readonly global: GlobalStats;
+  /** Personal profile statistics resource. */
+  readonly profile: ProfileStats;
+  /** Profile scatter statistics resource. */
+  readonly scatter: Scatter;
+  /** Wealth statistics resource. */
+  readonly wealth: WealthStats;
+  /** Historical statistics resource. */
+  readonly history: StatsHistory;
+  /** Retrieve industry statistics for a date. */
+  industry ( industry: TIndustry ) : StatsHistory;
+  /** Retrieve citizenship statistics for a date. */
+  citizenship ( isoCode: string ) : StatsHistory;
+  /** Industry index resource. */
+  readonly industryIndex: StatsGroup< TIndustry >;
+  /** Citizenship index resource. */
+  readonly citizenshipIndex: StatsGroup< string >;
+}
 
 
 // --- system ---
