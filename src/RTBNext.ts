@@ -1,11 +1,15 @@
 import { HttpClient } from './core/HttpClient';
 import { StateLoader } from './core/StateLoader';
+import { Filter } from './endpoint/Filter';
 import { Mover } from './endpoint/Mover';
 import { Profile } from './endpoint/Profile';
 import { System } from './endpoint/System';
 import { ResourcePool } from './resource/ResourcePool';
 import type { RTBNextOptions } from './types/core';
-import type { Endpoints, MoverEndpoint, ProfileEndpoint, SystemEndpoint } from './types/endpoint';
+import type {
+  Endpoints, FilterEndpoint, MoverEndpoint,
+  ProfileEndpoint, SystemEndpoint
+} from './types/endpoint';
 
 
 /**
@@ -29,6 +33,8 @@ export class RTBNext {
   public readonly profile: ProfileEndpoint;
   /** The Mover endpoint. */
   public readonly mover: MoverEndpoint;
+  /** The Filter endpoint. */
+  public readonly filter: FilterEndpoint;
   /** The System endpoint. */
   public readonly system: SystemEndpoint;
 
@@ -53,6 +59,7 @@ export class RTBNext {
 
     this.profile = endpoints.profile = new Profile( ...args );
     this.mover = endpoints.mover = new Mover( ...args );
+    this.filter = endpoints.filter = new Filter( ...args );
     this.system = endpoints.system = new System( ...args );
 
     this.endpoints = Object.freeze( endpoints );
