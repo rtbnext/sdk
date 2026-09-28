@@ -9,7 +9,12 @@ import { Endpoint } from './Endpoint';
  * Provides access to mover snapshots and mover index resources.
  */
 export class Mover extends Endpoint implements MoverEndpoint {
-  /** Returns a mover snapshot for a given date. */
+  /**
+   * Returns a mover snapshot for a given date.
+   * 
+   * @param date - The date for which to retrieve the mover snapshot (in YYYY-MM-DD format).
+   * @returns A MoverSnapshot resource for the specified date.
+   */
   public snapshot ( date: string ) : MoverSnapshot {
     return this.resource( `v2/mover/${ ymd( date ) }.json` );
   }

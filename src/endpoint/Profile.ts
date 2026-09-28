@@ -22,6 +22,7 @@ interface ProfileProvider {
  * Returns internal profile helper bindings from a profile endpoint instance.
  * 
  * @param profile - The profile endpoint implementation.
+ * @returns The internal profile helper bindings.
  */
 export const useProfile = ( profile: ProfileEndpoint ) : ProfileProvider[ 'use' ] =>
   ( profile as ProfileEndpoint & ProfileProvider ).use;
@@ -86,22 +87,42 @@ export class Profile extends Endpoint implements ProfileEndpoint, ProfileProvide
     };
   }
 
-  /** Returns profile metadata for the given URI. */
+  /**
+   * Returns profile metadata for the given URI.
+   * 
+   * @param uri - The profile URI.
+   * @returns The profile metadata resource.
+   */
   public meta ( uri: string ) : ProfileMeta {
     return this.resource( `v2/profile/${ uri }/meta.json` );
   }
 
-  /** Returns profile data for the given URI. */
+  /**
+   * Returns profile data for the given URI.
+   * 
+   * @param uri - The profile URI.
+   * @returns The profile data resource.
+   */
   public data ( uri: string ) : ProfileData {
     return this.resource( `v2/profile/${ uri }/profile.json` );
   }
 
-  /** Returns profile history time-series data for the given URI. */
+  /**
+   * Returns profile history time-series data for the given URI.
+   * 
+   * @param uri - The profile URI.
+   * @returns The profile history time-series resource.
+   */
   public history ( uri: string ) : ProfileHistory {
     return this.series( `v2/profile/${ uri }/history.csv`, row => this.point( row ) );
   }
 
-  /** Returns the profile entity for a URI. */
+  /**
+   * Returns the profile entity for a URI.
+   * 
+   * @param uri - The profile URI.
+   * @returns The profile entity with lazy-loaded `meta`, `data`, and `history` properties.
+   */
   public get ( uri: string ) : ProfileEntity< CollectItem > {
     return this.entity( { uri } );
   }
