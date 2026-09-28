@@ -1,4 +1,4 @@
-import { CollectItem, FindFn, SearchFn } from '../types/collection';
+import type { CollectData, CollectItem, FindFn, SearchFn } from '../types/collection';
 import type { ProfileCollection, ProfileData, ProfileEndpoint, ProfileEntity, ProfileHistory, ProfileMeta } from '../types/endpoint';
 import { Endpoint } from './Endpoint';
 
@@ -44,5 +44,21 @@ export class Profile extends Endpoint implements ProfileEndpoint, ProfileProvide
       get data () { return data ??= self.data( item.uri ) },
       get history () { return history ??= self.history( item.uri ) }
     } );
+  }
+
+  /**
+   * Returns a profile collection resource from a JSON endpoint.
+   * 
+   * @template D - The raw data type of the collection, which must include an `items` array.
+   * @template I - The type of individual items in the collection, which must include a `uri` string.
+   * @param path - The collection path.
+   * @param find - Optional custom find function.
+   * @param search - Optional custom search function.
+   * @returns A profile collection resource with lazy-loaded entities.
+   */
+  protected collect < D extends CollectData< I >, I extends CollectItem > (
+    path: string, find?: FindFn< I >, search?: SearchFn< I >
+  ) : ProfileCollection< D, I > {
+    return this.collectable( path, item => this.entity( item ), find, search );
   }
 }
