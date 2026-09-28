@@ -194,18 +194,17 @@ export class CollectCollection<
    * Returns items ordered by an item property.
    * 
    * @param key - The property used for ordering.
-   * @param descending - Whether to reverse the resulting order.
+   * @param dir - The direction of the ordering, either ascending or descending.
    * @returns A new ordered collection.
    */
-  public orderBy ( key: keyof I, descending: boolean = false ) : this {
+  public orderBy ( key: keyof I, dir: 'asc' | 'desc' = 'asc' ) : this {
+    const factor = dir === 'desc' ? -1 : 1;
+
     return this.clone( [ ...this.items ].sort( ( a, b ) => {
       const left = a[ key ], right = b[ key ];
 
-      if ( left === right ) return 0;
-      if ( left === undefined || left === null ) return 1;
-      if ( right === undefined || right === null ) return -1;
-
-      return left < right ? ( descending ? 1 : -1 ) : ( descending ? -1 : 1 );
+      return left === right ? 0 : left == null ? 1 : right == null ? -1 :
+        ( left < right ? -1 : 1 ) * factor;
     } ) );
   }
 
