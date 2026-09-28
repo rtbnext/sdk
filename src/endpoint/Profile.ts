@@ -76,4 +76,13 @@ export class Profile extends Endpoint implements ProfileEndpoint, ProfileProvide
   protected point ( [ date, rank, networth, change, changePct ]: TProfileHistoryItem ) : ProfileHistoryPoint {
     return { date, rank, networth, change, changePct };
   }
+
+  /** Exposes internal profile helper bindings for use by related endpoints. */
+  public get use () {
+    return {
+      entity: this.entity.bind( this ),
+      collect: this.collect.bind( this ),
+      point: this.point.bind( this )
+    }
+  }
 }
