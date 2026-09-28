@@ -13,12 +13,9 @@ import { Resource } from './Resource';
 const defaultKeys = ( value: unknown ) : readonly string[] | null => {
   if ( Array.isArray( value ) ) return value.map( String );
 
-  if ( value && typeof value === 'object' && ! Array.isArray( value ) && 'items' in value ) {
-    const items = value.items;
-
-    if ( items && typeof items === 'object' && ! Array.isArray( items ) )
-      return Object.keys( items );
-  }
+  if ( value && typeof value === 'object' && 'items' in value && value.items &&
+       typeof value.items === 'object' && ! Array.isArray( value.items ) )
+    return Object.keys( value.items );
 
   return null;
 };
