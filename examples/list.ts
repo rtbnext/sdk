@@ -10,4 +10,9 @@ const client = rtbnext( {
 } );
 
 
+// --- list available lists ---
 
+client.list.index.collection().then( lists => {
+  console.log( 'Available lists:', lists.count );
+  lists.forEach( list => console.log( list.name, list.uri ) );
+} );
