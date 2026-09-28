@@ -100,4 +100,9 @@ export class Profile extends Endpoint implements ProfileEndpoint, ProfileProvide
   public history ( uri: string ) : ProfileHistory {
     return this.series( `v2/profile/${ uri }/history.csv`, row => this.point( row ) );
   }
+
+  /** Returns the profile entity for a URI. */
+  public get ( uri: string ) : ProfileEntity< CollectItem > {
+    return this.entity( { uri } );
+  }
 }
