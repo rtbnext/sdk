@@ -1,5 +1,8 @@
+import type { TSnapshotIndex } from '@rtbnext/schema/src/base/generic';
+import type { TMover } from '@rtbnext/schema/src/model/mover';
 import type { TStatus } from '@rtbnext/schema/src/model/status';
 
+import type { DateableResource } from '../resource/DateableResource';
 import type { Resource } from '../resource/Resource';
 
 
@@ -14,6 +17,12 @@ export interface ListEndpoint {}
 
 
 // --- mover ---
+
+/** A single mover snapshot resource. */
+export type MoverSnapshot = Resource< TMover >;
+
+/** A date-indexed mover resource. */
+export type MoverIndex = DateableResource< TSnapshotIndex, MoverSnapshot >;
 
 export interface MoverEndpoint {}
 
