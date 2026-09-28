@@ -16,6 +16,7 @@ import type { IndexableResource } from '../resource/IndexableResource';
 import type { Resource } from '../resource/Resource';
 import type { TimeSeriesResource } from '../resource/TimeSeriesResource';
 import type { CollectData, CollectItem, Entity } from './collection';
+import { TDBStats, TGlobalStats, THistory, TProfileStats, TScatter, TScatterItem, TStatsGroup, TWealthStats } from '@rtbnext/schema/src/model/stats';
 
 
 // --- profile ---
@@ -191,7 +192,7 @@ export interface FilterEndpoint {
 // --- stats ---
 
 /** A point in a statistics time series. */
-export type HistoryPoint = {
+export interface HistoryPoint {
   /** The ISO date of the history point. */
   date: string;
   /** The total count of profiles at that date. */
@@ -206,7 +207,28 @@ export type HistoryPoint = {
   change: number;
   /** The percentage change in net worth since the prior date. */
   changePct: number;
-};
+}
+
+/** The database statistics resource. */
+export type DBStats = Resource< TDBStats >;
+
+/** The global statistics resource. */
+export type GlobalStats = Resource< TGlobalStats >;
+
+/** The profile statistics resource. */
+export type ProfileStats = Resource< TProfileStats >;
+
+/** A profile scatter statistics collection resource. */
+export type Scatter = CollectableResource< TScatter, TScatterItem, ProfileEntity< TScatterItem > >;
+
+/** The wealth statistics resource. */
+export type WealthStats = Resource< TWealthStats >;
+
+/** The stats history time series resource. */
+export type StatsHistory = TimeSeriesResource< THistory, HistoryPoint >;
+
+/** A grouped stats index resource. */
+export type StatsGroup< T extends string > = IndexableResource< TStatsGroup< T >[ 'index' ], StatsHistory >;
 
 export interface StatsEndpoint {}
 
