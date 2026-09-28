@@ -85,4 +85,19 @@ export class Profile extends Endpoint implements ProfileEndpoint, ProfileProvide
       point: this.point.bind( this )
     };
   }
+
+  /** Returns profile metadata for the given URI. */
+  public meta ( uri: string ) : ProfileMeta {
+    return this.resource( `v2/profile/${ uri }/meta.json` );
+  }
+
+  /** Returns profile data for the given URI. */
+  public data ( uri: string ) : ProfileData {
+    return this.resource( `v2/profile/${ uri }/profile.json` );
+  }
+
+  /** Returns profile history time-series data for the given URI. */
+  public history ( uri: string ) : ProfileHistory {
+    return this.series( `v2/profile/${ uri }/history.csv`, row => this.point( row ) );
+  }
 }
