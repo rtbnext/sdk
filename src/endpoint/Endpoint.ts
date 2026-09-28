@@ -2,12 +2,13 @@ import type { StateLoader } from '../core/StateLoader';
 import { json, parser } from '../parser';
 import { CollectableResource } from '../resource/CollectableResource';
 import { DateableResource } from '../resource/DateableResource';
+import { IndexableResource } from '../resource/IndexableResource';
 import { Resource } from '../resource/Resource';
 import type { ResourcePool } from '../resource/ResourcePool';
 import type { CollectData, CollectItem, Entity, EntityFn, FindFn, SearchFn } from '../types/collection';
 import type { ParserMode } from '../types/core';
 import type { Endpoints } from '../types/endpoint';
-import { DateData, DateFn } from '../types/resource';
+import { DateData, DateFn, IndexFn, KeysFn } from '../types/resource';
 
 
 /**
@@ -70,6 +71,22 @@ export abstract class Endpoint {
   ) : DateableResource< D, R > {
     return this.pool.get( path, () =>
       new DateableResource< D, R >( path, this.loader, json, date )
+    );
+  }
+
+  /**
+   * Creates a new indexable resource.
+   * 
+   * @param path - The resource path.
+   * @param index - The factory used to resolve indexed paths.
+   * @param keys - Optional function used to determine child keys.
+   * @returns An indexable resource.
+   */
+  protected indexable < D, R > (
+    path: string, index: IndexFn< R >, keys?: KeysFn
+  ) : IndexableResource< D, R > {
+    return this.pool.get( path, () =>
+      new IndexableResource< D, R >( path, this.loader, json, index, keys )
     );
   }
 }
