@@ -8,7 +8,7 @@ import type { ResourcePool } from '../resource/ResourcePool';
 import type { CollectData, CollectItem, Entity, EntityFn, FindFn, SearchFn } from '../types/collection';
 import type { ParserMode } from '../types/core';
 import type { Endpoints } from '../types/endpoint';
-import { DateData, DateFn, IndexFn, KeysFn } from '../types/resource';
+import type { DateData, DateFn, IndexFn, KeysFn } from '../types/resource';
 
 
 /**
