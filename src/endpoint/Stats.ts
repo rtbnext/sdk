@@ -31,7 +31,7 @@ export class Stats extends Endpoint implements StatsEndpoint {
    */
   protected group < K extends string > ( group: 'industry' | 'citizenship' ) : StatsGroup< K > {
     return this.indexable( `v2/stats/${ group }/index.json`,
-      ( [ key ] ) => this[ group ]( key ),
+      ( [ key ] ) => this[ group ]( key as any ),
       value => value && typeof value === 'object' && 'items' in value
         ? Object.keys( value.items as object ) : null
     );
