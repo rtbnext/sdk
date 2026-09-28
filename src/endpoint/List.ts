@@ -12,4 +12,11 @@ import { useProfile } from './Profile';
  * 
  * Provides access to item snapshots, date-indexed list resources, and the list index.
  */
-export class List extends Endpoint implements ListEndpoint {}
+export class List extends Endpoint implements ListEndpoint {
+  /** Returns a snapshot collection for a list URI at a specific date. */
+  public snapshot < T extends TListItem & CollectItem > ( uri: string, date: string ) : ListSnapshot< T > {
+    return useProfile( this.endpoints.profile ).collect(
+      `v2/list/${ sanitize( uri ) }/${ ymd( date ) }.json`
+    );
+  }
+}
