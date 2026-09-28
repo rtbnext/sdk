@@ -24,7 +24,13 @@ export type MoverSnapshot = Resource< TMover >;
 /** A date-indexed mover resource. */
 export type MoverIndex = DateableResource< TSnapshotIndex, MoverSnapshot >;
 
-export interface MoverEndpoint {}
+/** The mover endpoint interface. */
+export interface MoverEndpoint {
+  /** Retrieve a mover snapshot for a given date. */
+  snapshot ( date: string ) : MoverSnapshot;
+  /** The mover index resource. */
+  readonly index: MoverIndex;
+}
 
 
 // --- filter ---
