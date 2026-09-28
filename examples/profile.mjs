@@ -8,3 +8,11 @@ const client = rtbnext( {
     contact: 'https://npmjs.com/@rtbnext/sdk'
   }
 } );
+
+
+// --- access profile data ---
+
+client.profile.data( 'bill-gates' ).data().then( data => {
+  console.log( 'CV:', data.bio.cv );
+  console.log( 'Short:', data.wiki.desc );
+} );
