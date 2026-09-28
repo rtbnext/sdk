@@ -39,6 +39,29 @@ export type ProfileData = Resource< TProfileData >;
 /** Historical time series resource for profile data. */
 export type ProfileHistory = TimeSeriesResource< TProfileHistory, ProfileHistoryPoint >;
 
+/** Resources exposed by a profile entity. */
+export interface ProfileResources {
+  /** Metadata for the profile. */
+  readonly meta: ProfileMeta;
+  /** Core profile data. */
+  readonly data: ProfileData;
+  /** Historical profile values. */
+  readonly history: ProfileHistory;
+}
+
+/** A profile entity with its associated resources. */
+export type ProfileEntity< I extends CollectItem > = Entity< I, ProfileResources >;
+
+/** A collection of profile entities keyed by URI. */
+export type ProfileCollection< D extends CollectData< I >, I extends CollectItem > =
+  CollectableResource< D, I, ProfileEntity< I > >;
+
+/** The index resource for profiles. */
+export type ProfileIndex = ProfileCollection< TProfileIndex, TProfileIndexItem >;
+
+/** A search index of profiles. */
+export type SearchIndex = ProfileCollection< TSearchIndex, TSearchIndexItem >;
+
 export interface ProfileEndpoint {}
 
 
