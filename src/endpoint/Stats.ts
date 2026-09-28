@@ -1,9 +1,9 @@
 import type { THistoryItem } from '@rtbnext/schema/src/model/stats';
 
+import { TIndustry } from '@rtbnext/schema/src/base/const';
 import type { DBStats, GlobalStats, HistoryPoint, ProfileStats, Scatter, StatsEndpoint, StatsGroup, StatsHistory, WealthStats } from '../types/endpoint';
 import { Endpoint } from './Endpoint';
 import { useProfile } from './Profile';
-import { TIndustry } from '@rtbnext/schema/src/base/const';
 
 
 /**
@@ -89,5 +89,15 @@ export class Stats extends Endpoint implements StatsEndpoint {
     return this.series( `v2/stats/citizenship/${ isoCode.toUpperCase() }.csv`,
       row => this.point( row )
     );
+  }
+
+  /** Industry stats group index. */
+  public get industryIndex () : StatsGroup< TIndustry > {
+    return this.group( 'industry' );
+  }
+
+  /** Citizenship stats group index. */
+  public get citizenshipIndex () : StatsGroup< string > {
+    return this.group( 'citizenship' );
   }
 }
