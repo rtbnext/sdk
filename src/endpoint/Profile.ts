@@ -83,6 +83,6 @@ export class Profile extends Endpoint implements ProfileEndpoint, ProfileProvide
       entity: this.entity.bind( this ),
       collect: this.collect.bind( this ),
       point: this.point.bind( this )
-    }
+    };
   }
 }
