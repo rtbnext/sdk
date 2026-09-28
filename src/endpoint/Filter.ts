@@ -70,4 +70,9 @@ export class Filter extends Endpoint implements FilterEndpoint {
   public country ( isoCode: string ) : FilterCollection {
     return this.filter( `v2/filter/country/${ isoCode.toUpperCase() }.json` );
   }
+
+  /** State filter collection. */
+  public state ( uspsCode: string ) : FilterCollection {
+    return this.filter( `v2/filter/state/${ uspsCode.toUpperCase() }.json` );
+  }
 }
