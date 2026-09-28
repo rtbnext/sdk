@@ -2,8 +2,8 @@ import type { TProfileHistoryItem } from '@rtbnext/schema/src/model/profile';
 
 import type { CollectData, CollectItem, FindFn, SearchFn } from '../types/collection';
 import type {
-  ProfileCollection, ProfileData, ProfileEndpoint, ProfileEntity,
-  ProfileHistory, ProfileHistoryPoint, ProfileMeta
+  ProfileCollection, ProfileData, ProfileEndpoint, ProfileEntity, ProfileHistory,
+  ProfileHistoryPoint, ProfileIndex, ProfileMeta, SearchIndex
 } from '../types/endpoint';
 import { Endpoint } from './Endpoint';
 
@@ -104,5 +104,15 @@ export class Profile extends Endpoint implements ProfileEndpoint, ProfileProvide
   /** Returns the profile entity for a URI. */
   public get ( uri: string ) : ProfileEntity< CollectItem > {
     return this.entity( { uri } );
+  }
+
+  /** Returns the profile index collection. */
+  public get index () : ProfileIndex {
+    return this.collect( 'v2/profile/index.json' );
+  }
+
+  /** Returns the profile search index collection. */
+  public get searchIndex () : SearchIndex {
+    return this.collect( 'v2/profile/search.json' );
   }
 }
