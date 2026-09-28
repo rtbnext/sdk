@@ -1,4 +1,4 @@
-import type { TAgeGroup, TGender, TIndustry } from '@rtbnext/schema/src/base/const';
+import type { TAgeGroup, TGender, TIndustry, TMaritalStatus } from '@rtbnext/schema/src/base/const';
 
 import type { FilterCollection, FilterEndpoint } from '../types/endpoint';
 import { Endpoint } from './Endpoint';
@@ -54,5 +54,20 @@ export class Filter extends Endpoint implements FilterEndpoint {
   /** Gender filter collection. */
   public gender ( gender: TGender ) : FilterCollection {
     return this.filter( `v2/filter/gender/${ gender.toLowerCase() }.json` );
+  }
+
+  /** Marital status filter collection. */
+  public maritalStatus ( maritalStatus: TMaritalStatus ) : FilterCollection {
+    return this.filter( `v2/filter/maritalStatus/${ maritalStatus.toLowerCase() }.json` );
+  }
+
+  /** Citizenship filter collection. */
+  public citizenship ( isoCode: string ) : FilterCollection {
+    return this.filter( `v2/filter/citizenship/${ isoCode.toUpperCase() }.json` );
+  }
+
+  /** Country filter collection. */
+  public country ( isoCode: string ) : FilterCollection {
+    return this.filter( `v2/filter/country/${ isoCode.toUpperCase() }.json` );
   }
 }
