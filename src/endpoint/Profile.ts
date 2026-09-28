@@ -1,4 +1,5 @@
-import type { ProfileData, ProfileEndpoint, ProfileEntity, ProfileHistory, ProfileMeta } from '../types/endpoint';
+import { CollectItem, FindFn, SearchFn } from '../types/collection';
+import type { ProfileCollection, ProfileData, ProfileEndpoint, ProfileEntity, ProfileHistory, ProfileMeta } from '../types/endpoint';
 import { Endpoint } from './Endpoint';
 
 
