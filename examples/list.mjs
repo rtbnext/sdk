@@ -1,4 +1,4 @@
-import rtbnext from '../src/index';
+import rtbnext from '../dist/esm/index.js';
 
 
 const client = rtbnext( {
