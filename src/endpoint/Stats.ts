@@ -1,6 +1,6 @@
 import type { THistoryItem } from '@rtbnext/schema/src/model/stats';
 
-import type { DBStats, GlobalStats, HistoryPoint, ProfileStats, Scatter, StatsEndpoint, StatsGroup } from '../types/endpoint';
+import type { DBStats, GlobalStats, HistoryPoint, ProfileStats, Scatter, StatsEndpoint, StatsGroup, StatsHistory, WealthStats } from '../types/endpoint';
 import { Endpoint } from './Endpoint';
 import { useProfile } from './Profile';
 
@@ -54,5 +54,15 @@ export class Stats extends Endpoint implements StatsEndpoint {
   /** Profile scatter stats collection resource. */
   public get scatter () : Scatter {
     return useProfile( this.endpoints.profile ).collect( 'v2/stats/scatter.json' );
+  }
+
+  /** Wealth stats resource. */
+  public get wealth () : WealthStats {
+    return this.resource( 'v2/stats/wealth.json' );
+  }
+
+  /** Historical stats time-series resource. */
+  public get history () : StatsHistory {
+    return this.series( 'v2/stats/history.csv', row => this.point( row ) );
   }
 }
