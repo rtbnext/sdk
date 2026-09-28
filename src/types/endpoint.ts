@@ -1,6 +1,6 @@
 import type { TAgeGroup, TGender, TIndustry, TMaritalStatus } from '@rtbnext/schema/src/base/const';
 import type { TSnapshotIndex } from '@rtbnext/schema/src/base/generic';
-import type { TFilter, TFilterItem } from '@rtbnext/schema/src/model/filter';
+import type { TFilter, TFilterIndex, TFilterItem } from '@rtbnext/schema/src/model/filter';
 import type { TMover } from '@rtbnext/schema/src/model/mover';
 import type {
   TProfileData, TProfileHistory, TProfileIndex,
@@ -119,7 +119,7 @@ export interface MoverEndpoint {
 export type FilterCollection = CollectableResource< TFilter, TFilterItem, ProfileEntity< TFilterItem > >;
 
 /** A filter index resource. */
-export type FilterIndex = IndexableResource< TFilter, FilterCollection >;
+export type FilterIndex = IndexableResource< TFilterIndex, FilterCollection >;
 
 /** The filter endpoint interface. */
 export interface FilterEndpoint {
