@@ -70,4 +70,4 @@ export type TimeSeriesData = ReadonlyArray< TimeSeriesRow >;
  * @template D - The raw time-series data row type.
  * @template R - The type of the time-series point.
  */
-export type PointFn< D, R > = ( row: D ) => R;
+export type PointFn< D extends TimeSeriesData, R > = ( row: D[ number ] ) => R;
