@@ -13,7 +13,7 @@ import type { HttpClient } from './HttpClient';
  */
 export class StateLoader {
   /**
-   * Creates a new StateLoader instance.
+   * Creates a new `StateLoader` instance.
    * 
    * @param cache - The cache implementation to store resource state.
    * @param httpClient - The HTTP client used to fetch resources.
@@ -52,9 +52,7 @@ export class StateLoader {
    * @param options - Additional request options.
    * @returns The resulting resource state from the fetch operation.
    */
-  private async fetch (
-    path: string, prev?: ResourceState, options?: RequestOptions
-  ) : Promise< ResourceState > {
+  private async fetch ( path: string, prev?: ResourceState, options?: RequestOptions ) : Promise< ResourceState > {
     const headers = new Headers( options?.headers );
     if ( prev?.etag ) headers.set( 'If-None-Match', prev.etag );
     if ( prev?.lastModified ) headers.set( 'If-Modified-Since', prev.lastModified );
@@ -90,7 +88,7 @@ export class StateLoader {
    * 
    * @param path - The resource path or URL to refresh.
    * @param options - Optional request-specific options.
-   * @returns The refreshed ResourceState.
+   * @returns The refreshed `ResourceState`.
    */
   public async refresh ( path: string, options?: RequestOptions ) : Promise< ResourceState > {
     const cached = await this.cache.get( path );
@@ -105,7 +103,7 @@ export class StateLoader {
    * 
    * @param path - The resource path or URL to load.
    * @param options - Optional request-specific options.
-   * @returns The loaded ResourceState.
+   * @returns The loaded `ResourceState`.
    */
   public async load ( path: string, options?: RequestOptions ) : Promise< ResourceState > {
     if ( this.mode === 'revalidate' ) return this.refresh( path, options );
@@ -139,11 +137,11 @@ export class StateLoader {
   }
 
   /**
-   * Creates a StateLoader instance with the configured cache implementation.
+   * Creates a `StateLoader` instance with the configured cache implementation.
    * 
    * @param client - The HTTP client used to perform resource requests.
    * @param options - Cache configuration options.
-   * @returns A configured StateLoader.
+   * @returns A configured `StateLoader` instance.
    */
   public static getInstance ( client: HttpClient, options: CacheOptions = {} ) : StateLoader {
     const { type, mode } = { ...DEFAULT_OPTIONS.cache, ...options };
