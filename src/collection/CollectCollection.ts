@@ -171,18 +171,14 @@ export class CollectCollection<
    * Items are identified by their URI and occur only once in the result.
    * 
    * @param other - The other collection.
+   * @param compare - Optional custom comparison function.
    * @returns A new collection containing the union of both collections.
    */
-  public union ( other: this ) : this {
-    const seen = new Set< string >(), merged: I[] = [];
+  public union ( other: this, compare?: CompareFn< I > ) : this {
+    const matches = this.matcher( this.items, compare );
+    const merged = [ ...this.items ];
 
-    for ( const item of [ ...this.items, ...other.items ] ) {
-      if ( item.uri === undefined || ! seen.has( item.uri ) ) {
-        if ( item.uri ) seen.add( item.uri );
-        merged.push( item );
-      }
-    }
-
+    for ( const item of other.items ) if ( ! matches( item ) ) merged.push( item );
     return this.clone( merged );
   }
 
