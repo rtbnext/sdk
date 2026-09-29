@@ -15,10 +15,7 @@ import { Resource } from './Resource';
  * @template D - The raw time-series data type.
  * @template R - The type of time-series points.
  */
-export class TimeSeriesResource<
-  D extends TimeSeriesData,
-  R extends TimePoint
-> extends Resource< D > {
+export class TimeSeriesResource< D extends TimeSeriesData, R extends TimePoint > extends Resource< D > {
   /** Factory that converts a raw row into a typed time-series point. */
   private readonly point: PointFn< D, R >;
 
