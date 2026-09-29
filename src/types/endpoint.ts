@@ -111,7 +111,7 @@ export type ListItem = TPersonListItem | TRTBListItem;
  * 
  * @template T - The type of list item.
  */
-export type ListEntity< T extends TListItem > = TListIndexItem & {
+export type ListEntity< T extends TListItem = ListItem > = TListIndexItem & {
   /** The date-indexed snapshots for the list entity. */
   dates: ListDateIndex< T >;
 };
@@ -121,7 +121,7 @@ export type ListEntity< T extends TListItem > = TListIndexItem & {
  * 
  * @template T - The type of list item.
  */
-export type ListSnapshot< T extends TListItem > =
+export type ListSnapshot< T extends TListItem = ListItem > =
   CollectableResource< TListSnapshot< T >, T, ProfileEntity< T > >;
 
 /**
@@ -129,17 +129,18 @@ export type ListSnapshot< T extends TListItem > =
  * 
  * @template T - The type of list item.
  */
-export type ListDateIndex< T extends TListItem > = DateableResource< TSnapshotIndex, ListSnapshot< T > >;
+export type ListDateIndex< T extends TListItem = ListItem > =
+  DateableResource< TSnapshotIndex, ListSnapshot< T > >;
 
 /** The list index resource. */
-export type ListIndex = CollectableResource< TListIndex, TListIndexItem, ListEntity< any > >;
+export type ListIndex = CollectableResource< TListIndex, TListIndexItem, ListEntity >;
 
 /** The list endpoint interface. */
 export interface ListEndpoint {
   /** Retrieve a list snapshot for a URI and date. */
-  snapshot < T extends TListItem > ( uri: string, date: string ) : ListSnapshot< T >;
+  snapshot < T extends TListItem = ListItem > ( uri: string, date: string ) : ListSnapshot< T >;
   /** Retrieve a date-indexed list resource for a URI. */
-  get < T extends TListItem > ( uri: string ) : ListDateIndex< T >;
+  get < T extends TListItem = ListItem > ( uri: string ) : ListDateIndex< T >;
   /** The list index resource. */
   readonly index: ListIndex;
 }
