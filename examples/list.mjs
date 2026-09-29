@@ -27,3 +27,11 @@ client.list.index.collection()
     console.log( 'Latest snapshot:', snapshot?.count );
     snapshot?.take( 10 ).forEach( item => console.log( item.name, item.rank ) );
   } );
+
+
+// --- access optional profile data ---
+
+client.list.get( 'forbes-400' ).get()
+  .then( dates => dates.latest?.collection() )
+  .then( snapshot => snapshot.at( 0 )?.data?.data() )
+  .then( profile => console.log( profile.info ) );
