@@ -15,8 +15,9 @@ import type { DateData, DateFn, IndexFn, KeysFn, PointFn, TimeSeriesData } from 
 /**
  * Abstract base class for SDK endpoint implementations.
  * 
- * Provides shared resource factory helpers for text, JSON, CSV, collection, index,
- * time series, and date resources.
+ * Provides shared functionality for resource creation, caching, and endpoint management.
+ * Exposes protected methods for creating collectable, dateable, indexable,
+ * and time-series resources.
  */
 export abstract class Endpoint {
   /**
