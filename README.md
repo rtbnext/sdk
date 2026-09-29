@@ -43,3 +43,17 @@ The client identity consists of:
 * `version` — application version
 * `contact` — optional contact URL
 * `email` — optional contact email address
+
+## Core concepts
+
+### Lazy resources
+
+Resources are not downloaded when they are created. Data is loaded only when it is requested.
+
+```ts
+const profile = client.profile.get( 'bill-gates' );
+
+// No request has been made yet.
+
+profile.meta().then( console.log );
+```
