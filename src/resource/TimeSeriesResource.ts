@@ -27,10 +27,7 @@ export class TimeSeriesResource< D extends TimeSeriesData, R extends TimePoint >
    * @param parser - The parser function that converts raw HTTP responses into the expected data type.
    * @param point - The factory used to convert rows into typed points.
    */
-  public constructor (
-    path: string, loader: StateLoader, parser: ParserFn< D >,
-    point: PointFn< D, R >
-  ) {
+  public constructor ( path: string, loader: StateLoader, parser: ParserFn< D >, point: PointFn< D, R > ) {
     super( path, loader, parser );
     this.point = point;
   }
