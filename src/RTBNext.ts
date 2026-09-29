@@ -28,6 +28,7 @@ export class RTBNext {
   private readonly stateLoader: StateLoader;
   /** The resource pool used for caching and reusing resource instances. */
   private readonly resourcePool: ResourcePool;
+
   /** The collection of endpoint clients available in the SDK. */
   public readonly endpoints: Endpoints;
 
