@@ -18,4 +18,5 @@ export const sanitize = ( value: unknown, delimiter: string = '-' ) : string =>
  * @returns The UTC date string.
  */
 export const ymd = ( value: unknown ) : string =>
-  new Date( Date.parse( String( value ) ) ).toISOString().slice( 0, 10 );
+  ( value instanceof Date ? value : new Date( Date.parse( String( value ) ) ) )
+    .toISOString().slice( 0, 10 );
