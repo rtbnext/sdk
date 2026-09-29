@@ -1,0 +1,5 @@
+name: Publish
+
+on:
+  release:
+    types: [ published ]
