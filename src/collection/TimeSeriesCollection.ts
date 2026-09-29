@@ -180,27 +180,24 @@ export class TimeSeriesCollection<
       groups.set( key, group );
     }
 
-    return this.aggregatedSeries( [ ...groups.entries() ].map( ( [ label, points ] ) =>
-      this.aggregatePoints( points, label )
+    return this.aggregatedSeries( [ ...groups.entries() ].map(
+      ( [ label, points ] ) => this.aggregatePoints( points, label )
     ) );
   }
 
   /** Splits points into equally sized buckets and aggregates each bucket. */
   public buckets ( count: number ) : TimeSeriesCollection< A > {
-    if ( count >= this.count ) return this.aggregatedSeries( this.points.map( ( point, index ) =>
-      this.aggregatePoints( [ point ], `${ index + 1 }/${ this.count }` )
+    if ( count >= this.count ) return this.aggregatedSeries( this.points.map(
+      ( point, i ) => this.aggregatePoints( [ point ], `${ i + 1 }/${ this.count }` )
     ) );
 
     const size = this.count / count, result: A[] = [];
 
-    for ( let index = 0; index < count; index++ ) {
-      const start = Math.floor( index * size );
-      const end = Math.floor( ( index + 1 ) * size );
+    for ( let i = 0; i < count; i++ ) {
+      const start = Math.floor( i * size ), end = Math.floor( ( i + 1 ) * size );
+      const items = this.items.slice( start, end );
 
-      result.push( this.aggregatePoints(
-        this.items.slice( start, end ),
-        `${ index + 1 }/${ count }`
-      ) );
+      result.push( this.aggregatePoints( items, `${ i + 1 }/${ count }` ) );
     }
 
     return this.aggregatedSeries( result );
