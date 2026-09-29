@@ -7,3 +7,8 @@ on:
 permissions:
   id-token: write
   contents: read
+
+jobs:
+  publish:
+    name: Build & Publish
+    runs-on: ubuntu-latest
