@@ -1,3 +1,8 @@
+// --- resource ---
+
+/** The set of events emitted by a resource. */
+export type ResourceEvent = 'load' | 'update' | 'refresh' | 'transform';
+
 // --- dateable ---
 
 /** A function that resolves a date string to a resource. */
