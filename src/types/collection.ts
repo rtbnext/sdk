@@ -83,6 +83,13 @@ export type SearchFn< I extends CollectItem > = (
   item: I, query: string, terms: ReadonlyArray< string >
 ) => boolean;
 
+/**
+ * Compares two items for equality.
+ * 
+ * @template I - The type of collectable item.
+ */
+export type CompareFn< I extends CollectItem > = ( left: I, right: I ) => boolean;
+
 
 // --- time series ---
 
