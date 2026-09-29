@@ -101,3 +101,11 @@ The cache interface provides operations to:
 * delete a resource
 * clear the cache
 * report the current cache size
+
+## Documentation
+
+The [SDK Documentation](https://sdk.rtbnext.de) contains detailed information about the SDK, its resources, collections and available methods.
+
+For the underlying API, refer to the [RTBNext API Documentation](https://docs.rtbnext.de). The [RTBNext API](https://api.rtbnext.de) provides the actual data.
+
+For current incidents, maintenance and service information, see the [System Status](https://status.rtbnext.de).
