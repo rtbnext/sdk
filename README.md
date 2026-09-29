@@ -63,7 +63,7 @@ profile.meta.data().then( console.log );
 Collection resources provide filtering, searching, sorting and paging helpers.
 
 ```ts
-client.profile.index.collection()
+client.profile.searchIndex.collection()
   .then( profiles =>
     profiles.search( 'bill' )
       .orderBy( 'networth', 'desc' )
