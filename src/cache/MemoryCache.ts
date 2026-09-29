@@ -31,10 +31,10 @@ export class MemoryCache implements Cache {
    * If the key already exists, it will overwrite the existing value.
    * 
    * @param key - The key to associate with the cached resource.
-   * @param value - The `ResourceState` to store in the cache.
+   * @param state - The `ResourceState` to store in the cache.
    */
-  public async set ( key: string, value: ResourceState ) : Promise< void > {
-    this.store.set( key, value );
+  public async set ( key: string, state: ResourceState ) : Promise< void > {
+    this.store.set( key, state );
   }
 
   /**
