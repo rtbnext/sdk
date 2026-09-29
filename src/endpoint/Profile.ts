@@ -1,6 +1,6 @@
 import type { TProfileHistoryItem } from '@rtbnext/schema/src/model/profile';
 
-import type { CollectData, CollectItem, FindFn, SearchFn } from '../types/collection';
+import type { CollectData, CollectItem, FindFn, SearchFn, URICollectItem } from '../types/collection';
 import type {
   ProfileCollection, ProfileData, ProfileEndpoint, ProfileEntity, ProfileHistory,
   ProfileHistoryPoint, ProfileIndex, ProfileMeta, SearchIndex
@@ -37,18 +37,21 @@ export class Profile extends Endpoint implements ProfileEndpoint, ProfileProvide
   /**
    * Creates a profile entity with lazy-loaded related resources.
    * 
-   * @template I - The type of the raw profile item, which must include a `uri` property.
+    * @template I - The type of the raw profile item.
    * @param item - The raw profile item.
    * @returns A profile entity with lazy-loaded `meta`, `data`, and `history` properties.
    */
   protected entity < I extends CollectItem > ( item: I ) : ProfileEntity< I > {
+    const uri = item.uri;
+    if ( uri === undefined ) return Object.freeze( { ...item } ) as ProfileEntity< I >;
+
     let meta: ProfileMeta, data: ProfileData, history: ProfileHistory;
     const self = this;
   
     return Object.freeze( { ...item,
-      get meta () { return meta ??= self.meta( item.uri ) },
-      get data () { return data ??= self.data( item.uri ) },
-      get history () { return history ??= self.history( item.uri ) }
+      get meta () { return meta ??= self.meta( uri ) },
+      get data () { return data ??= self.data( uri ) },
+      get history () { return history ??= self.history( uri ) }
     } );
   }
 
@@ -123,7 +126,7 @@ export class Profile extends Endpoint implements ProfileEndpoint, ProfileProvide
    * @param uri - The profile URI.
    * @returns The profile entity with lazy-loaded `meta`, `data`, and `history` properties.
    */
-  public get ( uri: string ) : ProfileEntity< CollectItem > {
+  public get ( uri: string ) : ProfileEntity< URICollectItem > {
     return this.entity( { uri } );
   }
 
