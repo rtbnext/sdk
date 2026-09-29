@@ -19,3 +19,26 @@ Install the package using npm:
 ```bash
 npm install @rtbnext/sdk
 ```
+
+## First usage
+
+Every client application **must identify** itself when creating an SDK instance. This information is sent with API requests and helps provide transparency about API consumers.
+
+```ts
+import rtbnext from '@rtbnext/sdk';
+
+const client = rtbnext( {
+  client: {
+    name: 'my-application',
+    version: '1.0.0',
+    contact: 'https://example.com/contact'
+  }
+} );
+```
+
+The client identity consists of:
+
+* `name` — application or project name
+* `version` — application version
+* `contact` — optional contact URL
+* `email` — optional contact email address
