@@ -136,7 +136,7 @@ export class CollectCollection<
    */
   public intersect ( other: this ) : this {
     const uris = new Set( other.items.map( item => item.uri ) );
-    return this.clone( this.items.filter( item => uris.has( item.uri ) ) );
+    return this.clone( this.items.filter( item => item.uri && uris.has( item.uri ) ) );
   }
 
   /**
@@ -147,7 +147,7 @@ export class CollectCollection<
    */
   public exclude ( other: this ) : this {
     const uris = new Set( other.items.map( item => item.uri ) );
-    return this.clone( this.items.filter( item => ! uris.has( item.uri ) ) );
+    return this.clone( this.items.filter( item => item.uri === undefined || ! uris.has( item.uri ) ) );
   }
 
   /**
@@ -161,8 +161,12 @@ export class CollectCollection<
   public union ( other: this ) : this {
     const seen = new Set< string >(), merged: I[] = [];
 
-    for ( const item of [ ...this.items, ...other.items ] ) if ( ! seen.has( item.uri ) )
-      seen.add( item.uri ), merged.push( item );
+    for ( const item of [ ...this.items, ...other.items ] ) {
+      if ( item.uri === undefined || ! seen.has( item.uri ) ) {
+        if ( item.uri ) seen.add( item.uri );
+        merged.push( item );
+      }
+    }
 
     return this.clone( merged );
   }
