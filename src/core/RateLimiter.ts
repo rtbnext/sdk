@@ -6,8 +6,8 @@ import type { RateLimiterMode, RateLimiterOptions } from '../types/core';
  * Token-based rate limiter for controlling request throughput.
  * 
  * Supports two limiting strategies:
- *  - burst: allows short request bursts up to the configured limit
- *  - spread: distributes requests evenly over the configured interval
+ *  - `burst`: allows short request bursts up to the configured limit
+ *  - `spread`: distributes requests evenly over the configured interval
  */
 export class RateLimiter {
   /** The configuration options for the rate limiter. */
@@ -22,7 +22,7 @@ export class RateLimiter {
   private tokens: number;
 
   /**
-   * Constructs a new RateLimiter instance.
+   * Creates a new `RateLimiter` instance.
    * 
    * @param options - The configuration options for the rate limiter.
    */
@@ -88,7 +88,7 @@ export class RateLimiter {
   /**
    * Acquires permission to perform a request using the selected limiting strategy.
    * 
-   * @param mode - The rate limiting strategy to use.
+   * @param mode - The rate limiting strategy to use (`burst` or `spread`).
    */
   public async acquire ( mode: RateLimiterMode = 'burst' ) : Promise< void > {
     await this[ mode ]();
