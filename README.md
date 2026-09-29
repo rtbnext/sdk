@@ -11,3 +11,11 @@ The RTBNext SDK provides a typed interface for accessing billionaire profiles, l
 The SDK follows a consistent resource-oriented design with lazy loading, configurable caching, typed collections, time series and indexed resources.
 
 For complete usage instructions, API details and examples, please refer to the [SDK Documentation](https://sdk.rtbnext.de). The [API Documentation](https://docs.rtbnext.de) provides the complete RTBNext API reference.
+
+## Installation
+
+Install the package using npm:
+
+```bash
+npm install @rtbnext/sdk
+```
