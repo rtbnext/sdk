@@ -5,7 +5,7 @@ import { TextParser } from './TextParser';
 /**
  * Parses HTTP response bodies as JSON.
  * 
- * Extends TextParser by decoding the response body and parsing it into
+ * Extends `TextParser` by decoding the response body and parsing it into
  * the requested type.
  */
 export class JsonParser extends TextParser {
