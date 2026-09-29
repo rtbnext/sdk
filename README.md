@@ -55,7 +55,7 @@ const profile = client.profile.get( 'bill-gates' );
 
 // No request has been made yet.
 
-profile.meta().then( console.log );
+profile.meta.data().then( console.log );
 ```
 
 ### Collections
