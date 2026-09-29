@@ -94,7 +94,7 @@ export interface Cache {
   /** Retrieves a resource state from the cache by its key. */
   get ( key: string ) : Promise< ResourceState | null >;
   /** Stores a resource state in the cache with the given key. */
-  set ( key: string, value: ResourceState ) : Promise< void >;
+  set ( key: string, state: ResourceState ) : Promise< void >;
   /** Deletes a resource state from the cache by its key. */
   delete ( key: string ) : Promise< void >;
   /** Clears all resource states from the cache. */
