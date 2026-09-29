@@ -109,3 +109,9 @@ The [SDK Documentation](https://sdk.rtbnext.de) contains detailed information ab
 For the underlying API, refer to the [RTBNext API Documentation](https://docs.rtbnext.de). The [RTBNext API](https://api.rtbnext.de) provides the actual data.
 
 For current incidents, maintenance and service information, see the [System Status](https://status.rtbnext.de).
+
+## License
+
+**Copyright © 2026 RTBNext**  
+Created and maintained by [Paul Köhler](https://komed3.de) (komed3).  
+Licensed under the [MIT License](./LICENSE).
