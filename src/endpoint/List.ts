@@ -17,10 +17,10 @@ export class List extends Endpoint implements ListEndpoint {
    * 
    * @template T - The type of list item.
    * @param uri - The URI of the list.
-   * @param date - The date for which to retrieve the snapshot (in `YYYY-MM-DD` format).
+   * @param date - The date for which to retrieve the snapshot.
    * @returns A `ListSnapshot` resource for the specified URI and date.
    */
-  public snapshot < T extends TListItem = ListItem > ( uri: string, date: string ) : ListSnapshot< T > {
+  public snapshot < T extends TListItem = ListItem > ( uri: string, date: unknown ) : ListSnapshot< T > {
     return useProfile( this.endpoints.profile ).collect(
       `v2/list/${ sanitize( uri ) }/${ ymd( date ) }.json`
     );

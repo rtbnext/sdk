@@ -138,7 +138,7 @@ export type ListIndex = CollectableResource< TListIndex, TListIndexItem, ListEnt
 /** The list endpoint interface. */
 export interface ListEndpoint {
   /** Retrieve a list snapshot for a URI and date. */
-  snapshot < T extends TListItem = ListItem > ( uri: string, date: string ) : ListSnapshot< T >;
+  snapshot < T extends TListItem = ListItem > ( uri: string, date: unknown ) : ListSnapshot< T >;
   /** Retrieve a date-indexed list resource for a URI. */
   get < T extends TListItem = ListItem > ( uri: string ) : ListDateIndex< T >;
   /** The list index resource. */
