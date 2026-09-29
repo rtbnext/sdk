@@ -103,7 +103,12 @@ export class TimeSeriesCollection<
     return result as A;
   }
 
-  /** Creates a time-series collection from aggregated points. */
+  /**
+   * Creates a time-series collection from aggregated points.
+   * 
+   * @param points - The aggregated points.
+   * @returns A new time-series collection containing the aggregated points.
+   */
   private aggregatedSeries ( points: ReadonlyArray< A > ) : TimeSeriesCollection< A > {
     return new TimeSeriesCollection< A >( points );
   }
@@ -113,28 +118,53 @@ export class TimeSeriesCollection<
     return this.toArray();
   }
 
-  /** Returns the minimum numeric value. */
+  /**
+   * Returns the minimum numeric value.
+   * 
+   * @param callback - Optional function used to resolve numeric values.
+   * @returns The minimum numeric value.
+   */
   public min ( callback?: NumberCallback< R > ) : number {
     return Math.min( ...this.numbers( callback ) );
   }
 
-  /** Returns the maximum numeric value. */
+  /**
+   * Returns the maximum numeric value.
+   * 
+   * @param callback - Optional function used to resolve numeric values.
+   * @returns The maximum numeric value.
+   */
   public max ( callback?: NumberCallback< R > ) : number {
     return Math.max( ...this.numbers( callback ) );
   }
 
-  /** Returns the sum of all numeric values. */
+  /**
+   * Returns the sum of all numeric values.
+   * 
+   * @param callback - Optional function used to resolve numeric values.
+   * @returns The sum of all numeric values.
+   */
   public sum ( callback?: NumberCallback< R > ) : number {
     return this.numbers( callback ).reduce( ( sum, value ) => sum + value, 0 );
   }
 
-  /** Returns the arithmetic mean of all numeric values. */
+  /**
+   * Returns the arithmetic mean of all numeric values.
+   * 
+   * @param callback - Optional function used to resolve numeric values.
+   * @returns The arithmetic mean of all numeric values.
+   */
   public avg ( callback?: NumberCallback< R > ) : number {
     const values = this.numbers( callback );
     return this.sum( callback ) / values.length;
   }
 
-  /** Returns the median of all numeric values. */
+  /**
+   * Returns the median of all numeric values.
+   * 
+   * @param callback - Optional function used to resolve numeric values.
+   * @returns The median of all numeric values.
+   */
   public median ( callback?: NumberCallback< R > ) : number {
     const values = [ ...this.numbers( callback ) ].sort( ( a, b ) => a - b );
     const middle = Math.floor( values.length / 2 );
@@ -158,17 +188,33 @@ export class TimeSeriesCollection<
     return result;
   }
 
-  /** Returns all values of a point property. */
+  /**
+   * Returns all values of a point property.
+   * 
+   * @template K - The property key of the point.
+   * @param key - The property key to extract values for.
+   * @returns An array of values for the specified property.
+   */
   public column < K extends keyof R > ( key: K ) : R[ K ][] {
     return this.points.map( point => point[ key ] );
   }
 
-  /** Resolves one numeric value for each point. */
+  /**
+   * Resolves one numeric value for each point.
+   * 
+   * @param callback - Function used to resolve numeric values.
+   * @returns An array of numeric values.
+   */
   public values ( callback: NumberCallback< R > ) : number[] {
     return this.points.map( callback );
   }
 
-  /** Aggregates points by a calendar period or custom grouping function. */
+  /**
+   * Aggregates points by a calendar period or custom grouping function.
+   * 
+   * @param period - The aggregation period or a function to group points.
+   * @returns A new time-series collection containing the aggregated points.
+   */
   public aggregate ( period: AggregatePeriod | ( ( point: R ) => string ) ) : TimeSeriesCollection< A > {
     const groups = new Map< string, R[] >();
 
@@ -185,7 +231,12 @@ export class TimeSeriesCollection<
     ) );
   }
 
-  /** Splits points into equally sized buckets and aggregates each bucket. */
+  /**
+   * Splits points into equally sized buckets and aggregates each bucket.
+   * 
+   * @param count - The number of buckets to create.
+   * @returns A new time-series collection containing the aggregated buckets.
+   */
   public buckets ( count: number ) : TimeSeriesCollection< A > {
     if ( count >= this.count ) return this.aggregatedSeries( this.points.map(
       ( point, i ) => this.aggregatePoints( [ point ], `${ i + 1 }/${ this.count }` )
