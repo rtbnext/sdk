@@ -19,7 +19,7 @@ import type { DateableResource } from '../resource/DateableResource';
 import type { IndexableResource } from '../resource/IndexableResource';
 import type { Resource } from '../resource/Resource';
 import type { TimeSeriesResource } from '../resource/TimeSeriesResource';
-import type { CollectData, CollectItem, Entity } from './collection';
+import type { CollectData, CollectItem, Entity, URICollectItem } from './collection';
 
 
 // --- profile ---
@@ -58,17 +58,19 @@ export interface ProfileResources {
 }
 
 /**
- * A profile entity with its associated resources.
+ * A profile entity with its associated resources when the item has a URI.
  * 
- * @template I - The type of collectable item.
+ * @template I - The type of collection item.
  */
-export type ProfileEntity< I extends CollectItem > = Entity< I, ProfileResources >;
+export type ProfileEntity< I extends CollectItem > = Entity<
+  I, I extends URICollectItem ? ProfileResources : Partial< ProfileResources >
+>;
 
 /**
- * A collection of profile entities keyed by URI.
+ * A collection of profile entities, optionally keyed by URI.
  * 
  * @template D - The type of collectable data.
- * @template I - The type of collectable item.
+ * @template I - The type of collection item.
  */
 export type ProfileCollection< D extends CollectData< I >, I extends CollectItem > =
   CollectableResource< D, I, ProfileEntity< I > >;
@@ -88,7 +90,7 @@ export interface ProfileEndpoint {
   /** Retrieve profile history by URI. */
   history ( uri: string ) : ProfileHistory;
   /** Retrieve a profile entity by URI. */
-  get ( uri: string ) : ProfileEntity< CollectItem >;
+  get ( uri: string ) : ProfileEntity< URICollectItem >;
   /** The profile index resource. */
   readonly index: ProfileIndex;
   /** The search index for profiles. */
@@ -103,7 +105,7 @@ export interface ProfileEndpoint {
  * 
  * @template T - The type of list item.
  */
-export type ListEntity< T extends TListItem & CollectItem > = TListIndexItem & {
+export type ListEntity< T extends TListItem > = TListIndexItem & {
   /** The date-indexed snapshots for the list entity. */
   dates: ListDateIndex< T >;
 };
@@ -113,7 +115,7 @@ export type ListEntity< T extends TListItem & CollectItem > = TListIndexItem & {
  * 
  * @template T - The type of list item.
  */
-export type ListSnapshot< T extends TListItem & CollectItem > =
+export type ListSnapshot< T extends TListItem > =
   CollectableResource< TListSnapshot< T >, T, ProfileEntity< T > >;
 
 /**
@@ -121,8 +123,7 @@ export type ListSnapshot< T extends TListItem & CollectItem > =
  * 
  * @template T - The type of list item.
  */
-export type ListDateIndex< T extends TListItem & CollectItem > =
-  DateableResource< TSnapshotIndex, ListSnapshot< T > >;
+export type ListDateIndex< T extends TListItem > = DateableResource< TSnapshotIndex, ListSnapshot< T > >;
 
 /** The list index resource. */
 export type ListIndex = CollectableResource< TListIndex, TListIndexItem, ListEntity< any > >;
@@ -130,9 +131,9 @@ export type ListIndex = CollectableResource< TListIndex, TListIndexItem, ListEnt
 /** The list endpoint interface. */
 export interface ListEndpoint {
   /** Retrieve a list snapshot for a URI and date. */
-  snapshot < T extends TListItem & CollectItem > ( uri: string, date: string ) : ListSnapshot< T >;
+  snapshot < T extends TListItem > ( uri: string, date: string ) : ListSnapshot< T >;
   /** Retrieve a date-indexed list resource for a URI. */
-  get < T extends TListItem & CollectItem > ( uri: string ) : ListDateIndex< T >;
+  get < T extends TListItem > ( uri: string ) : ListDateIndex< T >;
   /** The list index resource. */
   readonly index: ListIndex;
 }
