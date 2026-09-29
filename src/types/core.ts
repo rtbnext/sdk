@@ -15,7 +15,7 @@ export interface ClientIdentity {
 
 // ---- rate limiter ---
 
-/** The mode of rate limiting to use, either 'burst' or 'spread'. */
+/** The mode of rate limiting to use, either `burst` or `spread`. */
 export type RateLimiterMode = 'burst' | 'spread';
 
 /** Options for the rate limiter. */
@@ -55,11 +55,11 @@ export interface RequestOptions {
 export interface HttpResponse {
   /** The URL of the request. */
   url: URL;
-  /** Whether the request was successful (status code 2xx). */
+  /** Whether the request was successful (status code `2xx`). */
   ok: boolean;
   /** The HTTP status code of the response. */
   status: number;
-  /** The body of the response as a Uint8Array. */
+  /** The body of the response as a `Uint8Array`. */
   body: Uint8Array< ArrayBuffer >;
   /** The headers of the response. */
   headers: Headers;
@@ -104,14 +104,14 @@ export interface Cache {
 /**
  * The mode of caching to use when loading resources.
  * 
- *  - 'ttl': Use the cached resource if it exists and is not expired.
- *  - 'revalidate': Always fetch the resource from the server and update the cache.
- *  - 'session': Use the cached resource if it exists, regardless of expiration.
+ *  - `ttl`: Use the cached resource if it exists and is not expired.
+ *  - `revalidate`: Always fetch the resource from the server and update the cache.
+ *  - `session`: Use the cached resource if it exists, regardless of expiration.
  */
 export type CacheMode = 'ttl' | 'revalidate' | 'session';
 
 /**
- * The type of cache to use, either false (no cache), 'memory' (in-memory cache),
+ * The type of cache to use, either `false` (no cache), `memory` (in-memory cache),
  * or a custom cache implementation.
  */
 export type CacheType = false | 'memory' | Cache;
