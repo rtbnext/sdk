@@ -102,6 +102,10 @@ The cache interface provides operations to:
 * clear the cache
 * report the current cache size
 
+## Requirements
+
+The SDK requires a modern JavaScript runtime with support for ES2015+ features and the Fetch API (Node.js 18+). For older Node.js versions, a Fetch API-compatible polyfill must be provided.
+
 ## Documentation
 
 The [SDK Documentation](https://sdk.rtbnext.de) contains detailed information about the SDK, its resources, collections and available methods.
