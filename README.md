@@ -29,9 +29,10 @@ import rtbnext from '@rtbnext/sdk';
 
 const client = rtbnext( {
   client: {
-    name: 'my-application',
-    version: '1.0.0',
-    contact: 'https://example.com/contact'
+    name: 'my-dashboard-app',
+    version: '1.3.0',
+    contact: 'https://example.com',
+    email: 'bot@example.com'
   }
 } );
 ```
