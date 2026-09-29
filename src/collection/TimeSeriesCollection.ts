@@ -148,12 +148,12 @@ export class TimeSeriesCollection<
   }
 
   /** Returns all point values grouped by property. */
-  public get columns () : Record< string, unknown[] > {
-    const result: Record< string, unknown[] > = {};
+  public get columns () : Record< keyof R, unknown[] > {
+    const result = {} as Record< keyof R, unknown[] >;
 
     for ( const point of this.points )
       for ( const [ key, value ] of Object.entries( point ) )
-        ( result[ key ] ??= [] ).push( value );
+        ( result[ key as keyof R ] ??= [] ).push( value );
 
     return result;
   }
