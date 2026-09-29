@@ -28,9 +28,8 @@ const defaultSearch = < I extends CollectItem > (
 ) : boolean => {
   const name = item.searchName || sanitize( item.name ?? '' ), text = item.text ?? '';
 
-  return query.includes( name ) || query.includes( text ) || terms.every(
-    term => name.includes( term ) || text.includes( term )
-  );
+  return query.includes( name ) || query.includes( text ) ||
+    terms.every( term => name.includes( term ) || text.includes( term ) );
 };
 
 
