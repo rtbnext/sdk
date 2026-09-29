@@ -2,7 +2,7 @@
   "name": "@rtbnext/sdk",
   "description": "Official SDK for the RTBNext API",
   "license": "MIT",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "author": {
     "name": "Paul Köhler (komed3)",
     "email": "webmaster@komed3.de",
