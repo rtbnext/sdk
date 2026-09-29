@@ -1,6 +1,5 @@
 import type { TListItem } from '@rtbnext/schema/src/model/list';
 
-import type { CollectItem } from '../types/collection';
 import type { ListDateIndex, ListEndpoint, ListIndex, ListSnapshot } from '../types/endpoint';
 import { sanitize, ymd } from '../utils';
 import { Endpoint } from './Endpoint';
@@ -21,7 +20,7 @@ export class List extends Endpoint implements ListEndpoint {
    * @param date - The date for which to retrieve the snapshot (in `YYYY-MM-DD` format).
    * @returns A ListSnapshot resource for the specified URI and date.
    */
-  public snapshot < T extends TListItem & CollectItem > ( uri: string, date: string ) : ListSnapshot< T > {
+  public snapshot < T extends TListItem > ( uri: string, date: string ) : ListSnapshot< T > {
     return useProfile( this.endpoints.profile ).collect(
       `v2/list/${ sanitize( uri ) }/${ ymd( date ) }.json`
     );
@@ -34,7 +33,7 @@ export class List extends Endpoint implements ListEndpoint {
    * @param uri - The URI of the list.
    * @returns A ListDateIndex resource for the specified URI.
    */
-  public get < T extends TListItem & CollectItem > ( uri: string ) : ListDateIndex< T > {
+  public get < T extends TListItem > ( uri: string ) : ListDateIndex< T > {
     return this.dateable( `v2/list/${ sanitize( uri ) }/index.json`,
       value => this.snapshot< T >( uri, value )
     );
