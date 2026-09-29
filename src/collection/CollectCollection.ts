@@ -1,4 +1,4 @@
-import type { CollectItem, Entity, EntityFn, FindFn, SearchFn } from '../types/collection';
+import type { CollectItem, CompareFn, Entity, EntityFn, FindFn, SearchFn } from '../types/collection';
 import { sanitize } from '../utils';
 import { CursorCollection } from './CursorCollection';
 
@@ -83,6 +83,20 @@ export class CollectCollection<
     return new ( this.constructor as any )(
       items, this.factory, this.total, this.findFn, this.searchFn
     );
+  }
+
+  /**
+   * Returns a predicate function that checks if an item is present in a given set of items.
+   * 
+   * @param items - The items to compare against.
+   * @param compare - Optional custom comparison function.
+   * @returns A predicate function that returns true if an item is present in the given set.
+   */
+  protected matcher ( items: ReadonlyArray< I >, compare?: CompareFn< I > ) : ( item: I ) => boolean {
+    if ( compare ) return item => items.some( other => compare( item, other ) );
+
+    const uris = new Set( items.flatMap( item => item.uri === undefined ? [] : [ item.uri ] ) );
+    return item => item.uri !== undefined && uris.has( item.uri );
   }
 
   /**
