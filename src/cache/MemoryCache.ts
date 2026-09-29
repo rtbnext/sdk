@@ -21,6 +21,7 @@ export class MemoryCache implements Cache {
    * Retrieves a resource state from the cache by its key.
    * 
    * @param key - The key associated with the cached resource.
+   * @returns The `ResourceState` if found, or `null` if not present.
    */
   public async get ( key: string ) : Promise< ResourceState | null > {
     return this.store.get( key ) ?? null;
