@@ -55,9 +55,7 @@ type IndexLeaf< T > =
  */
 export type IndexResult< T, R > =
   IndexLeaf< T > extends never
-    ? T extends object ? {
-      [ K in IndexKeys< T > ]: IndexResult< T[ K ], R >;
-    } : never
+    ? T extends object ? { [ K in IndexKeys< T > ]: IndexResult< T[ K ], R > } : never
     : Record< IndexLeaf< T >, R >;
 
 
