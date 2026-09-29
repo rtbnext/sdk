@@ -4,7 +4,7 @@ import type { HttpResponse } from '../types/core';
 /**
  * Parses HTTP response bodies into UTF-8 text.
  * 
- * The TextParser validates the response status and ensures the body contains
+ * The `TextParser` validates the response status and ensures the body contains
  * data before decoding it to a string.
  */
 export class TextParser {
