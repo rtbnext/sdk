@@ -19,14 +19,12 @@ export type DateResolver< T > = ( item: T ) => string;
 // --- collectable ---
 
 /**
- * Represents a collectable API item.
- * 
- * Collectable items must provide a unique URI and may contain additional
- * searchable or sortable properties.
+ * Represents an item contained in a collection.
+ * Items may provide a URI and additional searchable or sortable properties.
  */
 export interface CollectItem {
-  /** The unique resource URI. */
-  uri: string;
+  /** The resource URI, when available. */
+  uri?: string;
   /** The normalized search name, if available. */
   searchName?: string;
   /** The display name, if available. */
@@ -35,13 +33,19 @@ export interface CollectItem {
   text?: string;
 }
 
+/** Represents a collectable API item with a unique URI. */
+export interface URICollectItem extends CollectItem {
+  /** The unique resource URI. */
+  uri: string;
+}
+
 /**
- * Represents the parsed data of a collectable resource.
+ * Represents the parsed data of a collection resource.
  * 
  * @template I - The type of collectable item.
  */
 export interface CollectData< I extends CollectItem > {
-  /** The collectable items returned by the API. */
+  /** The items returned by the API. */
   items: ReadonlyArray< I >;
 }
 
