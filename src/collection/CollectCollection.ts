@@ -157,11 +157,12 @@ export class CollectCollection<
    * Returns a new collection excluding items from another collection.
    * 
    * @param other - The other collection.
+   * @param compare - Optional custom comparison function.
    * @returns A new collection excluding matching items.
    */
-  public exclude ( other: this ) : this {
-    const uris = new Set( other.items.map( item => item.uri ) );
-    return this.clone( this.items.filter( item => item.uri === undefined || ! uris.has( item.uri ) ) );
+  public exclude ( other: this, compare?: CompareFn< I > ) : this {
+    const matches = this.matcher( other.items, compare );
+    return this.clone( this.items.filter( item => item.uri === undefined || ! matches( item ) ) );
   }
 
   /**
