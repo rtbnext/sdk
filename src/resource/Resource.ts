@@ -1,5 +1,6 @@
 import { StateLoader } from '../core/StateLoader';
 import type { ParserFn, RequestOptions, ResourceState } from '../types/core';
+import type { ResourceEvent } from '../types/resource';
 
 
 /**
@@ -12,7 +13,7 @@ import type { ParserFn, RequestOptions, ResourceState } from '../types/core';
  */
 export class Resource< D > {
   /** Registered lifecycle event handlers for the resource. */
-  protected readonly hooks = new Map< string, Set< ( self: this ) => void > >();
+  protected readonly hooks = new Map< ResourceEvent, Set< ( self: this ) => void > >();
 
   /** Indicates whether the resource has been loaded at least once. */
   protected loaded = false;
@@ -72,18 +73,18 @@ export class Resource< D > {
    * 
    * @param events - Event names to emit.
    */
-  protected emit ( ...events: string[] ) : void {
+  protected emit ( ...events: ResourceEvent[] ) : void {
     for ( const event of events ) this.hooks.get( event )?.forEach( handler => handler( this ) );
   }
 
   /**
    * Registers an event handler for the resource.
    * 
-   * @param event - The event name.
+   * @param event - The event name (e.g. `load` or `transform`).
    * @param handler - The event handler.
    * @returns The current resource instance.
    */
-  public on ( event: string, handler: ( self: this ) => void ) : this {
+  public on ( event: ResourceEvent, handler: ( self: this ) => void ) : this {
     if ( ! this.hooks.has( event ) ) this.hooks.set( event, new Set() );
     this.hooks.get( event )!.add( handler );
 
@@ -93,11 +94,11 @@ export class Resource< D > {
   /**
    * Removes an event handler from the resource.
    * 
-   * @param event - The event name.
+   * @param event - The event name (e.g. `load` or `transform`).
    * @param handler - The event handler to remove.
    * @returns The current resource instance.
    */
-  public off ( event: string, handler: ( self: this ) => void ) : this {
+  public off ( event: ResourceEvent, handler: ( self: this ) => void ) : this {
     this.hooks.get( event )?.delete( handler );
     return this;
   }
