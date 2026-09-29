@@ -103,6 +103,9 @@ export interface ProfileEndpoint {
 
 // --- list ---
 
+/** Supported list item types. */
+export type ListItem = TPersonListItem | TRTBListItem;
+
 /**
  * A list entity that includes date-indexed snapshots.
  * 
