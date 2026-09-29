@@ -70,18 +70,14 @@ export type EntityFn< I extends CollectItem, E extends Entity< I > > = ItemFacto
  * 
  * @template I - The type of collectable item.
  */
-export type FindFn< I extends CollectItem > = (
-  items: ReadonlyArray< I >, uriLike: string
-) => I | undefined;
+export type FindFn< I extends CollectItem > = ( items: ReadonlyArray< I >, uriLike: string ) => I | undefined;
 
 /**
  * Tests whether an item matches a search query.
  * 
  * @template I - The type of collectable item.
  */
-export type SearchFn< I extends CollectItem > = (
-  item: I, query: string, terms: ReadonlyArray< string >
-) => boolean;
+export type SearchFn< I extends CollectItem > = ( item: I, query: string, terms: ReadonlyArray< string > ) => boolean;
 
 /**
  * Compares two items for equality.
