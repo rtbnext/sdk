@@ -81,3 +81,23 @@ client.profile.get( 'bill-gates' )
   .history.series()
   .then( history => console.log( history.first ) );
 ```
+
+## Cache behavior
+
+The SDK includes a configurable resource cache layer. Resources are cached according to the selected cache mode and the cache information provided by the server.
+
+Supported cache modes:
+
+* `ttl` — caches resources according to the server-defined cache lifetime
+* `revalidate` — performs conditional requests using validators such as `ETag` and `Last-Modified`
+* `session` — keeps resources for the lifetime of the SDK instance
+
+A custom cache implementation can be provided by implementing the `Cache` interface. This allows applications to integrate their own storage solutions, such as persistent databases, filesystem caches, browser storage or distributed cache systems.
+
+The cache interface provides operations to:
+
+* retrieve a cached resource state
+* store a resource state
+* delete a resource
+* clear the cache
+* report the current cache size
