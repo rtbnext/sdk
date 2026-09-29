@@ -10,9 +10,7 @@ import { CursorCollection } from './CursorCollection';
  * @param uriLike - The URI-like value to find.
  * @returns The first matching item, or undefined.
  */
-const defaultFind = < I extends CollectItem > (
-  items: ReadonlyArray< I >, uriLike: string
-) : I | undefined => {
+const defaultFind = < I extends CollectItem > ( items: ReadonlyArray< I >, uriLike: string ) : I | undefined => {
   const uri = sanitize( uriLike );
   return items.find( item => item.uri === uri );
 };
