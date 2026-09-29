@@ -21,7 +21,7 @@ import type { DateData, DateFn, IndexFn, KeysFn, PointFn, TimeSeriesData } from 
  */
 export abstract class Endpoint {
   /**
-   * Creates a new Endpoint instance.
+   * Creates a new `Endpoint` instance.
    * 
    * @param loader - The shared resource state loader instance.
    * @param pool - The shared resource pool for caching and reusing resources.
@@ -39,7 +39,7 @@ export abstract class Endpoint {
    * @template D - The expected data type of the resource.
    * @param path - The resource path.
    * @param mode - The parser mode to use for the resource.
-   * @returns A new Resource instance.
+   * @returns A new `Resource` instance.
    */
   protected resource < D > ( path: string, mode: ParserMode = 'json' ) : Resource< D > {
     return this.pool.get( path, () => new Resource< D >( path, this.loader, parser( mode ) ) );
