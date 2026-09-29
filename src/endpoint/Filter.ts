@@ -44,7 +44,7 @@ export class Filter extends Endpoint implements FilterEndpoint {
   /**
    * Industry filter collection.
    * 
-   * @param industry - The industry name (case-insensitive).
+   * @param industry - The industry identifier.
    * @returns The filter collection for the specified industry.
    */
   public industry ( industry: TIndustry ) : FilterCollection {
