@@ -1,7 +1,10 @@
 import type { TAgeGroup, TGender, TIndustry, TMaritalStatus } from '@rtbnext/schema/src/base/const';
 import type { TSnapshotIndex } from '@rtbnext/schema/src/base/generic';
 import type { TFilter, TFilterIndex, TFilterItem } from '@rtbnext/schema/src/model/filter';
-import type { TListIndex, TListIndexItem, TListItem, TListSnapshot } from '@rtbnext/schema/src/model/list';
+import type {
+  TListIndex, TListIndexItem, TListItem, TListSnapshot,
+  TPersonListItem, TRTBListItem
+} from '@rtbnext/schema/src/model/list';
 import type { TMover } from '@rtbnext/schema/src/model/mover';
 import type {
   TProfileData, TProfileHistory, TProfileIndex,
