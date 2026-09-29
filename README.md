@@ -57,3 +57,17 @@ const profile = client.profile.get( 'bill-gates' );
 
 profile.meta().then( console.log );
 ```
+
+### Collections
+
+Collection resources provide filtering, searching, sorting and paging helpers.
+
+```ts
+client.profile.index.collection()
+  .then( profiles =>
+    profiles.search( 'bill' )
+      .orderBy( 'networth', 'desc' )
+      .take( 5 )
+  )
+  .then( console.log );
+```
