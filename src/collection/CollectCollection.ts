@@ -146,11 +146,11 @@ export class CollectCollection<
    * Returns the intersection with another collection.
    * 
    * @param other - The other collection.
+   * @param compare - Optional custom comparison function.
    * @returns A new collection containing items present in both collections.
    */
-  public intersect ( other: this ) : this {
-    const uris = new Set( other.items.map( item => item.uri ) );
-    return this.clone( this.items.filter( item => item.uri && uris.has( item.uri ) ) );
+  public intersect ( other: this, compare?: CompareFn< I > ) : this {
+    return this.clone( this.items.filter( this.matcher( other.items, compare ) ) );
   }
 
   /**
