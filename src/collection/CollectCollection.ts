@@ -42,10 +42,7 @@ const defaultSearch = < I extends CollectItem > (
  * @template I - The type of raw collectable items.
  * @template E - The type of resolved entities.
  */
-export class CollectCollection<
-  I extends CollectItem,
-  E extends Entity< I >
-> extends CursorCollection< I, E > {
+export class CollectCollection< I extends CollectItem, E extends Entity< I > > extends CursorCollection< I, E > {
   /** The function used to find items by URI-like values. */
   protected readonly findFn: FindFn< I >;
   /** The function used to test items against search queries. */
